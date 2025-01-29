@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     AppBar,
     Toolbar,
@@ -26,11 +26,13 @@ import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import Tab from "@mui/material/Tab";
 import {TabContext, TabList, TabPanel} from "@mui/lab";
-import Table from "@/components/dashboard1/Table";
+import Table from "@/components/dashboard/Table";
 import img from "../../asset/dashboard1/Ellipse.png";
+import Cookies from "js-cookie";
+import {useRouter} from "next/navigation";
 
 
-const Header = () => {
+const Dashboard = () => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -45,6 +47,19 @@ const Header = () => {
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
     };
+
+    const token = Cookies.get("token");
+    const router = useRouter();
+
+    useEffect(() => {
+        if (!token) {
+            router.push("/login");
+        }
+    }, []);
+
+    if (!token) {
+        return router.push("/login");
+    }
 
     return (
         <Box sx={{bgcolor: "#fff", minHeight: "100vh", p: {md: 2, xs: 0}}}>
@@ -215,4 +230,4 @@ const Header = () => {
     );
 };
 
-export default Header;
+export default Dashboard;
