@@ -1,0 +1,31 @@
+{
+  "name": "linkdin",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.4.1",
+    "@mui/material": "^6.4.1",
+    "@mui/x-data-grid": "^7.24.1",
+    "@svgr/webpack": "^8.1.0",
+    "axios": "^1.7.9",
+    "codemirror": "^5.65.18",
+    "formik": "^2.4.6",
+    "js-cookie": "^3.0.5",
+    "mermaid": "^10.0.0",
+    "next": "15.1.6",
+    "react": "^19.0.0",
+    "react-codemirror2": "^8.0.0",
+    "react-dom": "^19.0.0",
+    "react-hot-toast": "^2.5.1",
+    "swiper": "^11.2.1",
+    "yup": "^1.6.1"
+  }
+}
