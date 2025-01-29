@@ -14,8 +14,9 @@ function Page() {
             redirect_uri: `${process.env.NEXT_PUBLIC_BASE_URL}/linkedin/callback`,
             scope: "openid email profile",
         });
-        console.log(params);
-        window.location.href = `https://www.linkedin.com/oauth/v2/authorization?${params}`;
+        if (typeof window !== "undefined") {
+            window.location.href = `https://www.linkedin.com/oauth/v2/authorization?${params}`;
+        }
     };
     return (<Box
         sx={{

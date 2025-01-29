@@ -3,14 +3,9 @@ import React from "react";
 import { Box, Typography, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
-interface HeaderProps {
-    handleDrawerToggle: () => void;
-}
-
-const Header: React.FC<HeaderProps> = ({ handleDrawerToggle }) => {
+const Header = ({ handleDrawerToggle }) => {
     return (
         <Box
-
             sx={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -30,7 +25,7 @@ const Header: React.FC<HeaderProps> = ({ handleDrawerToggle }) => {
             >
                 <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap sx={{fontSize: 16,color: 'darkBlue'}}>
+            <Typography variant="h6" noWrap sx={{ fontSize: 16, color: 'darkBlue' }}>
                 Workflows
             </Typography>
         </Box>

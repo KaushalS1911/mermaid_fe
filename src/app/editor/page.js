@@ -1,13 +1,13 @@
 "use client";
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+// import MainEditor from "@/components/editor/MainEditor";
 import MainLayout from "@/layout/MainLayout";
-import MainEditor from "@/components/editor/MainEditor";
 
 function Page() {
     const [sidebarKey, setSidebarKey] = useState("Snippets");
     return (<>
         <MainLayout setSidebarKey={setSidebarKey} sidebarKey={sidebarKey}>
-            <MainEditor sidebarKey={sidebarKey}/>
+            {/*<MainEditor sidebarKey={sidebarKey}/>*/}
         </MainLayout>
     </>);
 }
