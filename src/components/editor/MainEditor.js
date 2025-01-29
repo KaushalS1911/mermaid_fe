@@ -6,13 +6,13 @@ import Snippets from "@/components/editor/Snippets";
 import MonacoEditor from '@monaco-editor/react';
 import {ChartContext} from "@/app/layout";
 function MainEditor({ sidebarKey,formatCode }) {
-    const {code,setCode} = useContext(ChartContext
-    )
+    const {code,setCode} = useContext(ChartContext)
     const token =  typeof window !== "undefined" && localStorage.getItem("code")
     useEffect(() => {
+        if(token !== null){
         setCode(token);
+        }
     },[token])
-    console.log(code)
     const mermaidCode = `
    flowchart TD
     A[Christmas] -->|Get money| B(Go shopping)
