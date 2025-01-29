@@ -27,7 +27,7 @@ const router = useRouter();
     };
     return (
         <>
-            <Box sx={{background: '#FBE3EA'}}>
+            <Box>
                 <Toolbar sx={{justifyContent: 'space-around'}}>
                     <Box sx={{maxWidth: '100%', height: '28px'}}>
                         <img src={logo.src} alt="logo" style={{width: '100%', height: '100%'}}/>
