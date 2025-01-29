@@ -1,25 +1,19 @@
 "use client";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Drawer from "@mui/material/Drawer";
-import {Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText} from "@mui/material";
+import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import Image from "next/image";
 import logo from "../asset/home/diagram/icon1.png";
 import AcUnitIcon from '@mui/icons-material/AcUnit';
-import {useTheme} from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 
-const Sidebar = ({
-                     open,
-                     mobileOpen,
-                     handleDrawerToggle,
-                     setSidebarKey,
-                     sidebarKey
-                 }) => {
+const Sidebar = ({ open, mobileOpen, handleDrawerToggle, setSidebarKey, sidebarKey }) => {
     const drawerWidth = 275;
     const [openSubmenu, setOpenSubmenu] = useState({});
-    const theme = useTheme()
+    const theme = useTheme();
     const menuItems = [
-        {text: "Templates", icon: <AcUnitIcon/>, path: "/category"},
-        {text: "Snippets", icon: <AcUnitIcon/>, path: "/subcategory"},
+        { text: "Templates", icon: <AcUnitIcon />, path: "/category" },
+        { text: "Snippets", icon: <AcUnitIcon />, path: "/subcategory" },
         // { text: "Inbox", icon: <AcUnitIcon />, path: "/" },
         // { text: "Starred", icon: <AcUnitIcon /> , path: "/"},
         // { text: "Send email", icon: <AcUnitIcon /> , path: "/"},
@@ -27,21 +21,23 @@ const Sidebar = ({
         // { text: "Trash", icon: <AcUnitIcon /> , path: "/"},
         // { text: "Spam", icon: <AcUnitIcon /> , path: "/"},
     ];
+
     const handleSubmenuClick = (text) => {
         setOpenSubmenu((prevOpenSubmenu) => ({
             ...prevOpenSubmenu,
             [text]: !prevOpenSubmenu[text],
         }));
     };
+
     return (
         <Box>
             <Drawer
                 variant="temporary"
                 open={mobileOpen}
                 onClose={handleDrawerToggle}
-                ModalProps={{keepMounted: true}}
+                ModalProps={{ keepMounted: true }}
                 sx={{
-                    display: {xs: "block", sm: "none"},
+                    display: { xs: "block", sm: "none" },
                     "& .MuiDrawer-paper": {
                         boxSizing: "border-box",
                         width: drawerWidth,
@@ -66,20 +62,18 @@ const Sidebar = ({
                                     "&:hover": {
                                         backgroundColor: theme.palette?.sidebarHover || "#34495E",
                                         color: "white",
-                                        "& .icon": {color: "white"},
+                                        "& .icon": { color: "white" },
                                     },
                                 }}
                             >
-                                <ListItemButton
-                                >
+                                <ListItemButton>
                                     <ListItemIcon
                                         className="icon"
-                                        sx={{color: theme.palette?.textBlack || "#ECF0F1"}}
+                                        sx={{ color: theme.palette?.textBlack || "#ECF0F1" }}
                                     >
                                         {item.icon}
                                     </ListItemIcon>
-                                    <ListItemText primary={item.text}/>
-
+                                    <ListItemText primary={item.text} />
                                 </ListItemButton>
                             </ListItem>
                         </React.Fragment>
@@ -92,7 +86,7 @@ const Sidebar = ({
                 anchor="left"
                 open={open}
                 sx={{
-                    display: {xs: "none", sm: "block"},
+                    display: { xs: "none", sm: "block" },
                     "& .MuiDrawer-paper": {
                         boxSizing: "border-box",
                         width: drawerWidth,
@@ -116,26 +110,24 @@ const Sidebar = ({
                                     py: "2px",
                                     borderRadius: "10px",
                                     transition: ".3s",
-                                        backgroundColor:sidebarKey === item.text && theme.palette?.sidebarHover ,
-                                        color:sidebarKey === item.text && "white",
-                                        "& .icon": {color:sidebarKey === item.text && "white"},
+                                    backgroundColor: sidebarKey === item.text && theme.palette?.sidebarHover,
+                                    color: sidebarKey === item.text && "white",
+                                    "& .icon": { color: sidebarKey === item.text && "white" },
                                     "&:hover": {
-                                        backgroundColor: theme.palette?.sidebarHover ,
+                                        backgroundColor: theme.palette?.sidebarHover,
                                         color: "white",
-                                        "& .icon": {color: "white"},
+                                        "& .icon": { color: "white" },
                                     },
                                 }}
                             >
-                                <ListItemButton
-                                >
+                                <ListItemButton>
                                     <ListItemIcon
                                         className="icon"
-                                        sx={{color: theme.palette?.textBlack || "#ECF0F1"}}
+                                        sx={{ color: theme.palette?.textBlack || "#ECF0F1" }}
                                     >
                                         {item.icon}
                                     </ListItemIcon>
-                                    <ListItemText primary={item.text}/>
-
+                                    <ListItemText primary={item.text} />
                                 </ListItemButton>
                             </ListItem>
                         </React.Fragment>
