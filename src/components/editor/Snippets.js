@@ -3,7 +3,8 @@ import React from 'react';
 import {Box, Grid} from "@mui/material";
 import rectangle from "../../asset/editor/snippets/Rectangle.png"
 import {useTheme} from "@mui/material/styles";
-import PlusIcon from "../../asset/icons/editor/plus.svg";
+
+// import PlusIcon from "../../asset/icons/editor/plus.svg";
 
 function Snippets(props) {
     const theme = useTheme()
@@ -41,7 +42,7 @@ function Snippets(props) {
                                 p: 1
                             }}>
                                 <Box>
-                                    <PlusIcon width={50} height={50}/>
+                                    {/*<PlusIcon width={50} height={50}/>*/}
                                 </Box>
                                 <Box>|</Box>
                                 <Box>sss</Box>
