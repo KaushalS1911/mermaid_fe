@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React, {useContext} from 'react';
 import {
     Box, Button, FormControl, FormControlLabel, FormLabel, Grid, MenuItem, Radio, RadioGroup, TextField, Typography
 } from "@mui/material";
@@ -8,8 +8,13 @@ import * as Yup from "yup";
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import {CloseIcon} from "next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon";
 import axios from 'axios';
+import {useRouter} from "next/navigation";
+import {ChartContext} from "@/app/layout";
+import toast from "react-hot-toast";
 
 function Page(props) {
+    const {setCode} = useContext(ChartContext);
+    const router = useRouter();
     const formik = useFormik({
         initialValues: {
             method: "", aiModel: "Gemini", textOrSyntax: "", file: null,
@@ -34,17 +39,23 @@ function Page(props) {
                 }
 
                 // Replace the URL with your actual API endpoint
-                const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/flowchart`, formData, {
+                const response = await axios.post('http://localhost:8080/api/flowchart', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
+                        'huggingToken': process.env.NEXT_PUBLIC_HUGGING_TOKEN
                         // Add authorization token or other headers if needed
                     },
                     withCredentials: true, // Include cookies in the request
                 });
-
+                console.log(response.data.mermaidChart,"chart")
+                setCode(response.data.mermaidChart)
+                localStorage.setItem("code",response.data.mermaidChart)
+                router.push(`/editor`)
                 // Handle the response here
+                toast.success(response.data.message)
                 console.log("API Response:", response.data);
             } catch (error) {
+                toast.error('Something went wrong!')
                 console.error("Error during API call:", error);
             }
         },
