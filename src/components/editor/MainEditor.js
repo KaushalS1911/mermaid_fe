@@ -8,7 +8,7 @@ import {ChartContext} from "@/app/layout";
 function MainEditor({ sidebarKey,formatCode }) {
     const {code,setCode} = useContext(ChartContext
     )
-    const token = localStorage.getItem("code")
+    const token =  typeof window !== "undefined" && localStorage.getItem("code")
     useEffect(() => {
         setCode(token);
     },[token])

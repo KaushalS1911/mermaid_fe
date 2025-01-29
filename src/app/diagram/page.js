@@ -49,7 +49,7 @@ function Page(props) {
                 });
                 console.log(response.data.mermaidChart,"chart")
                 setCode(response.data.mermaidChart)
-                localStorage.setItem("code",response.data.mermaidChart)
+                typeof window !== "undefined" && localStorage.setItem("code",response.data.mermaidChart)
                 router.push(`/editor`)
                 // Handle the response here
                 toast.success(response.data.message)
