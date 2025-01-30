@@ -37,6 +37,8 @@ const Dashboard = () => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+    const token = searchParams.get("token") || Cookies.get("token");
+    const router = useRouter();
 
     const [menuOpen, setMenuOpen] = useState(false);
     const [value, setValue] = React.useState("1");
@@ -48,13 +50,12 @@ const Dashboard = () => {
         setMenuOpen(!menuOpen);
     };
 
-    const router = useRouter();
 
     useEffect(() => {
-        if (!searchParams.token) {
+        if (!token) {
             return router.push("/login");
         } else {
-            Cookies.set("token", searchParams.token, {
+            Cookies.set("token", token, {
                 secure: true,
                 sameSite: "None",
             });

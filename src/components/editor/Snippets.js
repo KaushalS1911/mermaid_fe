@@ -89,7 +89,6 @@ function Snippets(props) {
             title: "Arrow with Label", img: ArrowWithLabel, code: '\n-- label -->'
         },]
     }]
-    console.log(code,"kkkkkkkkkkkkkkkkkkkkk")
     const theme = useTheme()
     return (<>
         <Box sx={{height: "100vh", overflowY: "auto", px: 1}}>
