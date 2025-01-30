@@ -38,15 +38,18 @@ function Page(props) {
                     formData.append("file", values.file);
                 }
 
-                // Replace the URL with your actual API endpoint
-                const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/flowchart`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        'huggingToken': process.env.NEXT_PUBLIC_HUGGING_TOKEN
-                        // Add authorization token or other headers if needed
-                    },
-                    withCredentials: true, // Include cookies in the request
-                });
+                const response = await axios.post(
+                    `${process.env.NEXT_PUBLIC_BASE_URL}/api/flowchart`,
+                    formData,
+                    {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                            "huggingToken": process.env.NEXT_PUBLIC_HUGGING_TOKEN,
+                        },
+                        withCredentials: true,
+                    }
+                );
+
                 console.log(response.data.mermaidChart,"chart")
                 setCode(response.data.mermaidChart)
                 typeof window !== "undefined" && localStorage.setItem("code",response.data.mermaidChart)
