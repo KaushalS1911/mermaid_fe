@@ -22,10 +22,10 @@ function Page(props) {
             method: "", aiModel: "Gemini", textOrSyntax: "", file: null,
         },
         validationSchema: Yup.object({
-            method: Yup.string().required("Please select a method"),
-            aiModel: Yup.string().required("Please select an AI model"),
-            textOrSyntax: Yup.string().required("This field is required"),
-            file: Yup.mixed().nullable(),
+            // method: Yup.string().required("Please select a method"),
+            // aiModel: Yup.string().required("Please select an AI model"),
+            // textOrSyntax: Yup.string().required("This field is required"),
+            // file: Yup.mixed().nullable(),
         }),
         onSubmit: async (values) => {
             console.log("Form Data:", values);
@@ -91,7 +91,7 @@ function Page(props) {
                                     >
                                         <Typography variant="body2" sx={{ fontSize: '14px', mt: 2, fontWeight: 600 }}>Select Input Field:</Typography>
                                         <RadioGroup name="method" value={values.method} onChange={handleChange} sx={{ mt: 1 }}>
-                                            {['Tex/README', 'Voice Recording', 'Upload Audio'].map((option) => (
+                                            {['Text/README', 'Voice Recording', 'Upload Audio'].map((option) => (
                                                 <FormControlLabel sx={{ '& .MuiFormControlLabel-label': { fontSize: '14px' } }}
                                                     key={option}
                                                     value={option}
