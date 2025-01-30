@@ -55,12 +55,12 @@ const Dashboard = () => {
         if (!token) {
             return router.push("/login");
         }
-        // else {
-        //     Cookies.set("token", token, {
-        //         secure: true,
-        //         sameSite: "None",
-        //     });
-        // }
+        else {
+            Cookies.set("token", token, {
+                secure: true,
+                sameSite: "None",
+            });
+        }
     }, []);
 
 
