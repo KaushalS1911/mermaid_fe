@@ -48,18 +48,18 @@ const Dashboard = () => {
         setMenuOpen(!menuOpen);
     };
 
-    const token = Cookies.get("token");
     const router = useRouter();
+    // const token = Cookies.get("token");
+    //
+    // useEffect(() => {
+    //     if (!token) {
+    //         router.push("/login");
+    //     }
+    // }, []);
 
-    useEffect(() => {
-        if (!token) {
-            router.push("/login");
-        }
-    }, []);
-
-    if (!token) {
-        return router.push("/login");
-    }
+    // if (!token) {
+    //     return router.push("/login");
+    // }
 
     return (
         <Box sx={{bgcolor: "#fff", minHeight: "100vh", p: {md: 2, xs: 0}}}>
