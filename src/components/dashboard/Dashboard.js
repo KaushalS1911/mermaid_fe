@@ -37,7 +37,7 @@ const Dashboard = () => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
-    const token = searchParams.get("token") || Cookies.get("token");
+    const token = searchParams.get("token") || sessionStorage.getItem("token");
     const router = useRouter();
 
     const [menuOpen, setMenuOpen] = useState(false);
@@ -53,16 +53,11 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (!token) {
-            return router.push("/login");
-        }
-        else {
-            Cookies.set("token", token, {
-                secure: true,
-                sameSite: "None",
-            });
+            router.push("/login");
+        } else {
+            sessionStorage.setItem("token", token);
         }
     }, []);
-
 
     return (
         <Box sx={{bgcolor: "#fff", minHeight: "100vh", p: {md: 2, xs: 0}}}>
