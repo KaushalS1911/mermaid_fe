@@ -1,34 +1,37 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
     Box, Button, Container, FormControl, FormControlLabel, FormLabel, Grid, MenuItem, Radio, RadioGroup, TextField, Typography
 } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import { CloseIcon } from "next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon";
-import axios from 'axios';
 import Image from "next/image";
 import Upload from "../../asset/dashboard/upload.png"
+import {useRouter} from "next/navigation";
+import {ChartContext} from "@/app/layout";
+import toast from "react-hot-toast";
+import axiosInstance from "@/utils/axiosInstance";
 
 function Page(props) {
     const [file, setFile] = useState(null);
-
+    const {setCode} = useContext(ChartContext);
+    const router = useRouter();
     const formik = useFormik({
         initialValues: {
             method: "", aiModel: "Gemini", textOrSyntax: "", file: null,
         },
-        // validationSchema: Yup.object({
-        //     method: Yup.string().required("Please select a method"),
-        //     aiModel: Yup.string().required("Please select an AI model"),
-        //     textOrSyntax: Yup.string().required("This field is required"),
-        //     file: Yup.mixed().nullable(),
-        // }),
+        validationSchema: Yup.object({
+            method: Yup.string().required("Please select a method"),
+            aiModel: Yup.string().required("Please select an AI model"),
+            textOrSyntax: Yup.string().required("This field is required"),
+            file: Yup.mixed().nullable(),
+        }),
         onSubmit: async (values) => {
             console.log("Form Data:", values);
             try {
                 const formData = new FormData();
-                let payload = {}; // Declare payload before using it
+                let payload = {};
         
                 formData.append("aiModel", values.aiModel);
                 payload["aiModel"] = values.aiModel;
@@ -39,27 +42,30 @@ function Page(props) {
         
                     if (values.file) {
                         formData.append("file", values.file);
-                        payload["file"] = values.file; // Store file in state
+                        payload["file"] = values.file;
                     }
                 } else {
                     formData.append("textOrMermaid", values.textOrSyntax);
                     payload["textOrMermaid"] = values.textOrSyntax;
                 }
-        
-                // Store the final payload in state
-                setFile(payload);
-        
-                // Debugging: Log only the fields being sent
-                console.log("Final Payload:", payload);
-        
-                // Replace the URL with your actual API endpoint
-                const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/flowchart`, formData, {
-                    headers: { 'Content-Type': 'multipart/form-data' },
-                    withCredentials: true,
-                });
-        
-                console.log("API Response:", response.data);
+
+                const response = await axiosInstance.post(
+                    `${process.env.NEXT_PUBLIC_BASE_URL}/flowchart`,
+                    payload,
+                    {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                            "huggingToken": process.env.NEXT_PUBLIC_HUGGING_TOKEN,
+                        },
+                    }
+                );
+
+                setCode(response.data.mermaidChart)
+                typeof window !== "undefined" && localStorage.setItem("code",response.data.mermaidChart)
+                router.push(`/editor`)
+                toast.success(response.data.message)
             } catch (error) {
+                toast.error('Something went wrong!')
                 console.error("Error during API call:", error);
             }
         }
@@ -165,7 +171,6 @@ function Page(props) {
                                                     }
                                                 }}
                                                     fullWidth
-                                                    label="Gemini"
                                                     name="textOrSyntax"
                                                     value={values.textOrSyntax}
                                                     onChange={handleChange}
@@ -191,7 +196,6 @@ function Page(props) {
                                                             setFieldValue('file', file);
                                                         }
                                                     }}>
-                                                    {/* Wrap Image inside Label to make it clickable */}
                                                     <Box>
                                                         <label htmlFor="file-upload" style={{ cursor: "pointer" }}>
                                                             <Image

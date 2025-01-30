@@ -51,8 +51,8 @@ const Sidebar = ({ open, mobileOpen, handleDrawerToggle, setSidebarKey, sidebarK
                         px: "15px",
                     }}
                 >
-                    {menuItems.map((item) => (
-                        <React.Fragment key={item.text}>
+                    {menuItems.map((item,index) => (
+                        <React.Fragment key={index}>
                             <ListItem
                                 disablePadding
                                 sx={{
@@ -101,8 +101,8 @@ const Sidebar = ({ open, mobileOpen, handleDrawerToggle, setSidebarKey, sidebarK
                         px: "15px",
                     }}
                 >
-                    {menuItems.map((item) => (
-                        <React.Fragment key={item.text}>
+                    {menuItems.map((item,index) => (
+                        <React.Fragment key={index}>
                             <ListItem
                                 onClick={() => setSidebarKey(item.text)}
                                 disablePadding

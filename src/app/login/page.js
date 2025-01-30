@@ -6,11 +6,9 @@ import {Toaster} from "react-hot-toast";
 
 function Page() {
     const handleLogin = () => {
-        alert("kkkk")
-        console.log(process.env.NEXT_PUBLIC_CLINT_ID);
         const params = new URLSearchParams({
             response_type: "code",
-            client_id: process.env.NEXT_PUBLIC_CLINT_ID,
+            client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
             redirect_uri: `${process.env.NEXT_PUBLIC_BASE_URL}/linkedin/callback`,
             scope: "openid email profile",
         });
