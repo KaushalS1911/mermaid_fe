@@ -32,7 +32,7 @@ import Cookies from "js-cookie";
 import {useRouter} from "next/navigation";
 
 
-const Dashboard = () => {
+const Dashboard = ({searchParams}) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -49,17 +49,18 @@ const Dashboard = () => {
     };
 
     const router = useRouter();
-    // const token = Cookies.get("token");
-    //
-    // useEffect(() => {
-    //     if (!token) {
-    //         router.push("/login");
-    //     }
-    // }, []);
 
-    // if (!token) {
-    //     return router.push("/login");
-    // }
+    useEffect(() => {
+        if (!searchParams.token) {
+            return router.push("/login");
+        } else {
+            Cookies.set("token", searchParams.token, {
+                secure: true,
+                sameSite: "None",
+            });
+        }
+    }, []);
+
 
     return (
         <Box sx={{bgcolor: "#fff", minHeight: "100vh", p: {md: 2, xs: 0}}}>
