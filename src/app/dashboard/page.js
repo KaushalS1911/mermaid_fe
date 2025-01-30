@@ -52,9 +52,9 @@ export default function Home() {
     }, {
         field: "author", headerName: "Author", flex: 1, minWidth: 150,
     },];
-    // if (!token) {
+    if (!token) {
     //  return router.push("/login");
-    // }
+    }
     return (<>
         <Box p={4} bgcolor={"#f1f1f1"} minHeight="100vh" height={"100%"}>
             {/*<Tabs value={value} onChange={handleChange} sx={{*/}

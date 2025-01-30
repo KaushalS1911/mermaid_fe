@@ -5,19 +5,18 @@ import Features from "@/components/home/features";
 import Testimonials from "@/components/home/testimonials";
 import Faq from "@/components/home/faq";
 import HeroSection from '@/components/home/heroSection';
-import FlowchartPage from './dashboard2/page';
 
 function Page(props) {
     return (
         <>
-            {/* <HeroSection />
+            <HeroSection />
             <Diagram />
             <Features />
             <Testimonials />
-            <Faq /> */}
-            <FlowchartPage />
+            <Faq />
         </>
     );
+
 }
 
 export default Page;
