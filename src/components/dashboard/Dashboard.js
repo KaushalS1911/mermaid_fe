@@ -29,10 +29,11 @@ import {TabContext, TabList, TabPanel} from "@mui/lab";
 import Table from "@/components/dashboard/Table";
 import img from "../../asset/dashboard1/Ellipse.png";
 import Cookies from "js-cookie";
-import {useRouter} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 
 
-const Dashboard = ({searchParams}) => {
+const Dashboard = () => {
+    const searchParams = useSearchParams()
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -43,7 +44,6 @@ const Dashboard = ({searchParams}) => {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
-
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
     };
