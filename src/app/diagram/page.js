@@ -46,7 +46,6 @@ function Page(props) {
                             "Content-Type": "multipart/form-data",
                             "huggingToken": process.env.NEXT_PUBLIC_HUGGING_TOKEN,
                         },
-                        withCredentials: true,
                     }
                 );
 
