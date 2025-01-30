@@ -11,6 +11,7 @@ import axios from 'axios';
 import {useRouter} from "next/navigation";
 import {ChartContext} from "@/app/layout";
 import toast from "react-hot-toast";
+import axiosInstance from "@/utils/axiosInstance";
 
 function Page(props) {
     const {setCode} = useContext(ChartContext);
@@ -38,7 +39,7 @@ function Page(props) {
                     formData.append("file", values.file);
                 }
 
-                const response = await axios.post(
+                const response = await axiosInstance.post(
                     `${process.env.NEXT_PUBLIC_BASE_URL}/api/flowchart`,
                     formData,
                     {
