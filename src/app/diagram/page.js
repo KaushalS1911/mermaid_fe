@@ -40,7 +40,7 @@ function Page(props) {
                 }
 
                 const response = await axiosInstance.post(
-                    `${process.env.NEXT_PUBLIC_BASE_URL}/api/flowchart`,
+                    `${process.env.NEXT_PUBLIC_BASE_URL}/flowchart`,
                     formData,
                     {
                         headers: {
