@@ -39,7 +39,7 @@ function Page(props) {
                 }
 
                 // Replace the URL with your actual API endpoint
-                const response = await axios.post('http://localhost:8080/api/flowchart', formData, {
+                const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/flowchart`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         'huggingToken': process.env.NEXT_PUBLIC_HUGGING_TOKEN
