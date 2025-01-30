@@ -27,6 +27,7 @@ import {ChartContext} from "@/app/layout";
 import toast from "react-hot-toast";
 import { Mic, Stop } from "@mui/icons-material";
 import axiosInstance from "@/utils/axiosInstance";
+import FullScreenLoader from "@/utils/fullScreenLoader";
 
 function Page() {
     const [file, setFile] = useState(null);
@@ -34,7 +35,7 @@ function Page() {
     const [isRecording, setIsRecording] = useState(false);
     const [audioURL, setAudioURL] = useState(null);
     const [audioBlob, setAudioBlob] = useState(null);
-    const audioRef = useRef(null);
+    const [loading, setLoading] = useState(false);
     const router = useRouter();
 
     const handleAudioStop = (recordedData) => {
@@ -59,7 +60,7 @@ function Page() {
             // file: Yup.mixed().nullable(),
         }),
         onSubmit: async (values) => {
-            console.log("Form Data:", values);
+            setLoading(true);
             try {
                 const formData = new FormData();
                 let payload = {};
@@ -70,7 +71,6 @@ function Page() {
                 if (values.method) {
                     formData.append("selectInputMethod", values.method);
                     payload["selectInputMethod"] = values.method;
-                    console.log(audioBlob);
                     if (values.method === "Voice Recording" && audioBlob) {
                         formData.append("file", audioBlob);
                         payload["file"] = audioBlob;
@@ -101,11 +101,20 @@ function Page() {
             } catch (error) {
                 toast.error('Something went wrong!')
                 console.error("Error during API call:", error);
+            } finally {
+                setLoading(false);
             }
+
         }
     });
 
     const {values, errors, touched, handleChange, handleBlur, setFieldValue} = formik;
+
+    if(loading){
+        return (
+            <FullScreenLoader  />
+        )
+    }
 
     return (
         <>
@@ -219,15 +228,48 @@ function Page() {
                                         ) : (
                                             <>
                                                 {values.method === 'Voice Recording' ? (
-                                                    <Stack spacing={2} direction="column" alignItems="center" sx={{ mt: 4, p: 3, textAlign: "center" }}>
-                                                        <Typography variant="h5" fontWeight="bold" color="primary" gutterBottom>
-                                                            Audio Recorder
+                                                    <Stack spacing={2} sx={{ mt: 3, p: 2, maxWidth: 400 }}>
+                                                        {/* Title */}
+                                                        <Typography variant="body2" sx={{ fontSize: "14px", fontWeight: 600 }}>
+                                                            Audio Recorder:
                                                         </Typography>
-                                                        <ReactMic record={isRecording} onStop={handleAudioStop} mimeType="audio/webm" className="audio-recorder" visualSetting="sinewave" strokeColor="#3f51b5" backgroundColor="#e3f2fd" />
-                                                        <IconButton onClick={handleToggleRecording} color={isRecording ? "secondary" : "primary"} sx={{ bgcolor: isRecording ? "#ffebee" : "#e3f2fd", p: 2, borderRadius: "50%" }}>
-                                                            {isRecording ? <Stop fontSize="large" /> : <Mic fontSize="large" />}
-                                                        </IconButton>
-                                                        {audioURL && (<audio src={audioURL} controls style={{ width: "100%", marginTop: "10px" }} />)}
+
+                                                        {/* Recorder & Mic Button in a Row */}
+                                                        <Stack direction="row" alignItems="center" spacing={2}>
+                                                            <ReactMic
+                                                                record={isRecording}
+                                                                onStop={handleAudioStop}
+                                                                mimeType="audio/webm"
+                                                                className="audio-recorder"
+                                                                visualSetting="sinewave"
+                                                                strokeColor="#3f51b5"
+                                                                backgroundColor="#e3f2fd"
+                                                                style={{ borderRadius: 8, flexGrow: 1 }}
+                                                            />
+
+                                                            <IconButton
+                                                                onClick={handleToggleRecording}
+                                                                color={isRecording ? "secondary" : "primary"}
+                                                                sx={{
+                                                                    bgcolor: isRecording ? "#ffebee" : "#e3f2fd",
+                                                                    p: 2,
+                                                                    borderRadius: "50%",
+                                                                    transition: "0.3s",
+                                                                    "&:hover": { bgcolor: isRecording ? "#ffcdd2" : "#bbdefb" },
+                                                                }}
+                                                            >
+                                                                {isRecording ? <Stop fontSize="medium" /> : <Mic fontSize="medium" />}
+                                                            </IconButton>
+                                                        </Stack>
+
+                                                        {/* Audio Playback */}
+                                                        {audioURL && (
+                                                            <audio
+                                                                src={audioURL}
+                                                                controls
+                                                                style={{ width: "100%", marginTop: 8, borderRadius: 8, outline: "none" }}
+                                                            />
+                                                        )}
                                                     </Stack>
                                                 ) : (
                                                     <FormControl fullWidth sx={{mb: 3}}>
