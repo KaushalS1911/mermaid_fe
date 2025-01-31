@@ -1,33 +1,22 @@
 "use client";
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 import mermaid from "mermaid";
 import {Box, Grid} from "@mui/material";
 import Snippets from "@/components/editor/Snippets";
-import MonacoEditor from '@monaco-editor/react';
-import {ChartContext} from "@/app/layout";
 import Templates from "@/components/editor/Templates";
 import LeftContainer from "@/components/editor/LeftContainer";
 import RightContainer from "@/components/editor/RightContainer";
 import {useStore} from "@/store";
 
-function MainEditor({sidebarKey, formatCode}) {
-    // const {code, setCode} = useContext(ChartContext)
+function MainEditor({sidebarKey}) {
     const setCode = useStore((state) => state.setCode);
     const code = useStore((state) => state.code);
-    const token = localStorage.getItem("code")
+    const token = typeof window !== "undefined" && localStorage.getItem("code")
     useEffect(() => {
         if (token !== null) {
             setCode(token);
         }
     }, [token])
-    const mermaidCode = `
-   flowchart TD
-    A[Christmas] -->|Get money| B(Go shopping)
-    B --> C{Let me think}
-    C -->|One| D[Laptop]
-    C -->|Two| E[iPhone]
-    C -->|Three| F[fa:fa-car Car]
-  `;
     const chartRef = useRef(null);
     useEffect(() => {
         mermaid.initialize({

@@ -19,35 +19,35 @@ function Faq() {
 
     const faqData = [
         {
-            title: "Lorem ipsum",
-            content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.",
-            defaultExpanded: true,
+            "title": "Flowchart Diagrams",
+            "content": "Flowcharts are useful for visualizing processes. In Mermaid.js, you can create flowcharts using 'graph TD' or 'graph LR' syntax.",
+            "defaultExpanded": true
         },
         {
-            title: "Lorem ipsum",
-            content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.",
-            defaultExpanded: false,
+            "title": "Sequence Diagrams",
+            "content": "Sequence diagrams illustrate how objects interact in a particular sequence. Mermaid.js supports actors and messages using 'sequenceDiagram'.",
+            "defaultExpanded": false
         },
         {
-            title: "Lorem ipsum",
-            content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.",
-            defaultExpanded: false,
+            "title": "Gantt Charts",
+            "content": "Gantt charts help track project schedules. In Mermaid.js, use 'gantt' to define tasks, dates, and dependencies.",
+            "defaultExpanded": false
         },
         {
-            title: "Lorem ipsum",
-            content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.",
-            defaultExpanded: false,
+            "title": "Class Diagrams",
+            "content": "Class diagrams represent object-oriented structures. Mermaid.js supports 'classDiagram' to define classes and relationships.",
+            "defaultExpanded": false
         },
         {
-            title: "Lorem ipsum",
-            content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.",
-            defaultExpanded: false,
+            "title": "State Diagrams",
+            "content": "State diagrams help visualize state changes in a system. Mermaid.js uses 'stateDiagram' to define transitions and states.",
+            "defaultExpanded": false
         },
         {
-            title: "Lorem ipsum",
-            content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.",
-            defaultExpanded: false,
-        },
+            "title": "Entity Relationship Diagrams (ERD)",
+            "content": "ER diagrams show relationships between entities. Mermaid.js allows defining entities and their connections using 'erDiagram'.",
+            "defaultExpanded": false
+        }
     ];
 
     return (

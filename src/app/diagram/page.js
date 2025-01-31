@@ -26,8 +26,6 @@ import { CloseIcon } from "next/dist/client/components/react-dev-overlay/interna
 import Image from "next/image";
 import Upload from "../../asset/dashboard/upload.png"
 import { useRouter } from "next/navigation";
-// import { ReactMic } from "react-mic";
-import { ChartContext } from "@/app/layout";
 import toast from "react-hot-toast";
 import { Mic, Stop } from "@mui/icons-material";
 import axiosInstance from "@/utils/axiosInstance";
