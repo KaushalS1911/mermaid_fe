@@ -49,6 +49,8 @@ const RightContainer = () => {
                     height: 48,
                     display: "flex",
                     justifyContent: "space-between",
+                    backgroundColor:"#fff",
+                    borderRadius:"10px",
                     alignItems: "center",
                     px: 1,
                     position: "absolute",
