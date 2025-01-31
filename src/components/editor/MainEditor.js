@@ -8,10 +8,12 @@ import {ChartContext} from "@/app/layout";
 import Templates from "@/components/editor/Templates";
 import LeftContainer from "@/components/editor/LeftContainer";
 import RightContainer from "@/components/editor/RightContainer";
+import {useStore} from "@/store";
 
 function MainEditor({sidebarKey, formatCode}) {
-    const {code, setCode} = useContext(ChartContext
-    )
+    // const {code, setCode} = useContext(ChartContext)
+    const setCode = useStore((state) => state.setCode);
+    const code = useStore((state) => state.code);
     const token = localStorage.getItem("code")
     useEffect(() => {
         if(token !== null){
@@ -66,30 +68,10 @@ function MainEditor({sidebarKey, formatCode}) {
                 <Templates/>
             </Grid>
         )}
-            <Grid item xs={12} sm={6} md={sidebarKey === "Snippets" ? 5 : 6} lg={sidebarKey === "Snippets" ? 4 : 6}>
-                {/*<Box sx={{height: '100vh', overflowY: 'auto',py:2}}>*/}
-                {/*    <MonacoEditor*/}
-                {/*        height="100%"*/}
-                {/*        defaultLanguage="mermaid"*/}
-                {/*        theme="vs-light"*/}
-                {/*        value={code}*/}
-                {/*        onChange={(value) => setCode(value || '')}*/}
-                {/*        options={{*/}
-                {/*            minimap: {enabled: false}, scrollBeyondLastLine: false, automaticLayout: true,*/}
-                {/*        }}*/}
-                {/*    />*/}
-                {/*</Box>*/}
+            <Grid item xs={12} sm={6} md={sidebarKey? 5 : 6} lg={sidebarKey? 4 : 6}>
                 <LeftContainer />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={5} height={"100vh"} overflowY="hidden" py={2} >
-                {/*<Box>*/}
-                {/*<Box*/}
-                {/*    ref={chartRef}*/}
-                {/*    sx={{*/}
-                {/*        textAlign: "center", padding: '16px',*/}
-                {/*    }}*/}
-                {/*/>*/}
-                {/*</Box>*/}
                 <RightContainer />
             </Grid>
         </Grid>

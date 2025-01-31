@@ -4,6 +4,7 @@ import {allTemplates} from "@/constants/allTemplates";
 import {useTheme} from "@mui/material/styles";
 
 import {ChartContext} from "@/app/layout";
+import {useStore} from "@/store";
 
 function Templates(props) {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -11,7 +12,8 @@ function Templates(props) {
     const [selectedTemplate, setSelectedTemplate] = useState(null);
     const [open, setOpen] = useState(false);
     const [templateName, setTemplateName] = useState("All");
-    const {code, setCode} = useContext(ChartContext);
+    const setCode = useStore((state) => state.setCode);
+    const code = useStore((state) => state.code);
     const theme = useTheme();
     const handleOpen = (template) => {
         setSelectedTemplate(template);

@@ -9,9 +9,9 @@ import {useContext} from "react";
 import {ChartContext} from "@/app/layout";
 
 const MermaidEditor = () => {
-  const {code} = useContext(ChartContext)
-  // const code = useStore((state) => state.code);
-  // const setCode = useStore((state) => state.setCode);
+  // const {code} = useContext(ChartContext)
+  const code = useStore((state) => state.code);
+  const setCode = useStore((state) => state.setCode);
   const config = useStore((state) => state.config);
   const setConfig = useStore((state) => state.setConfig);
   const editorMode = useStore((state) => state.editorMode);

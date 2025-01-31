@@ -7,34 +7,12 @@ export const useStateStore = create(
     persist(
         (set) => ({
             code: `flowchart TD
-    %% Entry point
-    A[User Enters]
-
-    %% Main options
-    A ===> B{{Write their own code}}
-    A ===> C{{Edit existing code}}
-    A ===> D{{Export Mermaid diagrams}}
-    A ===> E{{Use AI to generate charts}}
-
-    %% AI Usage Group
-    subgraph AI_Usage [Using AI to Generate Charts]
-        E1[Enter query] ==> E2[Copy the generated code]
-        E2 ==> E3[Directly import in workspace]
-    end
-    E ===> AI_Usage
-
-    %% Connections for editing and exporting
-    B ===> F{{User Editor}}
-    C ===> F
-    F ==> G[Save Changes]
-    F ==> H[Preview Diagram]
-    G ==> D
-    H ==> D
-
-    %% Connections for AI to workspace
-    E1 ===> I[Process query with AI]
-    I ==> E2
-    `,
+    A[Christmas] -->|Get money| B(Go shopping)
+    B --> C{Let me think}
+    C -->|One| D[Laptop]
+    C -->|Two| E[iPhone]
+    C -->|Three| F[fa:fa-car Car]
+  `,
             config: formatJSON({
                 theme: "default",
             }),
