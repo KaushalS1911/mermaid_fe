@@ -17,7 +17,7 @@ function MainEditor({sidebarKey, formatCode}) {
     const token = localStorage.getItem("code")
     useEffect(() => {
         if(token !== null){
-        setCode(token);
+            setCode(token);
         }
     },[token])
     const mermaidCode = `
@@ -71,7 +71,7 @@ function MainEditor({sidebarKey, formatCode}) {
             <Grid item sx={{height: '100vh',overflow:'auto'}} xs={12} sm={6} md={sidebarKey? 5 : 6} lg={sidebarKey? 4 : 6}>
                 <LeftContainer />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={5} height={"100vh"} overflowY="hidden" py={2} >
+            <Grid item xs={12} sm={6} md={4} lg={5} height={"100vh"} overflowY="hidden"  >
                 <RightContainer />
             </Grid>
         </Grid>

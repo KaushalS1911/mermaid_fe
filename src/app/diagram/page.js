@@ -51,17 +51,39 @@ function Page() {
         setIsRecording((prev) => !prev);
     };
 
+    const validation = Yup.object({
+        method: Yup.string().required("Please select a method"),
+
+        aiModel: Yup.string().required("This field is required"),
+        title: Yup.string().required("This field is required"),
+
+        textOrSyntax: Yup.mixed().nullable().when('method',{
+            is: (val) => val.length !== 0,
+                then: (schema) => schema.required("Please select a file"),
+            otherwise: (schema) => schema.notRequired(),
+    }),
+
+        file: Yup.mixed().nullable().when("method", {
+            is: (val) => val.length === 0,
+            then: (schema) => schema.required("Please select a file"),
+            otherwise: (schema) => schema.notRequired(),
+        }),
+    });
+
+
     const formik = useFormik({
         initialValues: {
-            method: "", aiModel: "Gemini", textOrSyntax: "", file: null,
+            method: "",
+            aiModel: "Gemini",
+            textOrSyntax: "",
+            file: null,
+            title: "",
         },
-        validationSchema: Yup.object({
-            // method: Yup.string().required("Please select a method"),
-            // aiModel: Yup.string().required("Please select an AI model"),
-            // textOrSyntax: Yup.string().required("This field is required"),
-            // file: Yup.mixed().nullable(),
-        }),
+        validationSchema: validation, // ✅ Use the external validation schema
+        validateOnChange: true,  // ✅ Validate when fields change
+        validateOnBlur: true,    // ✅ Validate when fields lose focus
         onSubmit: async (values) => {
+            console.log("Form submitted with values:", values); // Debugging
             setLoading(true);
             try {
                 const formData = new FormData();
@@ -69,6 +91,8 @@ function Page() {
 
                 formData.append("aiModel", values.aiModel);
                 payload["aiModel"] = values.aiModel;
+                formData.append("title", values.title);
+                payload["title"] = values.title;
 
                 if (values.method) {
                     formData.append("selectInputMethod", values.method);
@@ -96,19 +120,20 @@ function Page() {
                     }
                 );
 
-                setCode(response.data.mermaidChart)
-                typeof window !== "undefined" && localStorage.setItem("code", response.data.mermaidChart)
-                router.push(`/editor`)
-                toast.success(response.data.message)
+                setCode(response.data.mermaidChart);
+                typeof window !== "undefined" && localStorage.setItem("code", response.data.mermaidChart);
+                router.push(`/editor`);
+                toast.success(response.data.message);
             } catch (error) {
-                toast.error('Something went wrong!')
+                toast.error("Something went wrong!");
                 console.error("Error during API call:", error);
             } finally {
                 setLoading(false);
             }
-
         }
     });
+
+
 
     const {values, errors, touched, handleChange, handleBlur, setFieldValue} = formik;
 
@@ -119,7 +144,7 @@ function Page() {
     }
 
     return (
-        <>
+        <Box bgcolor={'#fff'}>
             <Container>
                 <Box>
                     <Grid container>
@@ -151,6 +176,38 @@ function Page() {
                                         </RadioGroup>
                                     </FormControl>
 
+                                    <Typography variant="body2"
+                                                sx={{fontSize: "14px", mt: 2, fontWeight: 600}}>
+                                        Enter Title
+                                    </Typography>
+                                    <TextField sx={{
+                                        mt: 1,
+                                        "& .MuiOutlinedInput-root": {
+                                            "&:hover fieldset": {
+                                                borderColor: "#FF3480 !important",
+                                            },
+                                            "&.Mui-focused fieldset": {
+                                                borderColor: "#FF3480 !important",
+                                            }
+                                        },
+                                        "& .MuiInputLabel-root": {
+                                            "&.Mui-focused": {
+                                                color: "#FF3480",
+                                            },
+                                            "&:hover": {
+                                                color: "#FF3480",
+                                            }
+                                        }
+                                    }}
+                                               fullWidth
+                                               name="title"
+                                               value={values.title}
+                                               onChange={handleChange}
+                                               onBlur={handleBlur}
+                                               error={touched.title && Boolean(errors.title)}
+                                               helperText={touched.title && errors.title}
+                                               multiline
+                                    />
 
                                     <FormControl fullWidth sx={{mb: 3}}>
                                         <Typography variant="body2" sx={{fontSize: "14px", mt: 2, fontWeight: 600}}>
@@ -410,7 +467,7 @@ function Page() {
                     </Grid>
                 </Box>
             </Container>
-        </>
+        </Box>
     );
 }
 
