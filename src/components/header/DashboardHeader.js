@@ -11,31 +11,33 @@ export default function DashboardHeader({handleDrawerToggle}) {
     const [darkMode, setDarkMode] = React.useState(false);
     const [menuOpen, setMenuOpen] = React.useState(false);
     const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down("md")); // Detect mobile screens
+    const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
     const path = window.location.pathname;
     const name = path.split("/");
 
     return (
         <AppBar position="static" sx={{ backgroundColor: "#F8F8FA", color: "#000", boxShadow: "none", py: 1, px: { xs: 2, sm: 4 } }}>
-            <Box sx={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap",alignItems: "center" }}>
+            <Box sx={{ display: "flex", justifyContent: "space-between",alignItems: "center" }}>
 
-                <Box>
-                    {/* Left Side: Breadcrumb Navigation */}
                     {!isMobile && (
+                        <Box>
+
                         <Breadcrumbs separator="›" sx={{ flexGrow: 1 }}>
                             <Link underline="hover" color="inherit" href="/">Home</Link>
                             <Typography color="textPrimary" sx={{textTransform:"capitalize"}}>{name}</Typography>
                         </Breadcrumbs>
+                        </Box>
+
                     )}
-                </Box>
 
                 <Box>
-                    {/* Center: Navigation Buttons */}
                     {isMobile ? (
+                            <Box>
                         <IconButton edge="start" color="inherit" onClick={handleDrawerToggle}>
                             <Menu />
                         </IconButton>
+                            </Box>
                     ) : (
                         <Box sx={{ display: "flex", gap: 1 }}>
                             <Button sx={{ color: "#000" }}>Mermaid AI</Button>
@@ -45,7 +47,6 @@ export default function DashboardHeader({handleDrawerToggle}) {
                     )}
                 </Box>
 
-                {/* Right Side: Controls */}
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                     <Button
                         variant="contained"
@@ -67,7 +68,6 @@ export default function DashboardHeader({handleDrawerToggle}) {
                 </Box>
             </Box>
 
-            {/* Mobile Menu */}
             {isMobile && menuOpen && (
                 <Box sx={{ display: "flex", flexDirection: "column", px: 2, py: 1 }}>
                     <Button sx={{ color: "#000" }}>Mermaid AI</Button>
