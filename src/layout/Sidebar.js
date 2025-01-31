@@ -32,7 +32,7 @@ const Sidebar = ({open, mobileOpen, handleDrawerToggle, setSidebarKey,sidebarKey
     const {code, chartRef, setColor} = useContext(ChartContext);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"))
-    const drawerWidth = collapsed ? 60 : 200;
+    const drawerWidth = collapsed ? 67 : 200;
 
     const handleDownloadImage = () => {
         setIsLoading(true);
