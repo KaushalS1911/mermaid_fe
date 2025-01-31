@@ -64,7 +64,7 @@ function MainEditor({sidebarKey, formatCode}) {
                     <Snippets/>
                 </Grid>
             )}{sidebarKey === "Templates" && (
-            <Grid item xs={6} md={3}  sx={{height: '100vh',overflow:'auto'}}>
+            <Grid item xs={12} md={3}  sx={{height: '100vh',overflow:'auto'}}>
                 <Templates/>
             </Grid>
         )}
