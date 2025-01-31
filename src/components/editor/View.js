@@ -137,10 +137,11 @@ const View = () => {
 
     return (
         <Box ref={chartRef} component="div" sx={{
-            height: "100vh !important", cursor: 'grab', backgroundImage: `url("${color.image.src}")`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
+            height: "100vh !important", cursor: 'grab',
+            // backgroundImage: `url("${color.image.src}")`,
+            // backgroundSize: "cover",
+            // backgroundPosition: "center",
+            // backgroundRepeat: "no-repeat",
         }}>
             {validateCode.startsWith("Syntax error") ? (
                 <Box component="div" sx={{color: "red", paddingX: 2}}>
