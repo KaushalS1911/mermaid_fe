@@ -57,18 +57,18 @@ function MainEditor({sidebarKey, formatCode}) {
         renderDiagram();
     }, [code]);
 
-    return (<Box>
+    return (<Box sx={{height:'100vh',overflow:'auto',display:'flex'}}>
         <Grid container spacing={2}>
             {sidebarKey === "Snippets" && (
-                <Grid item xs={12} md={3}>
+                <Grid item xs={12} md={3} sx={{height: '100vh',overflow:'auto'}}>
                     <Snippets/>
                 </Grid>
             )}{sidebarKey === "Templates" && (
-            <Grid item xs={12} md={3}>
+            <Grid item xs={6} md={3}  sx={{height: '100vh',overflow:'auto'}}>
                 <Templates/>
             </Grid>
         )}
-            <Grid item xs={12} sm={6} md={sidebarKey? 5 : 6} lg={sidebarKey? 4 : 6}>
+            <Grid item sx={{height: '100vh',overflow:'auto'}} xs={12} sm={6} md={sidebarKey? 5 : 6} lg={sidebarKey? 4 : 6}>
                 <LeftContainer />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={5} height={"100vh"} overflowY="hidden" py={2} >
