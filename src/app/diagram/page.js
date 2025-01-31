@@ -52,20 +52,18 @@ function Page() {
     };
 
     const validation = Yup.object({
-        method: Yup.string().required("Please select a method"),
-
         aiModel: Yup.string().required("This field is required"),
         title: Yup.string().required("This field is required"),
 
-        textOrSyntax: Yup.mixed().nullable().when('method',{
-            is: (val) => val.length !== 0,
-                then: (schema) => schema.required("Please select a file"),
-            otherwise: (schema) => schema.notRequired(),
-    }),
-
         file: Yup.mixed().nullable().when("method", {
-            is: (val) => val.length === 0,
+            is: (val) => val === "Text/README" || val === "Upload Audio",
             then: (schema) => schema.required("Please select a file"),
+            otherwise: (schema) => schema.notRequired(),
+        }),
+
+        textOrSyntax: Yup.mixed().nullable().when("method", {
+            is: (val) => val === "",
+            then: (schema) => schema.required("Text is required"),
             otherwise: (schema) => schema.notRequired(),
         }),
     });
@@ -79,11 +77,11 @@ function Page() {
             file: null,
             title: "",
         },
-        validationSchema: validation, // ✅ Use the external validation schema
-        validateOnChange: true,  // ✅ Validate when fields change
-        validateOnBlur: true,    // ✅ Validate when fields lose focus
+        validationSchema: validation,
+        validateOnChange: true,
+        validateOnBlur: true,
         onSubmit: async (values) => {
-            console.log("Form submitted with values:", values); // Debugging
+            console.log("Form submitted with values:", values);
             setLoading(true);
             try {
                 const formData = new FormData();
