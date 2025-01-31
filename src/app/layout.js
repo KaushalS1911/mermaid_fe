@@ -1,19 +1,19 @@
 "use client";
-import { Geist, Geist_Mono } from "next/font/google";
+import {Geist, Geist_Mono} from "next/font/google";
 import "./globals.css";
 import {ThemeProvider} from "@mui/material";
 import theme from "@/components/theme/theme";
 import {Toaster} from "react-hot-toast";
-import {createContext, useContext, useRef, useState} from "react";
-import light from "../asset/editor/design/image (1).png"
+import {createContext, Suspense, useContext, useState} from "react";
+
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+    variable: "--font-geist-sans",
+    subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+    variable: "--font-geist-mono",
+    subsets: ["latin"],
 });
 
 // export const metadata = {

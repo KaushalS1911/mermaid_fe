@@ -29,13 +29,16 @@ import {TabContext, TabList, TabPanel} from "@mui/lab";
 import Table from "@/components/dashboard/Table";
 import img from "../../asset/dashboard1/Ellipse.png";
 import Cookies from "js-cookie";
-import {useRouter} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 
 
 const Dashboard = () => {
+    const searchParams = useSearchParams()
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+    const token = searchParams.get("token") || sessionStorage.getItem("token");
+    const router = useRouter();
 
     const [menuOpen, setMenuOpen] = useState(false);
     const [value, setValue] = React.useState("1");
@@ -43,26 +46,21 @@ const Dashboard = () => {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
-
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
     };
 
-    const token = Cookies.get("token");
-    const router = useRouter();
 
     useEffect(() => {
         if (!token) {
             router.push("/login");
+        } else {
+            sessionStorage.setItem("token", token);
         }
     }, []);
 
-    if (!token) {
-        return router.push("/login");
-    }
-
     return (
-        <Box sx={{bgcolor: "#fff", minHeight: "100vh", p: {md: 2, xs: 0}}}>
+        <Box sx={{bgcolor: "#fff", minHeight: "100vh", }}>
             <AppBar
                 position="static"
                 color="inherit"
@@ -77,9 +75,6 @@ const Dashboard = () => {
                         gap: 1,
                     }}
                 >
-
-
-                    {/* Tabs Section */}
                     <TabContext value={value}>
                         <Box sx={{flexGrow: 1, display: isSmallScreen ? "none" : "block"}}>
                             <TabList
@@ -89,7 +84,9 @@ const Dashboard = () => {
                                 scrollButtons="auto"
                                 sx={{
                                     "& .MuiTab-root.Mui-selected": {
-                                        border: "2px solid #FF3480", // Customize the color of the border
+                                        border: "2px solid #FF3480",
+                                        bgcolor:'lightPink',
+                                        color:"#FF3480 !important"
                                     },
                                 }}
                             >
@@ -101,9 +98,6 @@ const Dashboard = () => {
                             </TabList>
                         </Box>
                     </TabContext>
-
-
-                    {/* Search Bar & Controls */}
                     <Box
                         display="flex"
                         alignItems="center"
@@ -114,7 +108,6 @@ const Dashboard = () => {
                             flexWrap: "wrap",
                         }}
                     >
-                        {/* Mobile Menu Button */}
                         {isSmallScreen && (
                             <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleMenu}>
                                 <MenuIcon/>
@@ -135,14 +128,12 @@ const Dashboard = () => {
                                         : "250px",
                                 flexGrow: 1,
                                 maxWidth: "100%",
-                                marginBottom: isSmallScreen ? "10px" : "0", // Adjust for mobile
+                                marginBottom: isSmallScreen ? "10px" : "0",
                             }}
                         >
                             <InputBase placeholder="Search" sx={{ml: 1, flexGrow: 1}}/>
                             <SearchIcon color="disabled"/>
                         </Box>
-
-                        {/* User Actions */}
                         <Stack direction="row" spacing={1} alignItems="center">
                             {!isSmallScreen && (
                                 <Button
@@ -186,7 +177,6 @@ const Dashboard = () => {
                     </Box>
                 </Toolbar>
 
-                {/* Mobile Navigation Drawer */}
                 <Drawer anchor="left" open={menuOpen} onClose={toggleMenu}>
                     <List>
                         <ListItem button onClick={() => setValue("1")}>
@@ -208,7 +198,6 @@ const Dashboard = () => {
                 </Drawer>
             </AppBar>
 
-            {/* Tab Panels */}
             <TabContext value={value}>
                 <TabPanel value="1">
                     <Table/>

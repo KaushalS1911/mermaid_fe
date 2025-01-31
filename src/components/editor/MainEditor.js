@@ -5,18 +5,30 @@ import {Box, Grid} from "@mui/material";
 import Snippets from "@/components/editor/Snippets";
 import MonacoEditor from "@monaco-editor/react";
 import {ChartContext} from "@/app/layout";
+import Templates from "@/components/editor/Templates";
+import LeftContainer from "@/components/editor/LeftContainer";
+import RightContainer from "@/components/editor/RightContainer";
+import {useStore} from "@/store";
 
 function MainEditor({sidebarKey, formatCode}) {
-    const {code, setCode, color , chartRef} = useContext(ChartContext);
-
-    const token = localStorage.getItem("code");
-
-
+    const { color,chartRef} = useContext(ChartContext)
+    const setCode = useStore((state) => state.setCode);
+    const code = useStore((state) => state.code);
+    const token = localStorage.getItem("code")
     useEffect(() => {
-        if (token) {
-            setCode(token);
+        if(token !== null){
+        setCode(token);
         }
-    }, [token]);
+    },[token])
+    const mermaidCode = `
+   flowchart TD
+    A[Christmas] -->|Get money| B(Go shopping)
+    B --> C{Let me think}
+    C -->|One| D[Laptop]
+    C -->|Two| E[iPhone]
+    C -->|Three| F[fa:fa-car Car]
+  `;
+    const chartRef = useRef(null);
     useEffect(() => {
         mermaid.initialize({
             startOnLoad: false,
@@ -50,54 +62,38 @@ function MainEditor({sidebarKey, formatCode}) {
         renderDiagram();
     }, [code, color.theme, color.image]);
 
-    return (
-        <Box height={"100%"} minHeight={"100vh"}>
-            <Grid container>
-                {sidebarKey === "Snippets" && (
-                    <Grid item xs={12} md={3}>
-                        <Snippets/>
-                    </Grid>
-                )}
-                <Grid item xs={12} md={4} overflow={"auto"}>
-                    <MonacoEditor
-                        height="100vh"
-                        defaultLanguage="mermaid"
-                        theme="vs-light"
-                        value={code}
-                        onChange={(value) => setCode(value || "")}
-                        options={{
-                            minimap: {enabled: false},
-                            scrollBeyondLastLine: false,
-                            automaticLayout: true,
-                        }}
-                    />
+    return (<Box>
+        <Grid container spacing={2}>
+            {sidebarKey === "Snippets" && (
+                <Grid item xs={12} md={3}>
+                    <Snippets/>
                 </Grid>
-                <Grid
-                    item
-                    xs={12}
-                    md={5}
-                    height="100vh"
-                    width={100}
-                    overflowY="auto"
-                    sx={{
-                        backgroundImage: `url("${color.image.src}")`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        backgroundRepeat: "no-repeat",
-                    }}
-                >
-                        <div
-                            ref={chartRef}
-                            style={{
-                                textAlign: "center",
-                                padding: 16,
-                                overflow: "auto",
-                            }}
-                        />
-                </Grid>
+            )}{sidebarKey === "Templates" && (
+            <Grid item xs={12} md={3}>
+                <Templates/>
             </Grid>
-        </Box>
-    );
+        )}
+            <Grid item xs={12} sm={6} md={sidebarKey? 5 : 6} lg={sidebarKey? 4 : 6}>
+                <LeftContainer />
+            </Grid>
+            <Grid
+                item
+                xs={12}
+                md={5}
+                height="100vh"
+                width={100}
+                overflowY="auto"
+                sx={{
+                    backgroundImage: `url("${color.image.src}")`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                }}
+            >
+                <RightContainer />
+            </Grid>
+        </Grid>
+    </Box>);
 }
 
 export default MainEditor;

@@ -1,5 +1,5 @@
 "use client";
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {Box, Grid} from "@mui/material";
 import {useTheme} from "@mui/material/styles";
 import Rectangle from '../../asset/editor/snippets/Rectangle.png'
@@ -23,10 +23,13 @@ import Hexagon from '../../asset/editor/snippets/Hexagon.png'
 import file from '../../asset/editor/snippets/file-text.png'
 import plus from '../../asset/editor/snippets/plus.png'
 import toast from "react-hot-toast";
+import {ChartContext} from "@/app/layout";
 
 function Snippets(props) {
     const [isCopied, setIsCopied] = useState(false);
     const [textToCopy, setTextToCopy] = useState('');
+    const {code,setCode} = useContext(ChartContext)
+
     const copyToClipboard = useCallback(async (text) => {
         try {
             await navigator.clipboard.writeText(text);
@@ -47,57 +50,57 @@ function Snippets(props) {
     }, [textToCopy, copyToClipboard]);
     const data = [{
         mainTitle: "Flowchart Shapes", subData: [{
-            title: "Rectangle", img: Rectangle, code: 'rectId["`label`"]'
+            title: "Rectangle", img: Rectangle, code: '\nrectId["label"]'
         }, {
-            title: "Rounded", img: Rounded, code: 'roundedId("`label`")'
+            title: "Rounded", img: Rounded, code: '\nroundedId("label")'
         }, {
-            title: "Stadium", img: Stadium, code: 'stadiumId(["`label`"])'
+            title: "Stadium", img: Stadium, code: '\nstadiumId(["label"])'
         }, {
-            title: "Subroutine", img: Subroutine, code: 'subId[["`label`"]]'
+            title: "Subroutine", img: Subroutine, code: '\nsubId[["label"]]'
         }, {
-            title: "Database", img: Database, code: 'dbId[["`label`"]]'
+            title: "Database", img: Database, code: '\ndbId[["label"]]'
         }, {
-            title: "Decision", img: Decision, code: 'decisionId{"`label`"}'
+            title: "Decision", img: Decision, code: '\ndecisionId{"label"}'
         }, {
-            title: "Circle", img: Circle, code: 'circleId(("`label`"))'
+            title: "Circle", img: Circle, code: '\ncircleId(("label"))'
         }, {
-            title: "Asymmetric", img: Asymmetric, code: 'asymmetricId>"`label`"]'
+            title: "Asymmetric", img: Asymmetric, code: '\nasymmetricId>"label"]'
         }, {
-            title: "Hexagon", img: Hexagon, code: 'hexId{{"`label`"}}'
+            title: "Hexagon", img: Hexagon, code: '\nhexId{{"label"}}'
         }, {
-            title: "Parallelogram", img: Parallelogram, code: 'paraId[/"`label`"/]'
+            title: "Parallelogram", img: Parallelogram, code: '\nparaId[/"label"/]'
         }, {
-            title: "Parallelogram Reverser", img: ParallelogramReverser, code: 'paraRevId[\\"`label`"\\]'
+            title: "Parallelogram Reverser", img: ParallelogramReverser, code: '\nparaRevId[\\"label"\\]'
         }, {
-            title: "Trapezoid", img: Trapezoid, code: 'trapId[/"`label`"\\]'
+            title: "Trapezoid", img: Trapezoid, code: '\ntrapId[/"label"\\]'
         }, {
-            title: "Trapezoid Reversed", img: TrapezoidReversed, code: 'trapRevId[\\"`label`"/]'
+            title: "Trapezoid Reversed", img: TrapezoidReversed, code: '\ntrapRevId[\\"label"/]'
         }, {
-            title: "DoubleCircle", img: DoubleCircle, code: 'doubleCircleId((("`label`")))'
+            title: "DoubleCircle", img: DoubleCircle, code: '\ndoubleCircleId((("label")))'
         },]
     }, {
         mainTitle: "Flowchart Edges", subData: [{
-            title: "Arrow", img: Arrow, code: '-->'
+            title: "Arrow", img: Arrow, code: '\n-->'
         }, {
-            title: "Thick Arrow", img: ThickArrow, code: '==>'
+            title: "Thick Arrow", img: ThickArrow, code: '\n==>'
         }, {
-            title: "Dashed Arrow", img: DashedArrow, code: '-.->'
+            title: "Dashed Arrow", img: DashedArrow, code: '\n-.->'
         }, {
-            title: "Arrow with Label", img: ArrowWithLabel, code: '-- label -->'
+            title: "Arrow with Label", img: ArrowWithLabel, code: '\n-- label -->'
         },]
     }]
     const theme = useTheme()
     return (<>
-        <Box sx={{height: "100vh", overflowY: "auto", px: 1}}>
+        <Box sx={{height: "100vh", overflowY: "auto", px: 1,py:2}}>
             <Grid container spacing={2}>
                 {data.map((item, index) => (<>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} key={index}>
                         <Box>{item.mainTitle}</Box>
                     </Grid>
+                        <Grid item xs={12} display={"flex"} justifyContent={"space-between"} alignItems={"center"} flexWrap={"wrap"} >
                     {item.subData.map((subItem, index) => (<>
-                        <Grid item xs={12} sm={3} key={index}>
-                            <Box key={index}>
-                                <Box fontSize={12} textAlign={'center'} height={50}>
+                            <Box key={index} width={90}>
+                                <Box fontSize={12} textAlign={"center"} mt={2} height={45}>
                                     {subItem.title}
                                 </Box>
                                 <Box sx={{
@@ -136,13 +139,13 @@ function Snippets(props) {
                                         </Box>
                                         <Box color={'liteGray'}>|</Box>
                                         <Box mt={0.3} sx={{cursor: 'pointer'}}>
-                                            <img src={plus.src}/>
+                                            <img src={plus.src} onClick={() => setCode(code + subItem.code)}/>
                                         </Box>
                                     </Box>
                                 </Box>
                             </Box>
-                        </Grid>
                     </>))}
+                        </Grid>
                 </>))}
             </Grid>
         </Box>

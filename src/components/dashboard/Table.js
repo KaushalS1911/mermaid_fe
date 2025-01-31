@@ -23,13 +23,6 @@ import img from "../../asset/dashboard1/Ellipse.png";
 const Table = () => {
     const [value, setValue] = useState('all');
     const router = useRouter();
-    const token = Cookies.get("token");
-
-    // useEffect(() => {
-    //     if (!token) {
-    //         router.push("/login");
-    //     }
-    // }, []);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -133,10 +126,6 @@ const Table = () => {
             ),
         },
     ];
-    if (!token) {
-        return router.push("/login");
-    }
-
     return (
         <div>
             <Box p={4} bgcolor={"#fff"} minHeight="100vh" height={"100%"}>
