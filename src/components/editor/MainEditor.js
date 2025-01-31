@@ -1,9 +1,9 @@
 "use client";
-import React, {useContext, useEffect, useRef, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import mermaid from "mermaid";
 import {Box, Grid} from "@mui/material";
 import Snippets from "@/components/editor/Snippets";
-import MonacoEditor from "@monaco-editor/react";
+import MonacoEditor from '@monaco-editor/react';
 import {ChartContext} from "@/app/layout";
 import Templates from "@/components/editor/Templates";
 import LeftContainer from "@/components/editor/LeftContainer";
@@ -11,13 +11,13 @@ import RightContainer from "@/components/editor/RightContainer";
 import {useStore} from "@/store";
 
 function MainEditor({sidebarKey, formatCode}) {
-    const { color,chartRef} = useContext(ChartContext)
+    // const {code, setCode} = useContext(ChartContext)
     const setCode = useStore((state) => state.setCode);
     const code = useStore((state) => state.code);
     const token = localStorage.getItem("code")
     useEffect(() => {
         if(token !== null){
-        setCode(token);
+            setCode(token);
         }
     },[token])
     const mermaidCode = `
@@ -32,25 +32,21 @@ function MainEditor({sidebarKey, formatCode}) {
     useEffect(() => {
         mermaid.initialize({
             startOnLoad: false,
-            securityLevel: "loose",
-            theme: color.theme || "default",
-            image: color.image || "light",
+            securityLevel: 'loose',
+            theme: 'default',
         });
-    }, [color.theme, color.image]);
-
+    }, []);
     useEffect(() => {
         const renderDiagram = async () => {
             if (chartRef.current && code) {
                 try {
                     const container = chartRef.current;
                     const id = `mermaid-${Date.now()}`;
-                    container.innerHTML = "";
-                    const pre = document.createElement("pre");
-                    pre.className = "mermaid";
+                    container.innerHTML = '';
+                    const pre = document.createElement('pre');
+                    pre.className = 'mermaid';
                     pre.textContent = code;
                     container.appendChild(pre);
-
-                    await mermaid.contentLoaded();
                     const {svg} = await mermaid.render(id, code);
                     container.innerHTML = svg;
                 } catch (error) {
@@ -58,9 +54,8 @@ function MainEditor({sidebarKey, formatCode}) {
                 }
             }
         };
-
         renderDiagram();
-    }, [code, color.theme, color.image]);
+    }, [code]);
 
     return (<Box sx={{height:'100vh',overflow:'auto',display:'flex'}}>
         <Grid container spacing={2}>
@@ -76,20 +71,7 @@ function MainEditor({sidebarKey, formatCode}) {
             <Grid item sx={{height: '100vh',overflow:'auto'}} xs={12} sm={6} md={sidebarKey? 5 : 6} lg={sidebarKey? 4 : 6}>
                 <LeftContainer />
             </Grid>
-            <Grid
-                item
-                xs={12}
-                md={5}
-                height="100vh"
-                width={100}
-                overflowY="auto"
-                sx={{
-                    backgroundImage: `url("${color.image.src}")`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    backgroundRepeat: "no-repeat",
-                }}
-            >
+            <Grid item xs={12} sm={6} md={4} lg={5} height={"100vh"} overflowY="hidden"  >
                 <RightContainer />
             </Grid>
         </Grid>

@@ -4,7 +4,8 @@ import "./globals.css";
 import {ThemeProvider} from "@mui/material";
 import theme from "@/components/theme/theme";
 import {Toaster} from "react-hot-toast";
-import {createContext, Suspense, useContext, useState} from "react";
+import {createContext, Suspense, useContext, useRef, useState} from "react";
+import light from "../asset/editor/design/image (1).png"
 
 const geistSans = Geist({
     variable: "--font-geist-sans",

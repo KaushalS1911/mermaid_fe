@@ -28,7 +28,7 @@ const FullScreen = dynamic(() => import("./FullScreen"), {ssr: false});
 const RightContainer = () => {
     const panZoom = useStore.use.panZoom();
     const setPanZoomEnable = useStore.use.setPanZoomEnable();
-    const theme = useTheme(); // Using MUI theme
+    const theme = useTheme();
 
     const togglePanZoom = () => setPanZoomEnable(!panZoom);
 

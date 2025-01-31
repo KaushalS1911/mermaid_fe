@@ -7,13 +7,14 @@ import { Share, Brightness4, Brightness7, Menu } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
 
-export default function TopNavBar() {
+export default function DashboardHeader({handleDrawerToggle}) {
     const [darkMode, setDarkMode] = React.useState(false);
     const [menuOpen, setMenuOpen] = React.useState(false);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md")); // Detect mobile screens
 
     const path = window.location.pathname;
+    const name = path.split("/");
 
     return (
         <AppBar position="static" sx={{ backgroundColor: "#F8F8FA", color: "#000", boxShadow: "none", py: 1, px: { xs: 2, sm: 4 } }}>
@@ -24,7 +25,7 @@ export default function TopNavBar() {
                     {!isMobile && (
                         <Breadcrumbs separator="›" sx={{ flexGrow: 1 }}>
                             <Link underline="hover" color="inherit" href="/">Home</Link>
-                            <Typography color="textPrimary">{path}</Typography>
+                            <Typography color="textPrimary" sx={{textTransform:"capitalize"}}>{name}</Typography>
                         </Breadcrumbs>
                     )}
                 </Box>
@@ -32,7 +33,7 @@ export default function TopNavBar() {
                 <Box>
                     {/* Center: Navigation Buttons */}
                     {isMobile ? (
-                        <IconButton edge="start" color="inherit" onClick={() => setMenuOpen(!menuOpen)}>
+                        <IconButton edge="start" color="inherit" onClick={handleDrawerToggle}>
                             <Menu />
                         </IconButton>
                     ) : (

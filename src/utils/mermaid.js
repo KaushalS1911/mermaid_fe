@@ -1,12 +1,10 @@
 import mermaid from "mermaid";
+import {ChartContext} from "@/app/layout";
+import {useContext} from "react";
 
 // Render function
-export const render = async (config, code, id) => {
-  mermaid.initialize({
-    startOnLoad: false,
-    securityLevel: 'loose',
-    theme: 'default',
-  });
+export const render = async (config, code, id,data) => {
+  mermaid.initialize(data);
   return await mermaid.render(id, code);
 };
 
