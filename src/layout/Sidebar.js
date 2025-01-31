@@ -37,7 +37,7 @@ const Sidebar = ({ open, mobileOpen, handleDrawerToggle, setSidebarKey, sidebarK
                 onClose={handleDrawerToggle}
                 ModalProps={{ keepMounted: true }}
                 sx={{
-                    display: { xs: "block", sm: "none" },
+                    display: { xs: "block", md: "none" },
                     "& .MuiDrawer-paper": {
                         boxSizing: "border-box",
                         width: drawerWidth,
@@ -86,7 +86,7 @@ const Sidebar = ({ open, mobileOpen, handleDrawerToggle, setSidebarKey, sidebarK
                 anchor="left"
                 open={open}
                 sx={{
-                    display: { xs: "none", sm: "block" },
+                    display: { xs: "none", md: "block" },
                     "& .MuiDrawer-paper": {
                         boxSizing: "border-box",
                         width: drawerWidth,

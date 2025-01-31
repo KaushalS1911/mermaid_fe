@@ -89,19 +89,18 @@ function Snippets(props) {
             title: "Arrow with Label", img: ArrowWithLabel, code: '\n-- label -->'
         },]
     }]
-    console.log(code,"kkkkkkkkkkkkkkkkkkkkk")
     const theme = useTheme()
     return (<>
-        <Box sx={{height: "100vh", overflowY: "auto", px: 1}}>
+        <Box sx={{height: "100vh", overflowY: "auto", px: 1,py:2}}>
             <Grid container spacing={2}>
                 {data.map((item, index) => (<>
                     <Grid item xs={12}>
                         <Box>{item.mainTitle}</Box>
                     </Grid>
+                        <Grid item xs={12} display={"flex"} justifyContent={"space-between"} alignItems={"center"} flexWrap={"wrap"} >
                     {item.subData.map((subItem, index) => (<>
-                        <Grid item xs={12} sm={3} key={index}>
-                            <Box key={index}>
-                                <Box fontSize={12} textAlign={'center'} height={50}>
+                            <Box key={index} width={90}>
+                                <Box fontSize={12} textAlign={"center"} mt={2} height={45}>
                                     {subItem.title}
                                 </Box>
                                 <Box sx={{
@@ -145,8 +144,8 @@ function Snippets(props) {
                                     </Box>
                                 </Box>
                             </Box>
-                        </Grid>
                     </>))}
+                        </Grid>
                 </>))}
             </Grid>
         </Box>
