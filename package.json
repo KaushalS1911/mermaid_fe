@@ -24,6 +24,7 @@
     "file-saver": "^2.0.5",
     "formik": "^2.4.6",
     "js-base64": "^3.7.7",
+    "html2canvas": "^1.4.1",
     "js-cookie": "^3.0.5",
     "mermaid": "^10.0.0",
     "monaco-mermaid": "^1.1.0",

@@ -31,6 +31,7 @@ const MermaidEditor = () => {
   return (
     <MonacoEditor
       height="100%"
+      width={"100%"}
       language={"mermaid"}
       value={code}
       onChange={onChange}

@@ -1,33 +1,22 @@
 "use client";
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 import mermaid from "mermaid";
 import {Box, Grid} from "@mui/material";
 import Snippets from "@/components/editor/Snippets";
-import MonacoEditor from '@monaco-editor/react';
-import {ChartContext} from "@/app/layout";
 import Templates from "@/components/editor/Templates";
 import LeftContainer from "@/components/editor/LeftContainer";
 import RightContainer from "@/components/editor/RightContainer";
 import {useStore} from "@/store";
 
-function MainEditor({sidebarKey, formatCode}) {
-    // const {code, setCode} = useContext(ChartContext)
+function MainEditor({sidebarKey}) {
     const setCode = useStore((state) => state.setCode);
     const code = useStore((state) => state.code);
-    const token = localStorage.getItem("code")
+    const token = typeof window !== "undefined" && localStorage.getItem("code")
     useEffect(() => {
-        if(token !== null){
-        setCode(token);
+        if (token !== null) {
+            setCode(token);
         }
-    },[token])
-    const mermaidCode = `
-   flowchart TD
-    A[Christmas] -->|Get money| B(Go shopping)
-    B --> C{Let me think}
-    C -->|One| D[Laptop]
-    C -->|Two| E[iPhone]
-    C -->|Three| F[fa:fa-car Car]
-  `;
+    }, [token])
     const chartRef = useRef(null);
     useEffect(() => {
         mermaid.initialize({
@@ -56,22 +45,22 @@ function MainEditor({sidebarKey, formatCode}) {
         };
         renderDiagram();
     }, [code]);
-
-    return (<Box sx={{height:'100vh',overflow:'auto',display:'flex'}}>
+    return (<Box sx={{height: '100vh', overflow: 'auto', display: 'flex'}}>
         <Grid container spacing={2}>
-            {sidebarKey === "Snippets" && (
-                <Grid item xs={12} md={3} sx={{height: '100vh',overflow:'auto'}}>
-                    <Snippets/>
+                {(sidebarKey.text === "Snippets" && sidebarKey.selected) && (
+                    <Grid item xs={12} sm={6} md={3} sx={{height: '100vh', overflow: 'auto'}}>
+                        <Snippets/>
+                    </Grid>
+                )}{(sidebarKey.text === "Templates" && sidebarKey.selected) && (
+                <Grid item xs={12} sm={6} md={3} sx={{height: '100vh', overflow: 'auto'}}>
+                    <Templates/>
                 </Grid>
-            )}{sidebarKey === "Templates" && (
-            <Grid item xs={6} md={3}  sx={{height: '100vh',overflow:'auto'}}>
-                <Templates/>
+            )}
+            <Grid item sx={{height: '100vh', overflowY: 'auto'}} xs={12} sm={6} md={5}
+                  lg={4}>
+                <LeftContainer/>
             </Grid>
-        )}
-            <Grid item sx={{height: '100vh',overflow:'auto'}} xs={12} sm={6} md={sidebarKey? 5 : 6} lg={sidebarKey? 4 : 6}>
-                <LeftContainer />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={5} height={"100vh"} overflowY="hidden" py={2} >
+            <Grid item xs={12} sm={6} md={4} lg={5} height={"100vh"} sx={{overflowY: 'hidden'}}  >
                 <RightContainer />
             </Grid>
         </Grid>
