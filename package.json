@@ -27,6 +27,7 @@
     "react-codemirror2": "^8.0.0",
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.5.1",
+    "react-mic": "^12.4.6",
     "swiper": "^11.2.1",
     "yup": "^1.6.1"
   }

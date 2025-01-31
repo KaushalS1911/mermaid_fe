@@ -12,9 +12,10 @@ function MainEditor({sidebarKey, formatCode}) {
     )
     const token = localStorage.getItem("code")
     useEffect(() => {
+        if(token !== null){
         setCode(token);
-    }, [token])
-    console.log(code)
+        }
+    },[token])
     const mermaidCode = `
    flowchart TD
     A[Christmas] -->|Get money| B(Go shopping)

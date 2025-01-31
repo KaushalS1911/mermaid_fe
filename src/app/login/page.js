@@ -8,7 +8,7 @@ function Page() {
     const handleLogin = () => {
         const params = new URLSearchParams({
             response_type: "code",
-            client_id: process.env.NEXT_PUBLIC_CLINT_ID,
+            client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
             redirect_uri: `${process.env.NEXT_PUBLIC_BASE_URL}/linkedin/callback`,
             scope: "openid email profile",
         });
@@ -16,7 +16,6 @@ function Page() {
             window.location.href = `https://www.linkedin.com/oauth/v2/authorization?${params}`;
         }
     };
-    console.log(`${process.env.NEXT_PUBLIC_BASE_URL}/linkedin/callback`)
     return (<Box
         sx={{
             display: "flex",
