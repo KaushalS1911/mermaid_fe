@@ -6,6 +6,8 @@ import Snippets from "@/components/editor/Snippets";
 import MonacoEditor from '@monaco-editor/react';
 import {ChartContext} from "@/app/layout";
 import Templates from "@/components/editor/Templates";
+import LeftContainer from "@/components/editor/LeftContainer";
+import RightContainer from "@/components/editor/RightContainer";
 
 function MainEditor({sidebarKey, formatCode}) {
     const {code, setCode} = useContext(ChartContext
@@ -53,51 +55,17 @@ function MainEditor({sidebarKey, formatCode}) {
         renderDiagram();
     }, [code]);
 
-    return (
-        <Box height={"100%"} minHeight={'100VH'}>
-            <Grid container>
-                {sidebarKey === "Snippets" && (
-                    <Grid item xs={12} md={3}>
-                        <Snippets/>
-                    </Grid>
-                )}{sidebarKey === "Templates" && (
-                <Grid item xs={12} md={3}>
-                    <Templates/>
-                </Grid>
-            )}
-                <Grid item xs={12} sm={6} lg={4} overflow={"auto"}>
-                    <MonacoEditor
-                        height="100vh"
-                        overflowY={'auto'}
-                        defaultLanguage="mermaid"
-                        theme="vs-light"
-                        value={code}
-                        onChange={(value) => setCode(value || '')}
-                        options={{
-                            minimap: {enabled: false},
-                            scrollBeyondLastLine: false,
-                            automaticLayout: true,
-                        }}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} lg={5} bgcolor={'white'} height={'100vh'} overflowY={"scroll"}>
-                    <div
-                        ref={chartRef}
-                        style={{
-                            textAlign: "center",
-                            padding: '16px',
-                            overflow: 'auto',
-                        }}
-                    />
-                </Grid>
-            </Grid>
-        </Box>
-    );
     return (<Box>
         <Grid container spacing={2}>
-            {sidebarKey === "Snippets" && (<Grid item xs={12} sm={12} md={3} lg={3}>
-                <Snippets/>
-            </Grid>)}
+            {sidebarKey === "Snippets" && (
+                <Grid item xs={12} md={3}>
+                    <Snippets/>
+                </Grid>
+            )}{sidebarKey === "Templates" && (
+            <Grid item xs={12} md={3}>
+                <Templates/>
+            </Grid>
+        )}
             <Grid item xs={12} sm={6} md={sidebarKey === "Snippets" ? 5 : 6} lg={sidebarKey === "Snippets" ? 4 : 6}>
                 {/*<Box sx={{height: '100vh', overflowY: 'auto',py:2}}>*/}
                 {/*    <MonacoEditor*/}
@@ -113,7 +81,7 @@ function MainEditor({sidebarKey, formatCode}) {
                 {/*</Box>*/}
                 <LeftContainer />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={5} height={"100vh"} overflowY="auto" py={2}>
+            <Grid item xs={12} sm={6} md={4} lg={5} height={"100vh"} overflowY="hidden" py={2} >
                 {/*<Box>*/}
                 {/*<Box*/}
                 {/*    ref={chartRef}*/}
