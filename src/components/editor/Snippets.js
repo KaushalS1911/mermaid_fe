@@ -91,7 +91,7 @@ function Snippets(props) {
     }]
     const theme = useTheme()
     return (<>
-        <Box sx={{height: "100vh", overflowY: "auto", px: 1,py:2}}>
+        <Box sx={{px: 1,py:2}}>
             <Grid container spacing={2}>
                 {data.map((item, index) => (<>
                     <Grid item xs={12} key={index}>
