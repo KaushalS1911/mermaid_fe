@@ -63,7 +63,7 @@ const Dashboard = () => {
     }, []);
 
     return (
-        <Box sx={{bgcolor: "#fff", minHeight: "100vh", }}>
+        <Box sx={{bgcolor: "#fff", minHeight: "100vh",}}>
             <AppBar
                 position="static"
                 color="inherit"
@@ -79,7 +79,7 @@ const Dashboard = () => {
                     }}
                 >
                     <TabContext value={value}>
-                        <Box sx={{flexGrow: 1, display: isSmallScreen ? "none" : "block"}}>
+                        <Box sx={{flexGrow: 1, display: isSmallScreen ? "none" : "block",pt:1}}>
                             <TabList
                                 onChange={handleChange}
                                 aria-label="tabs"
@@ -88,16 +88,51 @@ const Dashboard = () => {
                                 sx={{
                                     "& .MuiTab-root.Mui-selected": {
                                         border: "2px solid #FF3480",
-                                        bgcolor:'lightPink',
-                                        color:"#FF3480 !important"
+                                        bgcolor: 'lightPink',
+                                        color: "#FF3480 !important",
                                     },
                                 }}
                             >
-                                <Tab label="All" value="1" sx={{border: "1px solid transparent"}}/>
-                                <Tab label="Recents" value="2" sx={{border: "1px solid transparent"}}/>
-                                <Tab label="Created by Me" value="3" sx={{border: "1px solid transparent"}}/>
-                                <Tab label="Folders" value="4" sx={{border: "1px solid transparent"}}/>
-                                <Tab label="Unsorted" value="5" sx={{border: "1px solid transparent"}}/>
+                                <Tab
+                                    label="All"
+                                    value="1"
+                                    sx={{
+                                        border: "1px solid transparent",
+                                        padding: "8px 18px !important", // Removes top and bottom padding
+                                        minHeight: "auto", // Prevents default height enforcement
+                                        minWidth: "auto", // Ensures it doesn't stretch unnecessarily
+                                        textTransform:"capitalize"
+                                    }}
+                                />
+
+                                <Tab label="Recents" value="2" sx={{
+                                    border: "1px solid transparent",
+                                    padding: "8px 18px !important", // Removes top and bottom padding
+                                    minHeight: "auto", // Prevents default height enforcement
+                                    minWidth: "auto", // Ensures it doesn't stretch unnecessarily
+                                    textTransform:"capitalize"
+                                }}/>
+                                <Tab label="Created by Me" value="3" sx={{
+                                    border: "1px solid transparent",
+                                    padding: "8px 18px !important", // Removes top and bottom padding
+                                    minHeight: "auto", // Prevents default height enforcement
+                                    minWidth: "auto", // Ensures it doesn't stretch unnecessarily
+                                    textTransform:"capitalize"
+                                }}/>
+                                <Tab label="Folders" value="4" sx={{
+                                    border: "1px solid transparent",
+                                    padding: "8px 18px !important", // Removes top and bottom padding
+                                    minHeight: "auto", // Prevents default height enforcement
+                                    minWidth: "auto", // Ensures it doesn't stretch unnecessarily
+                                    textTransform:"capitalize"
+                                }}/>
+                                <Tab label="Unsorted" value="5" sx={{
+                                    border: "1px solid transparent",
+                                    padding: "8px 18px !important", // Removes top and bottom padding
+                                    minHeight: "auto", // Prevents default height enforcement
+                                    minWidth: "auto", // Ensures it doesn't stretch unnecessarily
+                                    textTransform:"capitalize"
+                                }}/>
                             </TabList>
                         </Box>
                     </TabContext>
@@ -142,7 +177,7 @@ const Dashboard = () => {
                                 <Button
                                     variant="outlined"
                                     size="small"
-                                    sx={{color: "#8DA6B2", border: "#C8C8C8 1px solid"}}
+                                    sx={{color: "#8DA6B2", border: "#C8C8C8 1px solid",textTransform:"capitalize"}}
                                 >
                                     Ctrl K
                                 </Button>
@@ -163,7 +198,10 @@ const Dashboard = () => {
                                         variant="outlined"
                                         startIcon={<SendIcon/>}
                                         size="small"
-                                        sx={{color: "#171717", border: "#EFEFEF 1px solid"}}
+                                        sx={{color: "#171717", border: "#EFEFEF 1px solid"
+                                            ,textTransform:"capitalize"
+
+                                    }}
                                     >
                                         Invite
                                     </Button>

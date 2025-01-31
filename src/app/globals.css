@@ -18,6 +18,10 @@ body {
     overflow-x: hidden;
 }
 
+.css-jkmkwa{
+    background-color: transparent !important;
+}
+
 body {
     color: var(--foreground);
     background: var(--background);
