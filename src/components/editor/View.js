@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import { useDebounce } from "ahooks";
 import { Box } from "@mui/material";
 import { parse, render } from "@/utils/mermaid";
 import svgPanZoom from "svg-pan-zoom";
 import { useStore } from "@/store";
+import {ChartContext} from "@/app/layout";
 
 const customMessage = `\n\nIf you are using AI, Gemini can be incorrect sometimes and may provide syntax errors. 
 In such cases please manually fix them.
@@ -15,6 +16,7 @@ Common gemini syntax Errors:
 - Parenthesis or single or double quotes in node titles (remove them)`;
 
 const View = () => {
+  const {chartRef,color} = useContext(ChartContext)
   const code = useStore.use.code();
   const config = useStore.use.config();
   const autoSync = useStore.use.autoSync();
@@ -66,7 +68,11 @@ const View = () => {
       const { svg } = await render(
         { ...JSON.parse(config) },
         code,
-        "graph-div"
+        "graph-div",{
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: color.theme,
+          }
       );
       if (svg.length > 0) {
         handlePanZoom();
@@ -122,11 +128,21 @@ const View = () => {
       if (updateDiagram) setUpdateDiagram(false);
     }
   });
+  // console.log(color)
+  // // //
+  // useEffect(() => {
+  //   const cod ={theme:color.theme}
+  //   setConfig(JSON.stringify(cod))
+  // }, [color]);
 
   return (
-    <Box ref={view} component="div" sx={{ height: "100%" ,cursor:'grab'}}>
+    <Box ref={chartRef} component="div" sx={{
+      height: "100vh !important" ,cursor:'grab' , backgroundImage: `url("${color.image.src}")`,
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",}}>
       {validateCode.startsWith("Syntax error") ? (
-        <Box component="div" sx={{ color: "red", padding: 2 }}>
+        <Box component="div" sx={{ color: "red", paddingX: 2 }}>
           {validateCode}
         </Box>
       ) : (
