@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import {
     AppBar, Toolbar, Button, Typography, IconButton, Breadcrumbs, Link, Avatar, Box, useMediaQuery
@@ -5,15 +6,16 @@ import {
 import {Share, Brightness4, Brightness7, Menu} from "@mui/icons-material";
 import {useTheme} from "@mui/material/styles";
 import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
+import {usePathname} from "next/navigation";
 
 export default function DashboardHeader({handleDrawerToggle}) {
     const [darkMode, setDarkMode] = React.useState(false);
     const [menuOpen, setMenuOpen] = React.useState(false);
+    const pathName = usePathname();
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-    const path = typeof window !== "undefined" && window.location.pathname;
-    const name = path.split("/");
+    const name = pathName?.split("/");
 
     return (<AppBar position="static"
                     sx={{backgroundColor: "#F8F8FA", color: "#000", boxShadow: "none", py: 1, px: {xs: 2, sm: 4}}}>
