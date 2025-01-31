@@ -4,18 +4,19 @@ import Diagram from "@/components/home/diagram";
 import Features from "@/components/home/features";
 import Testimonials from "@/components/home/testimonials";
 import Faq from "@/components/home/faq";
-import Header from "@/components/header/Header";
+import HeroSection from '@/components/home/heroSection';
 
 function Page(props) {
     return (
         <>
-            <Header/>
-            <Diagram/>
-            <Features/>
-            <Testimonials/>
-            <Faq/>
+            <HeroSection />
+            <Diagram />
+            <Features />
+            <Testimonials />
+            <Faq />
         </>
     );
+
 }
 
 export default Page;

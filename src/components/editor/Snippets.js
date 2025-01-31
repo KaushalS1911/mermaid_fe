@@ -94,7 +94,7 @@ function Snippets(props) {
         <Box sx={{height: "100vh", overflowY: "auto", px: 1,py:2}}>
             <Grid container spacing={2}>
                 {data.map((item, index) => (<>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} key={index}>
                         <Box>{item.mainTitle}</Box>
                     </Grid>
                         <Grid item xs={12} display={"flex"} justifyContent={"space-between"} alignItems={"center"} flexWrap={"wrap"} >
