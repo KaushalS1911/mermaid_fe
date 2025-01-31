@@ -18,11 +18,15 @@ import {
     MoreVert
 } from "@mui/icons-material";
 import img from "../../asset/dashboard1/Ellipse.png";
+import axiosInstance from "@/utils/axiosInstance";
+import { formatDistanceToNow } from "date-fns";
 
 
 const Table = () => {
     const [value, setValue] = useState('all');
     const router = useRouter();
+const [rows, setRows] = useState([]);
+const [loading, setLoading] = useState(true);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -34,82 +38,100 @@ const Table = () => {
     }, {
         icon: <AccountTreeOutlinedIcon sx={{fontSize: 80}}/>, title: "(Example) User Data Model", navigate: "/diagram"
     },]
-    const rows = [
-        {
-            id: 1,
-            name: "John Doe",
-            age: 25,
-            email: "john.doe@example.com",
-            location: "Location",
-            created: "1 Day Ago",
-            edited: "1 Day Ago",
-            comments: "0",
-            author: img.src,
-        },
-        {
-            id: 2,
-            name: "Jane Smith",
-            age: 30,
-            email: "jane.smith@example.com",
-            location: "Location",
-            created: "1 Day Ago",
-            edited: "1 Day Ago",
-            comments: "0",
-            author: img.src,
-        },
-        {
-            id: 3,
-            name: "Sam Johnson",
-            age: 22,
-            email: "sam.johnson@example.com",
-            location: "Location",
-            created: "1 Day Ago",
-            edited: "1 Day Ago",
-            comments: "0",
-            author: img.src
-        },
-        {
-            id: 4,
-            name: "Emily Brown",
-            age: 27,
-            email: "emily.brown@example.com",
-            location: "Location",
-            created: "1 Day Ago",
-            edited: "1 Day Ago",
-            comments: "0",
-            author: img.src
-        },
-        {
-            id: 5,
-            name: "Michael Lee",
-            age: 35,
-            email: "michael.lee@example.com",
-            location: "Location",
-            created: "1 Day Ago",
-            edited: "1 Day Ago",
-            comments: "0",
-            author: img.src
-        },
-    ];
+    // const rows = [
+    //     {
+    //         id: 1,
+    //         name: "John Doe",
+    //         age: 25,
+    //         email: "john.doe@example.com",
+    //         location: "Location",
+    //         created: "1 Day Ago",
+    //         edited: "1 Day Ago",
+    //         comments: "0",
+    //         author: img.src,
+    //     },
+    //     {
+    //         id: 2,
+    //         name: "Jane Smith",
+    //         age: 30,
+    //         email: "jane.smith@example.com",
+    //         location: "Location",
+    //         created: "1 Day Ago",
+    //         edited: "1 Day Ago",
+    //         comments: "0",
+    //         author: img.src,
+    //     },
+    //     {
+    //         id: 3,
+    //         name: "Sam Johnson",
+    //         age: 22,
+    //         email: "sam.johnson@example.com",
+    //         location: "Location",
+    //         created: "1 Day Ago",
+    //         edited: "1 Day Ago",
+    //         comments: "0",
+    //         author: img.src
+    //     },
+    //     {
+    //         id: 4,
+    //         name: "Emily Brown",
+    //         age: 27,
+    //         email: "emily.brown@example.com",
+    //         location: "Location",
+    //         created: "1 Day Ago",
+    //         edited: "1 Day Ago",
+    //         comments: "0",
+    //         author: img.src
+    //     },
+    //     {
+    //         id: 5,
+    //         name: "Michael Lee",
+    //         age: 35,
+    //         email: "michael.lee@example.com",
+    //         location: "Location",
+    //         created: "1 Day Ago",
+    //         edited: "1 Day Ago",
+    //         comments: "0",
+    //         author: img.src
+    //     },
+    // ];
 
     const columns = [{
-        field: "name", headerName: "Name", flex: 1, minWidth: 150,
-    }, {
-        field: "location", headerName: "Location", flex: 1, minWidth: 150,
-    }, {
-        field: "created", headerName: "Created", flex: 1, minWidth: 150,
-    }, {
-        field: "edited", headerName: "Edited", flex: 1, minWidth: 150,
-    }, {
-        field: "comments", headerName: "Comments", flex: 1, minWidth: 150,
+        field: "title", headerName: "Name", flex: 1, minWidth: 150,
     },
+    //     {
+    //     field: "location", headerName: "Location", flex: 1, minWidth: 150,
+    // },
+        {
+            field: "createdAt",
+            headerName: "Created",
+            flex: 1,
+            minWidth: 150,
+            renderCell: (params) => (
+                <span>{formatDistanceToNow(new Date(params.value), { addSuffix: true })}</span>
+            ),
+        },
+        {
+            field: "updatedAt",
+            headerName: "Updated",
+            flex: 1,
+            minWidth: 150,
+            renderCell: (params) => (
+                <span>{formatDistanceToNow(new Date(params.value), { addSuffix: true })}</span>
+            ),
+        },
+    //     {
+    //     field: "comments", headerName: "Comments", flex: 1, minWidth: 150,
+    // },
         {
             field: "author",
             headerName: "Author",
             flex: 1,
             minWidth: 150,
+            display: "flex",
+            alignItems: "center",
             renderCell: (params) => (
-                <Avatar src={params.value} alt="Author"/>
+                <Avatar src={params.row.user_id.avatar} alt={params.row.user_id.name} />
             ),
         },
         {
@@ -126,9 +148,25 @@ const Table = () => {
             ),
         },
     ];
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axiosInstance.get("/flowcharts");
+                        setRows(response.data.data);
+    console.log(response.data.data,'mmmmmmmmmmmmmmmm');
+            } catch (error) {
+                setError("Failed to fetch data");
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
     return (
         <div>
-            <Box p={4} bgcolor={"#fff"} minHeight="100vh" height={"100%"}>
+            <Box bgcolor={"#fff"} minHeight="100vh" height={"100%"}>
 
                 {value === "all" && <Box mt={2}>
                     <Grid container spacing={2} sx={{my: 2}}>
@@ -162,6 +200,7 @@ const Table = () => {
                             rows={rows}
                             columns={columns}
                             hideFooter
+                            getRowId={(row) => row?._id}
                             sx={{
                                 borderRadius: "8px", backgroundColor: "#fff", "& .MuiDataGrid-columnHeaders": {
                                     backgroundColor: "#f0f0f0", color: "#333", fontWeight: "bold",
