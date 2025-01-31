@@ -1,5 +1,6 @@
 "use client";
-import React, {useContext, useRef, useState} from 'react';
+
+import React, { useContext, useRef, useState } from 'react';
 import {
     Box,
     Button,
@@ -14,39 +15,57 @@ import {
     IconButton,
     Stack, Card, CardContent,
     TextField,
-    Typography
+    Typography,
+    Dialog,
+    DialogContent,
+    DialogActions
 } from "@mui/material";
-import {useFormik} from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
-import {CloseIcon} from "next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon";
+import { CloseIcon } from "next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon";
 import Image from "next/image";
 import Upload from "../../asset/dashboard/upload.png"
-import {useRouter} from "next/navigation";
-import { ReactMic } from "react-mic";
-import {ChartContext} from "@/app/layout";
+import { useRouter } from "next/navigation";
+// import { ReactMic } from "react-mic";
+import { ChartContext } from "@/app/layout";
 import toast from "react-hot-toast";
 import { Mic, Stop } from "@mui/icons-material";
 import axiosInstance from "@/utils/axiosInstance";
 import FullScreenLoader from "@/utils/fullScreenLoader";
+import dynamic from "next/dynamic";
+
+const ReactMic = dynamic(() => import("react-mic").then((mod) => mod.ReactMic), { ssr: false });
 
 function Page() {
     const [file, setFile] = useState(null);
-    const {setCode} = useContext(ChartContext);
+    const { setCode } = useContext(ChartContext);
     const [isRecording, setIsRecording] = useState(false);
     const [audioURL, setAudioURL] = useState(null);
     const [audioBlob, setAudioBlob] = useState(null);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    const [isOpen, setIsOpen] = useState(false);
+    const [isRecordingComplete, setIsRecordingComplete] = useState(false);
+
+    const handleCloseDialog = () => {
+        setIsOpen(false);
+    };
 
     const handleAudioStop = (recordedData) => {
         const audioBlob = recordedData.blob;
         const audioUrl = URL.createObjectURL(audioBlob);
         setAudioURL(audioUrl);
         setAudioBlob(audioBlob);
+        setIsRecordingComplete(true);
+        console.log(recordedData);
     };
 
     const handleToggleRecording = () => {
         setIsRecording((prev) => !prev);
+    };
+
+    const handleToggleBox = () => {
+        setIsOpen(!isOpen);
     };
 
     const formik = useFormik({
@@ -108,11 +127,11 @@ function Page() {
         }
     });
 
-    const {values, errors, touched, handleChange, handleBlur, setFieldValue} = formik;
+    const { values, errors, touched, handleChange, handleBlur, setFieldValue } = formik;
 
-    if(loading){
+    if (loading) {
         return (
-            <FullScreenLoader  />
+            <FullScreenLoader />
         )
     }
 
@@ -122,7 +141,7 @@ function Page() {
                 <Box>
                     <Grid container>
                         <Grid item xs={12}>
-                            <Typography sx={{fontSize: '32px', fontWeight: '600', color: '#171717', mt: 4}}> AI
+                            <Typography sx={{ fontSize: '32px', fontWeight: '600', color: '#171717', mt: 4 }}> AI
                                 Flowchart Generator</Typography>
                         </Grid>
                         <Grid item xs={12} mt={3}>
@@ -137,7 +156,7 @@ function Page() {
                                             Select Input Field:
                                         </Typography>
                                         <RadioGroup name="method" value={values.method} onChange={handleChange} sx={{ mt: 1 }}>
-                                            {['Text/README', 'Voice Recording', 'Upload Audio'].map((option,index) => (
+                                            {['Text/README', 'Voice Recording', 'Upload Audio'].map((option, index) => (
                                                 <FormControlLabel
                                                     sx={{ '& .MuiFormControlLabel-label': { fontSize: '14px' } }}
                                                     key={index}
@@ -149,9 +168,8 @@ function Page() {
                                         </RadioGroup>
                                     </FormControl>
 
-
-                                    <FormControl fullWidth sx={{mb: 3}}>
-                                        <Typography variant="body2" sx={{fontSize: "14px", mt: 2, fontWeight: 600}}>
+                                    <FormControl fullWidth sx={{ mb: 3 }}>
+                                        <Typography variant="body2" sx={{ fontSize: "14px", mt: 2, fontWeight: 600 }}>
                                             Select AI Model
                                         </Typography>
                                         <TextField sx={{
@@ -173,16 +191,16 @@ function Page() {
                                                 }
                                             }
                                         }}
-                                                   select
-                                                   label=""
-                                                   name="aiModel"
-                                                   value={values.aiModel}
-                                                   onChange={handleChange}
-                                                   onBlur={handleBlur}
-                                                   error={touched.aiModel && Boolean(errors.aiModel)}
-                                                   helperText={touched.aiModel && errors.aiModel}
+                                            select
+                                            label=""
+                                            name="aiModel"
+                                            value={values.aiModel}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            error={touched.aiModel && Boolean(errors.aiModel)}
+                                            helperText={touched.aiModel && errors.aiModel}
                                         >
-                                            {['Gemini'].map((model,index) => (
+                                            {['Gemini'].map((model, index) => (
                                                 <MenuItem key={index} value={model}>
                                                     {model}
                                                 </MenuItem>))}
@@ -192,7 +210,7 @@ function Page() {
                                         !values.method ? (
                                             <>
                                                 <Typography variant="body2"
-                                                            sx={{fontSize: "14px", mt: 2, fontWeight: 600}}>
+                                                    sx={{ fontSize: "14px", mt: 2, fontWeight: 600 }}>
                                                     Enter Text or Mermaid Syntax
                                                 </Typography>
                                                 <TextField sx={{
@@ -214,83 +232,160 @@ function Page() {
                                                         }
                                                     }
                                                 }}
-                                                           fullWidth
-                                                           name="textOrSyntax"
-                                                           value={values.textOrSyntax}
-                                                           onChange={handleChange}
-                                                           onBlur={handleBlur}
-                                                           error={touched.textOrSyntax && Boolean(errors.textOrSyntax)}
-                                                           helperText={touched.textOrSyntax && errors.textOrSyntax}
-                                                           multiline
-                                                           rows={4}
+                                                    fullWidth
+                                                    name="textOrSyntax"
+                                                    value={values.textOrSyntax}
+                                                    onChange={handleChange}
+                                                    onBlur={handleBlur}
+                                                    error={touched.textOrSyntax && Boolean(errors.textOrSyntax)}
+                                                    helperText={touched.textOrSyntax && errors.textOrSyntax}
+                                                    multiline
+                                                    rows={4}
                                                 />
                                             </>
                                         ) : (
                                             <>
                                                 {values.method === 'Voice Recording' ? (
                                                     <Stack spacing={2} sx={{ mt: 3, p: 2, maxWidth: 400 }}>
-                                                        {/* Title */}
                                                         <Typography variant="body2" sx={{ fontSize: "14px", fontWeight: 600 }}>
                                                             Audio Recorder:
                                                         </Typography>
 
-                                                        {/* Recorder & Mic Button in a Row */}
                                                         <Stack direction="row" alignItems="center" spacing={2}>
-                                                            <ReactMic
-                                                                record={isRecording}
-                                                                onStop={handleAudioStop}
-                                                                mimeType="audio/webm"
-                                                                className="audio-recorder"
-                                                                visualSetting="sinewave"
-                                                                strokeColor="#3f51b5"
-                                                                backgroundColor="#e3f2fd"
-                                                                style={{ borderRadius: 8, flexGrow: 1 }}
-                                                            />
-
                                                             <IconButton
-                                                                onClick={handleToggleRecording}
-                                                                color={isRecording ? "secondary" : "primary"}
+                                                                onClick={handleToggleBox}
+                                                                color={isOpen ? "secondary" : "primary"}
                                                                 sx={{
-                                                                    bgcolor: isRecording ? "#ffebee" : "#e3f2fd",
+                                                                    bgcolor: isOpen ? "#FF3480" : "#FFF4F8",
                                                                     p: 2,
                                                                     borderRadius: "50%",
                                                                     transition: "0.3s",
-                                                                    "&:hover": { bgcolor: isRecording ? "#ffcdd2" : "#bbdefb" },
+                                                                    "&:hover": {
+                                                                        bgcolor: isOpen ? "#FF69A6" : "#FFDCE6",
+                                                                    },
                                                                 }}
                                                             >
-                                                                {isRecording ? <Stop fontSize="medium" /> : <Mic fontSize="medium" />}
+                                                                <Mic fontSize="medium" />
                                                             </IconButton>
-                                                        </Stack>
+                                                            {audioURL && (
+                                                                <audio
+                                                                    src={audioURL}
+                                                                    controls
+                                                                    style={{ width: "100%", marginTop: 8, borderRadius: 8, outline: "none" }}
+                                                                />
+                                                            )}
+                                                            <Dialog
+                                                                open={isOpen}
+                                                                onClose={handleCloseDialog}
+                                                                fullScreen
+                                                                sx={{
+                                                                    "& .MuiDialog-paper": {
+                                                                        backgroundColor: "#f9f9f9",
+                                                                        boxShadow: 3,
+                                                                        display: "flex",
+                                                                        flexDirection: "column",
+                                                                        alignItems: "center",
+                                                                        width: '500px',
+                                                                        height: '500px'
+                                                                    },
+                                                                }}
+                                                            >
+                                                                <DialogContent
+                                                                    sx={{
+                                                                        display: "flex",
+                                                                        flexDirection: "column",
+                                                                        alignItems: "center",
+                                                                        justifyContent: "center",
+                                                                        p: 4,
+                                                                    }}
+                                                                >
+                                                                    <Box
+                                                                        sx={{
+                                                                            width: 200,
+                                                                            height: 200,
+                                                                            borderRadius: "50%",
+                                                                            overflow: "hidden",
+                                                                            display: "flex",
+                                                                            justifyContent: "center",
+                                                                            alignItems: "center",
+                                                                            backgroundColor: "#FFF4F8",
+                                                                            boxShadow: isRecording ? "0px 0px 10px rgba(255, 56, 128, 0.7)" : "none", // Glow effect while recording
+                                                                        }}
+                                                                    >
+                                                                        <ReactMic
+                                                                            record={isRecording}
+                                                                            onStop={handleAudioStop}
+                                                                            mimeType="audio/webm"
+                                                                            className="audio-recorder"
+                                                                            visualSetting="sinewave"
+                                                                            strokeColor="#FF3480"
+                                                                            backgroundColor="#FFF4F8"
+                                                                            style={{
+                                                                                borderRadius: "50%",
+                                                                                maxWidth: "100%",
+                                                                                maxHeight: "100%",
+                                                                            }}
+                                                                        />
+                                                                    </Box>
 
-                                                        {/* Audio Playback */}
-                                                        {audioURL && (
-                                                            <audio
-                                                                src={audioURL}
-                                                                controls
-                                                                style={{ width: "100%", marginTop: 8, borderRadius: 8, outline: "none" }}
-                                                            />
-                                                        )}
+                                                                    <IconButton
+                                                                        onClick={handleToggleRecording}
+                                                                        color={isRecording ? "secondary" : "primary"}
+                                                                        sx={{
+                                                                            bgcolor: isRecording ? "#FF3480" : "#FFF4F8",
+                                                                            p: 2,
+                                                                            borderRadius: "50%",
+                                                                            transition: "0.3s",
+                                                                            "&:hover": {
+                                                                                bgcolor: isRecording ? "#FF69A6" : "#FFDCE6",
+                                                                            },
+                                                                            mt: 2,
+                                                                            boxShadow: isRecording
+                                                                                ? "0px 0px 15px rgba(255, 56, 128, 0.5)"
+                                                                                : "none",
+                                                                        }}
+                                                                    >
+                                                                        {isRecording ? (
+                                                                            <Stop fontSize="medium" />
+                                                                        ) : (
+                                                                            <Mic fontSize="medium" sx={{ animation: isRecordingComplete ? 'none' : 'pulse 1s infinite' }} />
+                                                                        )}
+                                                                    </IconButton>
+
+                                                                    {isRecordingComplete && (
+                                                                        <Typography variant="body2" sx={{ mt: 2, color: "#FF3480" }}>
+                                                                            Recording Completed!
+                                                                        </Typography>
+                                                                    )}
+                                                                </DialogContent>
+                                                                <DialogActions>
+                                                                    <IconButton onClick={handleCloseDialog} sx={{ color: "#FF3480", borderRadius: 2, fontSize: 16, px: 2, border: '1px solid #FF3480' }}>
+                                                                        Close
+                                                                    </IconButton>
+                                                                </DialogActions>
+                                                            </Dialog>
+                                                        </Stack>
                                                     </Stack>
                                                 ) : (
-                                                    <FormControl fullWidth sx={{mb: 3}}>
+                                                    <FormControl fullWidth sx={{ mb: 3 }}>
                                                         <Typography variant="body1"
-                                                                    sx={{fontSize: '14px', mt: 2, fontWeight: 600}}>Or upload a
+                                                            sx={{ fontSize: '14px', mt: 2, fontWeight: 600 }}>Or upload a
                                                             README file:</Typography>
 
                                                         <Box textAlign="center" border={1} borderRadius={2} p={3}
-                                                             borderColor="grey.300" sx={{my: 1}}
-                                                             onDragOver={(e) => {
-                                                                 e.preventDefault();
-                                                             }}
-                                                             onDrop={(e) => {
-                                                                 e.preventDefault();
-                                                                 const file = e.dataTransfer.files[0];
-                                                                 if (file) {
-                                                                     setFieldValue('file', file);
-                                                                 }
-                                                             }}>
+                                                            borderColor="grey.300" sx={{ my: 1 }}
+                                                            onDragOver={(e) => {
+                                                                e.preventDefault();
+                                                            }}
+                                                            onDrop={(e) => {
+                                                                e.preventDefault();
+                                                                const file = e.dataTransfer.files[0];
+                                                                if (file) {
+                                                                    setFieldValue('file', file);
+                                                                }
+                                                            }}>
                                                             <Box>
-                                                                <label htmlFor="file-upload" style={{cursor: "pointer"}}>
+                                                                <label htmlFor="file-upload" style={{ cursor: "pointer" }}>
                                                                     <Image
                                                                         src={Upload}
                                                                         alt="Upload Icon"
@@ -300,13 +395,12 @@ function Page() {
 
                                                             </Box>
                                                             <Box>
-                                                                <Typography sx={{color: '#000', fontSize: '14px', mt: 1}}>Drag
+                                                                <Typography sx={{ color: '#000', fontSize: '14px', mt: 1 }}>Drag
                                                                     and drop file here</Typography>
-                                                                <Typography sx={{color: '#95989C', fontSize: '14px', mt: 1}}>Limit
+                                                                <Typography sx={{ color: '#95989C', fontSize: '14px', mt: 1 }}>Limit
                                                                     200MB per file .TXT,MD</Typography>
                                                             </Box>
                                                             <Box>
-
                                                                 <label htmlFor="file-upload">
                                                                     <Button variant="contained" component="label" sx={{
                                                                         mt: 2,
@@ -334,7 +428,7 @@ function Page() {
                                                             </Box>
                                                         </Box>
                                                         {values.file && values.file.type.startsWith('image/') && (
-                                                            <Box sx={{mt: 2, position: 'relative'}}>
+                                                            <Box sx={{ mt: 2, position: 'relative' }}>
                                                                 <Box
                                                                     component="img"
                                                                     src={URL.createObjectURL(values.file)}
@@ -366,26 +460,25 @@ function Page() {
                                                                             padding: 1,
                                                                         }}
                                                                     />
-
                                                                 </Box>
                                                             </Box>
                                                         )}
+
                                                         {values.file && (
                                                             <Box display="flex" alignItems="center" mt={2}>
-                                                                <Typography sx={{fontSize: "14px", color: "#000"}}>
+                                                                <Typography sx={{ fontSize: "14px", color: "#000" }}>
                                                                     Selected File: {values.file.name}
                                                                 </Typography>
                                                             </Box>
                                                         )}
 
                                                         {touched.file && errors.file && (
-                                                            <Typography color="error" variant="body2" sx={{mt: 1}}>
+                                                            <Typography color="error" variant="body2" sx={{ mt: 1 }}>
                                                                 {errors.file}
                                                             </Typography>)}
                                                     </FormControl>
                                                 )}
                                             </>
-
                                         )
                                     }
 
@@ -393,9 +486,9 @@ function Page() {
                                         <Button type="submit" variant="contained" color="primary" sx={{
                                             my: 2,
                                             textTransform: 'capitalize',
-                                            color: '#FF3480',
+                                            bgcolor: '#FF3480',
                                             border: '1px solid #FF3480',
-                                            bgcolor: '#fff',
+                                            color: '#fff',
                                             boxShadow: 'none',
                                             fontSize: '16px'
                                         }}>
