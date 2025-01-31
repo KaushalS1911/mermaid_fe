@@ -8,7 +8,7 @@ import AcUnitIcon from '@mui/icons-material/AcUnit';
 import { useTheme } from "@mui/material/styles";
 
 const Sidebar = ({ open, mobileOpen, handleDrawerToggle, setSidebarKey, sidebarKey }) => {
-    const drawerWidth = 275;
+    const drawerWidth = 270;
     const [openSubmenu, setOpenSubmenu] = useState({});
     const theme = useTheme();
     const menuItems = [
@@ -108,6 +108,7 @@ const Sidebar = ({ open, mobileOpen, handleDrawerToggle, setSidebarKey, sidebarK
                                 disablePadding
                                 sx={{
                                     py: "2px",
+                                    my:'2px',
                                     borderRadius: "10px",
                                     transition: ".3s",
                                     backgroundColor: sidebarKey === item.text && theme.palette?.sidebarHover,
