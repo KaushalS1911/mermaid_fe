@@ -55,10 +55,10 @@ const Sidebar = ({open, mobileOpen, handleDrawerToggle, setSidebarKey,sidebarKey
         setIsLoading(false);
     };
     const menuItems = [
-        {text: "Collapse menu", icon:!collapsed ? <KeyboardDoubleArrowLeftIcon /> : <KeyboardDoubleArrowRightIcon/>, action: () => setCollapsed(!collapsed)},
-        {text: "Templates", icon: <DataSaverOffIcon/>},
-        {text: "Snippets", icon: <DashboardCustomizeIcon/>},
-        {text: "Design", icon: <BrushIcon/>, action: (event) => {
+        {text: "Collapse menu",selected:false, icon:!collapsed ? <KeyboardDoubleArrowLeftIcon /> : <KeyboardDoubleArrowRightIcon/>, action: () => setCollapsed(!collapsed)},
+        {text: "Templates", selected:false,icon: <DataSaverOffIcon/>},
+        {text: "Snippets",selected:false, icon: <DashboardCustomizeIcon/>},
+        {text: "Design",icon: <BrushIcon/>, action: (event) => {
                 setDesignAnchor(event.currentTarget)
                 setSidebarKey("Design")
             }},
@@ -86,26 +86,27 @@ const Sidebar = ({open, mobileOpen, handleDrawerToggle, setSidebarKey,sidebarKey
                 open={isMobile ? mobileOpen : true}
                 onClose={handleDrawerToggle}
                 ModalProps={{keepMounted: true}}
-                sx={{"& .MuiDrawer-paper": {boxSizing: "border-box", width: drawerWidth, backgroundColor: "#fffcfd",mx:1}}}
+                sx={{"& .MuiDrawer-paper": {boxSizing: "border-box", width: drawerWidth, backgroundColor: "#fffcfd",}}}
             >
 
 
                 <List sx={{mx: "5px"}}>
                     {menuItems.map((item, index) => (
-                        <ListItem key={index} disablePadding>
+                        <ListItem key={index} disablePadding >
                             <ListItemButton
-                                onClick={item.action || (() => setSidebarKey(item.text))}
+                                onClick={item.action || (() => setSidebarKey({text:item.text,selected:sidebarKey.text === item.text ? !sidebarKey.selected : !item.selected}))}
                                 sx={{
-                                    borderRadius: "10px",backgroundColor: sidebarKey === item.text && theme.palette?.sidebarHover,
-                                    color: sidebarKey === item.text && "white",
+                                    my:0.5,
+                                    borderRadius: "10px",backgroundColor: sidebarKey.text === item.text && theme.palette?.sidebarHover,
+                                    color: sidebarKey.text === item.text && "white",
                                     py: 0.5,
                                     "&:hover": {
-                                        backgroundColor: "rgba(255,52,128,0.2)",
+                                        backgroundColor: sidebarKey.text !== item.text ? "rgba(255,52,128,0.2)" : theme.palette?.sidebarHover,
                                     },
                                 }}
                             >
-                                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center"}}>
-                                    <ListItemIcon sx={{ minWidth: 20, color:sidebarKey === item.text && "white"}}>
+                                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center",flexDirection: "column" ,p:'0 !important'}}>
+                                    <ListItemIcon sx={{ minWidth: 20, color:sidebarKey.text === item.text && "white",p:'0 !important'}}>
                                         {item.icon}
                                     </ListItemIcon>
                                 </Box>

@@ -16,10 +16,10 @@ function MainEditor({sidebarKey, formatCode}) {
     const code = useStore((state) => state.code);
     const token = localStorage.getItem("code")
     useEffect(() => {
-        if(token !== null){
+        if (token !== null) {
             setCode(token);
         }
-    },[token])
+    }, [token])
     const mermaidCode = `
    flowchart TD
     A[Christmas] -->|Get money| B(Go shopping)
@@ -56,20 +56,20 @@ function MainEditor({sidebarKey, formatCode}) {
         };
         renderDiagram();
     }, [code]);
-
-    return (<Box sx={{height:'100vh',overflow:'auto',display:'flex'}}>
+    return (<Box sx={{height: '100vh', overflow: 'auto', display: 'flex'}}>
         <Grid container spacing={2}>
-            {sidebarKey === "Snippets" && (
-                <Grid item xs={12} md={3} sx={{height: '100vh',overflow:'auto'}}>
-                    <Snippets/>
+                {(sidebarKey.text === "Snippets" && sidebarKey.selected) && (
+                    <Grid item xs={12} sm={6} md={3} sx={{height: '100vh', overflow: 'auto'}}>
+                        <Snippets/>
+                    </Grid>
+                )}{(sidebarKey.text === "Templates" && sidebarKey.selected) && (
+                <Grid item xs={12} sm={6} md={3} sx={{height: '100vh', overflow: 'auto'}}>
+                    <Templates/>
                 </Grid>
-            )}{sidebarKey === "Templates" && (
-            <Grid item xs={6} md={3}  sx={{height: '100vh',overflow:'auto'}}>
-                <Templates/>
-            </Grid>
-        )}
-            <Grid item sx={{height: '100vh',overflow:'auto'}} xs={12} sm={6} md={sidebarKey? 5 : 6} lg={sidebarKey? 4 : 6}>
-                <LeftContainer />
+            )}
+            <Grid item sx={{height: '100vh', overflowY: 'auto'}} xs={12} sm={6} md={5}
+                  lg={4}>
+                <LeftContainer/>
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={5} height={"100vh"} sx={{overflowY: 'hidden'}}  >
                 <RightContainer />
