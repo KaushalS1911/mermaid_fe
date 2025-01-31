@@ -28,15 +28,17 @@ import toast from "react-hot-toast";
 import { Mic, Stop } from "@mui/icons-material";
 import axiosInstance from "@/utils/axiosInstance";
 import FullScreenLoader from "@/utils/fullScreenLoader";
+import {useStore} from "@/store";
 
 function Page() {
     const [file, setFile] = useState(null);
-    const {setCode} = useContext(ChartContext);
+    // const {setCode} = useContext(ChartContext);
     const [isRecording, setIsRecording] = useState(false);
     const [audioURL, setAudioURL] = useState(null);
     const [audioBlob, setAudioBlob] = useState(null);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    const setCode = useStore.use.setCode();
 
     const handleAudioStop = (recordedData) => {
         const audioBlob = recordedData.blob;
