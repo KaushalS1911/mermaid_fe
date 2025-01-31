@@ -19,6 +19,7 @@
     "@svgr/webpack": "^8.1.0",
     "axios": "^1.7.9",
     "codemirror": "^5.65.18",
+    "date-fns": "^4.1.0",
     "formik": "^2.4.6",
     "js-cookie": "^3.0.5",
     "mermaid": "^10.0.0",

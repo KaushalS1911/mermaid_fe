@@ -37,8 +37,11 @@ const Dashboard = () => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
-    const token = searchParams.get("token") || sessionStorage.getItem("token");
+    // const token = searchParams.get("token") || typeof window.sessionStorage !== 'undefined' && sessionStorage.getItem("token");
     const router = useRouter();
+    const token =
+        searchParams.get("token") ||
+        (typeof window !== "undefined" && sessionStorage.getItem("token"));
 
     const [menuOpen, setMenuOpen] = useState(false);
     const [value, setValue] = React.useState("1");
