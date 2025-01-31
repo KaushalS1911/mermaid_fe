@@ -35,10 +35,11 @@ import FullScreenLoader from "@/utils/fullScreenLoader";
 import dynamic from "next/dynamic";
 
 const ReactMic = dynamic(() => import("react-mic").then((mod) => mod.ReactMic), { ssr: false });
+import {useStore} from "@/store";
 
 function Page() {
     const [file, setFile] = useState(null);
-    const { setCode } = useContext(ChartContext);
+    // const {setCode} = useContext(ChartContext);
     const [isRecording, setIsRecording] = useState(false);
     const [audioURL, setAudioURL] = useState(null);
     const [audioBlob, setAudioBlob] = useState(null);
@@ -50,6 +51,7 @@ function Page() {
     const handleCloseDialog = () => {
         setIsOpen(false);
     };
+    const setCode = useStore.use.setCode();
 
     const handleAudioStop = (recordedData) => {
         const audioBlob = recordedData.blob;
@@ -64,21 +66,41 @@ function Page() {
         setIsRecording((prev) => !prev);
     };
 
+    const validation = Yup.object({
+        aiModel: Yup.string().required("This field is required"),
+        title: Yup.string().required("This field is required"),
+
+        file: Yup.mixed().nullable().when("method", {
+            is: (val) => val === "Text/README" || val === "Upload Audio",
+            then: (schema) => schema.required("Please select a file"),
+            otherwise: (schema) => schema.notRequired(),
+        }),
+
+        textOrSyntax: Yup.mixed().nullable().when("method", {
+            is: (val) => val === "",
+            then: (schema) => schema.required("Text is required"),
+            otherwise: (schema) => schema.notRequired(),
+        }),
+    });
+
+
     const handleToggleBox = () => {
         setIsOpen(!isOpen);
     };
 
     const formik = useFormik({
         initialValues: {
-            method: "", aiModel: "Gemini", textOrSyntax: "", file: null,
+            method: "",
+            aiModel: "Gemini",
+            textOrSyntax: "",
+            file: null,
+            title: "",
         },
-        validationSchema: Yup.object({
-            // method: Yup.string().required("Please select a method"),
-            // aiModel: Yup.string().required("Please select an AI model"),
-            // textOrSyntax: Yup.string().required("This field is required"),
-            // file: Yup.mixed().nullable(),
-        }),
+        validationSchema: validation,
+        validateOnChange: true,
+        validateOnBlur: true,
         onSubmit: async (values) => {
+            console.log("Form submitted with values:", values);
             setLoading(true);
             try {
                 const formData = new FormData();
@@ -86,6 +108,8 @@ function Page() {
 
                 formData.append("aiModel", values.aiModel);
                 payload["aiModel"] = values.aiModel;
+                formData.append("title", values.title);
+                payload["title"] = values.title;
 
                 if (values.method) {
                     formData.append("selectInputMethod", values.method);
@@ -113,12 +137,12 @@ function Page() {
                     }
                 );
 
-                setCode(response.data.mermaidChart)
-                typeof window !== "undefined" && localStorage.setItem("code", response.data.mermaidChart)
-                router.push(`/editor`)
-                toast.success(response.data.message)
+                setCode(response.data.mermaidChart);
+                typeof window !== "undefined" && localStorage.setItem("code", response.data.mermaidChart);
+                router.push(`/editor`);
+                toast.success(response.data.message);
             } catch (error) {
-                toast.error('Something went wrong!')
+                toast.error("Something went wrong!");
                 console.error("Error during API call:", error);
             } finally {
                 setLoading(false);
@@ -126,6 +150,8 @@ function Page() {
 
         }
     });
+
+
 
     const { values, errors, touched, handleChange, handleBlur, setFieldValue } = formik;
 
@@ -136,7 +162,7 @@ function Page() {
     }
 
     return (
-        <>
+        <Box bgcolor={'#fff'}>
             <Container>
                 <Box>
                     <Grid container>
@@ -168,8 +194,41 @@ function Page() {
                                         </RadioGroup>
                                     </FormControl>
 
-                                    <FormControl fullWidth sx={{ mb: 3 }}>
-                                        <Typography variant="body2" sx={{ fontSize: "14px", mt: 2, fontWeight: 600 }}>
+                                    <Typography variant="body2"
+                                                sx={{fontSize: "14px", mt: 2, fontWeight: 600}}>
+                                        Enter Title
+                                    </Typography>
+                                    <TextField sx={{
+                                        mt: 1,
+                                        "& .MuiOutlinedInput-root": {
+                                            "&:hover fieldset": {
+                                                borderColor: "#FF3480 !important",
+                                            },
+                                            "&.Mui-focused fieldset": {
+                                                borderColor: "#FF3480 !important",
+                                            }
+                                        },
+                                        "& .MuiInputLabel-root": {
+                                            "&.Mui-focused": {
+                                                color: "#FF3480",
+                                            },
+                                            "&:hover": {
+                                                color: "#FF3480",
+                                            }
+                                        }
+                                    }}
+                                               fullWidth
+                                               name="title"
+                                               value={values.title}
+                                               onChange={handleChange}
+                                               onBlur={handleBlur}
+                                               error={touched.title && Boolean(errors.title)}
+                                               helperText={touched.title && errors.title}
+                                               multiline
+                                    />
+
+                                    <FormControl fullWidth sx={{mb: 3}}>
+                                        <Typography variant="body2" sx={{fontSize: "14px", mt: 2, fontWeight: 600}}>
                                             Select AI Model
                                         </Typography>
                                         <TextField sx={{
@@ -501,7 +560,7 @@ function Page() {
                     </Grid>
                 </Box>
             </Container>
-        </>
+        </Box>
     );
 }
 

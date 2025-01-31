@@ -1,16 +1,23 @@
 "use client";
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import mermaid from "mermaid";
-import { Box, Grid } from "@mui/material";
+import {Box, Grid} from "@mui/material";
 import Snippets from "@/components/editor/Snippets";
 import MonacoEditor from '@monaco-editor/react';
 import {ChartContext} from "@/app/layout";
-function MainEditor({ sidebarKey,formatCode }) {
-    const {code,setCode} = useContext(ChartContext)
-    const token =  typeof window !== "undefined" && localStorage.getItem("code")
+import Templates from "@/components/editor/Templates";
+import LeftContainer from "@/components/editor/LeftContainer";
+import RightContainer from "@/components/editor/RightContainer";
+import {useStore} from "@/store";
+
+function MainEditor({sidebarKey, formatCode}) {
+    // const {code, setCode} = useContext(ChartContext)
+    const setCode = useStore((state) => state.setCode);
+    const code = useStore((state) => state.code);
+    const token = localStorage.getItem("code")
     useEffect(() => {
         if(token !== null){
-        setCode(token);
+            setCode(token);
         }
     },[token])
     const mermaidCode = `
@@ -40,7 +47,7 @@ function MainEditor({ sidebarKey,formatCode }) {
                     pre.className = 'mermaid';
                     pre.textContent = code;
                     container.appendChild(pre);
-                    const { svg } = await mermaid.render(id, code);
+                    const {svg} = await mermaid.render(id, code);
                     container.innerHTML = svg;
                 } catch (error) {
                     console.error("Mermaid rendering error:", error);
@@ -50,41 +57,25 @@ function MainEditor({ sidebarKey,formatCode }) {
         renderDiagram();
     }, [code]);
 
-    return (
-        <Box height={"100%"} minHeight={'100VH'}>
-            <Grid container>
-                {sidebarKey === "Snippets" && (
-                    <Grid item xs={12} md={3}>
-                        <Snippets />
-                    </Grid>
-                )}
-                <Grid item xs={12} md={4} overflow={"auto"}>
-                    <MonacoEditor
-                        height="100vh"
-                        overflow={'auto'}
-                        defaultLanguage="mermaid"
-                        theme="vs-light"
-                        value={code}
-                        onChange={(value) => setCode(value || '')}
-                        options={{
-                            minimap: { enabled: false },
-                            scrollBeyondLastLine: false,
-                            automaticLayout: true,
-                        }}
-                    />
+    return (<Box sx={{height:'100vh',overflow:'auto',display:'flex'}}>
+        <Grid container spacing={2}>
+            {sidebarKey === "Snippets" && (
+                <Grid item xs={12} md={3} sx={{height: '100vh',overflow:'auto'}}>
+                    <Snippets/>
                 </Grid>
-                <Grid item xs={12} md={5} bgcolor={'white'} height={'100vh'} overflowY={"scroll"}>
-                    <div
-                        ref={chartRef}
-                        style={{
-                            textAlign: "center",
-                            padding: '16px',
-                            overflow: 'auto',
-                        }}
-                    />
-                </Grid>
+            )}{sidebarKey === "Templates" && (
+            <Grid item xs={6} md={3}  sx={{height: '100vh',overflow:'auto'}}>
+                <Templates/>
             </Grid>
-        </Box>
-    );
+        )}
+            <Grid item sx={{height: '100vh',overflow:'auto'}} xs={12} sm={6} md={sidebarKey? 5 : 6} lg={sidebarKey? 4 : 6}>
+                <LeftContainer />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={5} height={"100vh"} overflowY="hidden"  >
+                <RightContainer />
+            </Grid>
+        </Grid>
+    </Box>);
 }
+
 export default MainEditor;
