@@ -24,12 +24,14 @@ import file from '../../asset/editor/snippets/file-text.png'
 import plus from '../../asset/editor/snippets/plus.png'
 import toast from "react-hot-toast";
 import {ChartContext} from "@/app/layout";
+import {useStore} from "@/store";
 
 function Snippets(props) {
     const [isCopied, setIsCopied] = useState(false);
     const [textToCopy, setTextToCopy] = useState('');
-    const {code,setCode} = useContext(ChartContext)
-
+    // const {code,setCode} = useContext(ChartContext)
+    const setCode = useStore((state) => state.setCode);
+    const code = useStore((state) => state.code);
     const copyToClipboard = useCallback(async (text) => {
         try {
             await navigator.clipboard.writeText(text);
