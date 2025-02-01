@@ -19,14 +19,16 @@ import {
 } from "@mui/icons-material";
 import img from "../../asset/dashboard1/Ellipse.png";
 import axiosInstance from "@/utils/axiosInstance";
-import { formatDistanceToNow } from "date-fns";
+import {formatDistanceToNow} from "date-fns";
+import {useStore} from "@/store";
 
 
 const Table = () => {
     const [value, setValue] = useState('all');
     const router = useRouter();
-const [rows, setRows] = useState([]);
-const [loading, setLoading] = useState(true);
+    const [rows, setRows] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const setCode = useStore((state) => state.setCode);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -96,19 +98,34 @@ const [loading, setLoading] = useState(true);
     //     },
     // ];
 
-    const columns = [{
-        field: "title", headerName: "Name", flex: 1, minWidth: 150,
-    },
-    //     {
-    //     field: "location", headerName: "Location", flex: 1, minWidth: 150,
-    // },
+    const columns = [
+        {
+            field: "title",
+            headerName: "Name",
+            flex: 1,
+            minWidth: 150,
+            renderCell: (params) => (
+                <span
+                    style={{ color: "#000", cursor: "pointer", textDecoration: "none", fontWeight:600}}
+                    onClick={() => {
+                        router.push('/editor')
+                        setCode(params.row.mermaidString);
+                    }}
+                >
+                {params.value}
+            </span>
+            ),
+        },
+        //     {
+        //     field: "location", headerName: "Location", flex: 1, minWidth: 150,
+        // },
         {
             field: "createdAt",
             headerName: "Created",
             flex: 1,
             minWidth: 150,
             renderCell: (params) => (
-                <span>{formatDistanceToNow(new Date(params.value), { addSuffix: true })}</span>
+                <span>{formatDistanceToNow(new Date(params.value), {addSuffix: true})}</span>
             ),
         },
         {
@@ -117,12 +134,12 @@ const [loading, setLoading] = useState(true);
             flex: 1,
             minWidth: 150,
             renderCell: (params) => (
-                <span>{formatDistanceToNow(new Date(params.value), { addSuffix: true })}</span>
+                <span>{formatDistanceToNow(new Date(params.value), {addSuffix: true})}</span>
             ),
         },
-    //     {
-    //     field: "comments", headerName: "Comments", flex: 1, minWidth: 150,
-    // },
+        //     {
+        //     field: "comments", headerName: "Comments", flex: 1, minWidth: 150,
+        // },
         {
             field: "author",
             headerName: "Author",
@@ -131,7 +148,7 @@ const [loading, setLoading] = useState(true);
             display: "flex",
             alignItems: "center",
             renderCell: (params) => (
-                <Avatar src={params.row.user_id.avatar} alt={params.row.user_id.name} />
+                <Avatar src={params.row.user_id.avatar} alt={params.row.user_id.name}/>
             ),
         },
         {
@@ -152,8 +169,10 @@ const [loading, setLoading] = useState(true);
         const fetchData = async () => {
             try {
                 const response = await axiosInstance.get("/flowcharts");
-                        setRows(response.data.data);
+                setRows(response.data.data);
+                console.log(response.data.data, 'mmmmmmmmmmmmmmmm');
             } catch (error) {
+                setError("Failed to fetch data");
                 console.error(error);
             } finally {
                 setLoading(false);
