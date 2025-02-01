@@ -58,10 +58,10 @@ function MainEditor({sidebarKey}) {
                 </Grid>
             )}
             <Grid item sx={{height: '100vh', overflowY: 'auto'}} xs={12} sm={6} md={5}
-                  lg={4}>
+                  lg={6}>
                 <LeftContainer/>
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={5} height={"100vh"} sx={{overflowY: 'hidden'}}  >
+            <Grid item xs={12} sm={6} md={6} lg={3} height={"100vh"} sx={{overflowY: 'hidden'}}  >
                 <RightContainer />
             </Grid>
         </Grid>

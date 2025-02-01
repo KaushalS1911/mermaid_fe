@@ -4,9 +4,10 @@ import {
     AppBar, Toolbar, Button, Typography, IconButton, Breadcrumbs, Link, Avatar, Box, useMediaQuery
 } from "@mui/material";
 import {Share, Brightness4, Brightness7, Menu} from "@mui/icons-material";
+import LogoutIcon from '@mui/icons-material/Logout';
 import {useTheme} from "@mui/material/styles";
 import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
-import {usePathname} from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
 
 export default function DashboardHeader({handleDrawerToggle}) {
     const [darkMode, setDarkMode] = React.useState(false);
@@ -14,7 +15,7 @@ export default function DashboardHeader({handleDrawerToggle}) {
     const pathName = usePathname();
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
+    const router = useRouter();
     const name = pathName?.split("/");
 
     return (
@@ -25,7 +26,7 @@ export default function DashboardHeader({handleDrawerToggle}) {
             {!isMobile && (<Box>
 
                     <Breadcrumbs separator="›" sx={{flexGrow: 1}}>
-                        <Link underline="hover" color="inherit" href="/">Home</Link>
+                        <Link underline="hover" color="inherit" href="/dashboard">Dashboard</Link>s
                         <Typography color="textPrimary" sx={{textTransform: "capitalize"}}>{name}</Typography>
                     </Breadcrumbs>
                 </Box>
@@ -60,7 +61,14 @@ export default function DashboardHeader({handleDrawerToggle}) {
                 <IconButton onClick={() => setDarkMode(!darkMode)}>
                     {darkMode ? <Brightness7/> : <Brightness4/>}
                 </IconButton>
-
+                <Button
+                    onClick={()=>router.push("/")}
+                    variant="contained"
+                    sx={{ color: "#fff", display: {xs: "none", sm: "flex"}, gap: 1}}
+                >
+                    <LogoutIcon/>
+                    Log Out
+                </Button>
                 <Avatar src="https://mui.com/static/images/avatar/1.jpg"/>
             </Box>
         </Box>
