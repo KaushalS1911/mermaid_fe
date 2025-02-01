@@ -24,9 +24,14 @@ const MermaidEditor = () => {
     }
   };
 
-  const onMount = (_, monaco) => {
-    initEditor(monaco);
+  const onMount = (editor, monaco) => {
+    try {
+      initEditor(monaco);
+    } catch (error) {
+      console.error("Error initializing Monaco editor:", error);
+    }
   };
+
 
   return (
     <MonacoEditor
