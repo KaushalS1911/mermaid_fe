@@ -56,8 +56,8 @@ const Footer = () => {
                                 "Brainstorming",
                                 "Wireframes",
                                 "Whiteboard Interview",
-                            ].map((item) => (
-                                <Box sx={{mt: 1}}>
+                            ].map((item,index) => (
+                                <Box sx={{mt: 1}} key={index}>
                                     <Box sx={{
                                         fontSize: "18px",
                                         lineHeight: "27px",
@@ -85,8 +85,8 @@ const Footer = () => {
                                 "DiagramGPT",
                                 "Docs →",
                                 "DesignDocs.dev →",
-                            ].map((item) => (
-                                <Box sx={{mt: 1}}>
+                            ].map((item,index) => (
+                                <Box sx={{mt: 1}} key={index}>
                                     <Box sx={{
                                         fontSize: "18px",
                                         lineHeight: "27px",
@@ -114,8 +114,8 @@ const Footer = () => {
                                 "Careers →",
                                 "Privacy Policy",
                                 "Terms",
-                            ].map((item) => (
-                                <Box sx={{mt: 1}}>
+                            ].map((item,index) => (
+                                <Box sx={{mt: 1}} key={index}>
                                     <Box sx={{
                                         fontSize: "18px",
                                         lineHeight: "27px",

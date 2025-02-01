@@ -153,9 +153,7 @@ const [loading, setLoading] = useState(true);
             try {
                 const response = await axiosInstance.get("/flowcharts");
                         setRows(response.data.data);
-    console.log(response.data.data,'mmmmmmmmmmmmmmmm');
             } catch (error) {
-                setError("Failed to fetch data");
                 console.error(error);
             } finally {
                 setLoading(false);

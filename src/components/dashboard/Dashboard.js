@@ -37,7 +37,7 @@ const Dashboard = () => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
-    // const token = searchParams.get("token") || typeof window.sessionStorage !== 'undefined' && sessionStorage.getItem("token");
+
     const router = useRouter();
     const token =
         searchParams.get("token") ||
@@ -98,39 +98,39 @@ const Dashboard = () => {
                                     value="1"
                                     sx={{
                                         border: "1px solid transparent",
-                                        padding: "8px 18px !important", // Removes top and bottom padding
-                                        minHeight: "auto", // Prevents default height enforcement
-                                        minWidth: "auto", // Ensures it doesn't stretch unnecessarily
+                                        padding: "8px 18px !important",
+                                        minHeight: "auto",
+                                        minWidth: "auto",
                                         textTransform:"capitalize"
                                     }}
                                 />
 
                                 <Tab label="Recents" value="2" sx={{
                                     border: "1px solid transparent",
-                                    padding: "8px 18px !important", // Removes top and bottom padding
-                                    minHeight: "auto", // Prevents default height enforcement
-                                    minWidth: "auto", // Ensures it doesn't stretch unnecessarily
+                                    padding: "8px 18px !important",
+                                    minHeight: "auto",
+                                    minWidth: "auto",
                                     textTransform:"capitalize"
                                 }}/>
                                 <Tab label="Created by Me" value="3" sx={{
                                     border: "1px solid transparent",
-                                    padding: "8px 18px !important", // Removes top and bottom padding
-                                    minHeight: "auto", // Prevents default height enforcement
-                                    minWidth: "auto", // Ensures it doesn't stretch unnecessarily
+                                    padding: "8px 18px !important",
+                                    minHeight: "auto",
+                                    minWidth: "auto",
                                     textTransform:"capitalize"
                                 }}/>
                                 <Tab label="Folders" value="4" sx={{
                                     border: "1px solid transparent",
-                                    padding: "8px 18px !important", // Removes top and bottom padding
-                                    minHeight: "auto", // Prevents default height enforcement
-                                    minWidth: "auto", // Ensures it doesn't stretch unnecessarily
+                                    padding: "8px 18px !important",
+                                    minHeight: "auto",
+                                    minWidth: "auto",
                                     textTransform:"capitalize"
                                 }}/>
                                 <Tab label="Unsorted" value="5" sx={{
                                     border: "1px solid transparent",
-                                    padding: "8px 18px !important", // Removes top and bottom padding
-                                    minHeight: "auto", // Prevents default height enforcement
-                                    minWidth: "auto", // Ensures it doesn't stretch unnecessarily
+                                    padding: "8px 18px !important",
+                                    minHeight: "auto",
+                                    minWidth: "auto",
                                     textTransform:"capitalize"
                                 }}/>
                             </TabList>
