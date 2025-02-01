@@ -85,9 +85,16 @@ const router = useRouter();
                                 ))}
                             </List>
                             <Box sx={{padding: "0 10px", display: "inline-block", flexDirection: 'column'}}>
-                                <Button variant="text" sx={{color: '#333', mb: 1}}>
+                                {token ? <Button variant="text" sx={{color: '#333'}} onClick={() => {
+                                    router.push('/login');
+                                    Cookies.clear()
+                                }}>
+                                    Log Out
+                                </Button> : <Button variant="text" sx={{color: '#333'}} onClick={() => {
+                                    router.push('/login');
+                                }}>
                                     Log In
-                                </Button>
+                                </Button>}
                                 <Box>
                                     <Button
                                         variant="contained"
