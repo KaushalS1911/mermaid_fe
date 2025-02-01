@@ -1,10 +1,10 @@
 // components/EditorTabs.js
+'use client';
 
 import { useState } from "react";
 import { Box, AppBar, Tabs, Tab } from "@mui/material";
 import MermaidEditor from "./MermaidEditor";
 import { useStore } from "@/store";
-import SelectSample from "./SelectSample";
 
 const EditorTabs = () => {
   const setEditorMode = useStore.use.setEditorMode();

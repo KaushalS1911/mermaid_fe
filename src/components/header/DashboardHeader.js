@@ -17,7 +17,8 @@ export default function DashboardHeader({handleDrawerToggle}) {
 
     const name = pathName?.split("/");
 
-    return (<AppBar position="static"
+    return (
+        <AppBar position="static"
                     sx={{backgroundColor: "#F8F8FA", color: "#000", boxShadow: "none", py: 1, px: {xs: 2, sm: 4}}}>
         <Box sx={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
 
@@ -73,5 +74,6 @@ export default function DashboardHeader({handleDrawerToggle}) {
                 Share
             </Button>
         </Box>)}
-    </AppBar>);
+    </AppBar>
+    );
 }

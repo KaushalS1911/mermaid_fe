@@ -45,6 +45,7 @@ function MainEditor({sidebarKey}) {
         };
         renderDiagram();
     }, [code]);
+
     return (<Box sx={{height: '100vh', overflow: 'auto', display: 'flex'}}>
         <Grid container spacing={2}>
                 {(sidebarKey.text === "Snippets" && sidebarKey.selected) && (
