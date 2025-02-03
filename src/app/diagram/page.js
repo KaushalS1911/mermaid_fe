@@ -234,7 +234,7 @@ function Page() {
                                                error={touched.aiModel && Boolean(errors.aiModel)}
                                                helperText={touched.aiModel && errors.aiModel}
                                     >
-                                        {['Smart Graph','Gemini','Open Ai'].map((model, index) => (<MenuItem key={index} value={model}>
+                                        {['Smart Graph','Gemini','Open AI'].map((model, index) => (<MenuItem key={index} value={model}>
                                             {model}
                                         </MenuItem>))}
                                     </TextField>
