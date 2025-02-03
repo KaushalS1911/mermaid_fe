@@ -46,7 +46,7 @@ const Main = styled("main", {
     return (<Box sx={{display: "flex"}}>
         <Box
             component="nav"
-            sx={{width: {md: collapsed ? 70 : 210}, flexShrink: {md: 0}}}
+            sx={{width: {md: collapsed ? 70 : 200}, flexShrink: {md: 0}}}
             aria-label="mailbox folders"
         >
             <Sidebar

@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import mermaid from "mermaid";
-import { Box } from "@mui/material";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
 import Snippets from "@/components/editor/Snippets";
 import Templates from "@/components/editor/Templates";
 import LeftContainer from "@/components/editor/LeftContainer";
@@ -12,6 +12,8 @@ function MainEditor({ sidebarKey }) {
     const setCode = useStore((state) => state.setCode);
     const code = useStore((state) => state.code);
     const token = typeof window !== "undefined" && localStorage.getItem("code");
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
     useEffect(() => {
         if (token !== null) {
@@ -50,55 +52,66 @@ function MainEditor({ sidebarKey }) {
         renderDiagram();
     }, [code]);
 
-
-    const [leftWidth, setLeftWidth] = useState(50);
+    // Adjusting Widths
+    const [leftWidth, setLeftWidth] = useState(isMobile ? 100 : 50); // Default 50% on desktop, 100% on mobile
     const isResizing = useRef(false);
 
     const handleMouseDown = (e) => {
+        if (isMobile) return; // Disable resizing on mobile
         isResizing.current = true;
         document.addEventListener("mousemove", handleMouseMove);
         document.addEventListener("mouseup", handleMouseUp);
     };
 
     const handleMouseMove = (e) => {
-        if (!isResizing.current) return;
-
-        const newWidth = ((e.clientX - (sidebarKey.selected ? 250 : 0)) / (window.innerWidth - (sidebarKey.selected ? 250 : 0))) * 100;
+        if (!isResizing.current || isMobile) return;
+        const sidebarWidth = sidebarKey.selected ? 250 : 0;
+        const newWidth = ((e.clientX - sidebarWidth) / (window.innerWidth - sidebarWidth)) * 100;
         if (newWidth > 20 && newWidth < 80) {
             setLeftWidth(newWidth);
         }
     };
 
     const handleMouseUp = () => {
+        if (isMobile) return;
         isResizing.current = false;
         document.removeEventListener("mousemove", handleMouseMove);
         document.removeEventListener("mouseup", handleMouseUp);
     };
 
     return (
-        <Box sx={{ height: "100vh", overflow: "hidden", display: "flex" }}>
+        <Box sx={{ height: "100vh", display: "flex", overflow: "hidden", flexDirection: isMobile ? "column" : "row" }}>
             {sidebarKey.selected && (
-                <Box sx={{ width: "550px", height: "100vh", overflow: "auto" }}>
-                    {sidebarKey.text === "Snippets" ? <Snippets /> : <Templates />}
+                <Box sx={{ width: isMobile ? "100%" : "390px", height: isMobile ? "auto" : "100vh", overflowY: "auto", flexShrink: 0 }}>
+                    {sidebarKey.text === "Snippets" && <Snippets />}
+                    {sidebarKey.text === "Templates" && <Templates />}
                 </Box>
             )}
 
-            <Box sx={{ width: `${leftWidth}%`, height: "100vh", overflowY: "auto" }}>
+            <Box sx={{ width: isMobile ? "100%" : `${leftWidth}%`, height: isMobile ? "50vh" : "100vh", overflowY: "auto", flexShrink: 0 }}>
                 <LeftContainer />
             </Box>
 
+            {!isMobile && (
+                <Box
+                    sx={{
+                        width: "5px",
+                        cursor: "ew-resize",
+                        backgroundColor: "#ccc",
+                        height: "100vh",
+                        flexShrink: 0,
+                    }}
+                    onMouseDown={handleMouseDown}
+                />
+            )}
+
             <Box
                 sx={{
-                    width: "5px",
-                    cursor: "ew-resize",
-                    backgroundColor: "#ccc",
-                    height: "100vh",
-                    position: "relative",
+                    width: isMobile ? "100%" : `calc(100% - ${leftWidth}% - ${sidebarKey.selected ? "255px" : "5px"})`,
+                    height: isMobile ? "50vh" : "100vh",
+                    overflowY: "auto",
                 }}
-                onMouseDown={handleMouseDown}
-            />
-
-            <Box sx={{ width: `${100 - leftWidth}%`, height: "100vh", overflowY: "hidden" }}>
+            >
                 <RightContainer />
             </Box>
         </Box>
@@ -106,4 +119,3 @@ function MainEditor({ sidebarKey }) {
 }
 
 export default MainEditor;
-

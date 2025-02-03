@@ -112,7 +112,7 @@ function Snippets(props) {
 
     return (
         <Box sx={{ px: 1, py: 2 }}>
-            <Grid container spacing={2}>
+            <Grid container>
                 {data.map((item, index) => (
                     <Box key={index}>
                         <Grid item xs={12} key={index}>

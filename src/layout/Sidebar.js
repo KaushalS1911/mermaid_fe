@@ -148,6 +148,7 @@ const Sidebar = ({open, mobileOpen, handleDrawerToggle, setSidebarKey,sidebarKey
                             onClick={() => {
                                 setColor({theme: themeItem.color, image: themeItem.image});
                                 setThemeAnchor(null);
+                                setDesignAnchor(null);
                                 setSidebarKey(themeItem.text);
                             }}
                             sx={{borderRadius: "10px", py: 0.5,"&:hover": {backgroundColor: "sidebarHover" , color: "white"}}}
