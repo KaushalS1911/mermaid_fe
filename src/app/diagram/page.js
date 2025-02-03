@@ -509,7 +509,17 @@ function Page() {
                                     </>)}
 
                                 <Box display={"flex"} justifyContent={"flex-end"}>
-                                    <Button type="submit" variant="contained" color="primary" sx={{
+                                    <Button onClick={()=>router.push('/dashboard')} variant="outlined" color="primary" sx={{
+                                        m: 2,
+                                        textTransform: 'capitalize',
+                                        // bgcolor: '#FF3480',
+                                        border: '1px solid #FF3480',
+                                        color: '#FF3480',
+                                        boxShadow: 'none',
+                                        fontSize: '16px'
+                                    }}>
+                                        Cancel
+                                    </Button> <Button type="submit" variant="contained" color="primary" sx={{
                                         my: 2,
                                         textTransform: 'capitalize',
                                         bgcolor: '#FF3480',

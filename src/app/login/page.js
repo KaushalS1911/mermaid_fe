@@ -16,17 +16,7 @@ function Page() {
             window.location.href = `https://www.linkedin.com/oauth/v2/authorization?${params}`;
         }
     };
-    return (<Box
-        sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            height: "100vh",
-            backgroundColor: "#f1f1f1",
-            px: {sm: 0, xs: 2},
-        }}
-    >
+    return (<Box>
         <Toaster/>
         <Card
             sx={{
