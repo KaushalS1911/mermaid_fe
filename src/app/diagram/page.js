@@ -90,7 +90,7 @@ function Page() {
 
     const formik = useFormik({
         initialValues: {
-            method: "", aiModel: "Gemini", textOrSyntax: "", file: null, title: "",
+            method: "", aiModel: "Smart Graph", textOrSyntax: "", file: null, title: "",
         }, validationSchema: validation, validateOnChange: true, validateOnBlur: true, onSubmit: async (values) => {
             console.log("Form submitted with values:", values);
             setLoading(true);
@@ -234,7 +234,7 @@ function Page() {
                                                error={touched.aiModel && Boolean(errors.aiModel)}
                                                helperText={touched.aiModel && errors.aiModel}
                                     >
-                                        {['Gemini'].map((model, index) => (<MenuItem key={index} value={model}>
+                                        {['Smart Graph','Gemini','Open Ai'].map((model, index) => (<MenuItem key={index} value={model}>
                                             {model}
                                         </MenuItem>))}
                                     </TextField>
