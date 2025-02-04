@@ -56,7 +56,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (!token) {
-            router.push("/login");
+            router.push("/");
         } else {
             sessionStorage.setItem("token", token);
         }
