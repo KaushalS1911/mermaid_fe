@@ -139,7 +139,7 @@ function Header() {
                                 Log Out
                             </Button>
                         ) : (
-                            <Button variant="text" sx={{ color: '#333' }} onClick={router.push('/login')}>
+                            <Button variant="text" sx={{ color: '#333' }} onClick={() => router.push('/login')}>
                                 Log In
                             </Button>
                         )}
