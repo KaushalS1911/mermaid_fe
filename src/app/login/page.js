@@ -16,7 +16,15 @@ function Page() {
             window.location.href = `https://www.linkedin.com/oauth/v2/authorization?${params}`;
         }
     };
-    return (<Box>
+    return (<Box
+        sx={{
+            display: "flex",
+            justifyContent:'center',
+            alignItems: 'center',
+            height: '100vh',
+            background:'#ccc'
+        }}
+    >
         <Toaster/>
         <Card
             sx={{

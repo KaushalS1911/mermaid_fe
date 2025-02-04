@@ -175,11 +175,15 @@ const Dashboard = () => {
                         <Stack direction="row" spacing={1} alignItems="center">
                             {!isSmallScreen && (
                                 <Button
+                                    onClick={()=> {
+                                        typeof window !== "undefined" && sessionStorage.removeItem("token")
+                                        router.push("/")
+                                    } }
                                     variant="outlined"
                                     size="small"
                                     sx={{color: "#8DA6B2", border: "#C8C8C8 1px solid",textTransform:"capitalize"}}
                                 >
-                                    Ctrl K
+                                    Log Out
                                 </Button>
                             )}
 

@@ -70,12 +70,18 @@ export const allTemplates = [
             {
                 img: sample_arc_dia,
                 dec: "A sample architecture diagram",
-                code:
-                    "sequenceDiagram\n" +
-                    "    Alice->>+John: Hello John, how are you?\n" +
-                    "    Alice->>+John: John, can you hear me?\n" +
-                    "    John-->>-Alice: Hi Alice, I can hear you!\n" +
-                    "    John-->>-Alice: I feel great!",
+                code:'architecture-beta\n' +
+                    '    group api(cloud)[API]\n' +
+                    '\n' +
+                    '    service db(database)[Database] in api\n' +
+                    '    service disk1(disk)[Storage] in api\n' +
+                    '    service disk2(disk)[Storage] in api\n' +
+                    '    service server(server)[Server] in api\n' +
+                    '\n' +
+                    '    db:L -- R:server\n' +
+                    '    disk1:T -- B:server\n' +
+                    '    disk2:T -- B:db\n' +
+                    '    \n'
             },
         ],
     },

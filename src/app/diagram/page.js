@@ -20,7 +20,7 @@ import {
     Typography,
     Dialog,
     DialogContent,
-    DialogActions
+    DialogActions, Breadcrumbs, Link
 } from "@mui/material";
 import {useFormik} from "formik";
 import * as Yup from "yup";
@@ -125,7 +125,7 @@ function Page() {
                 });
 
                 setCode(response.data.mermaidChart);
-                typeof window !== "undefined" && localStorage.setItem("code", response.data.mermaidChart);
+                typeof window !== "undefined" && sessionStorage.setItem("code", response.data.mermaidChart);
                 router.push(`/editor`);
                 toast.success(response.data.message);
             } catch (error) {
@@ -149,8 +149,11 @@ function Page() {
             {/*<Container>*/}
             <Box>
                 <Grid container>
-                    <Grid item xs={12}>
-                        <Typography sx={{fontSize: '32px', fontWeight: '600', color: '#171717', mt: 4}}> AI
+                    <Grid item xs={12} mt={3}>
+                        <Breadcrumbs separator="›" sx={{flexGrow: 1}}>
+                            <Link underline="hover" color="inherit" href="/dashboard">Dashboard</Link>s
+                            <Typography color="textPrimary" sx={{textTransform: "capitalize"}}>Diagram</Typography>
+                        </Breadcrumbs>                        <Typography sx={{fontSize: '32px', fontWeight: '600', color: '#171717', mt: 2}}> AI
                             Flowchart Generator</Typography>
                     </Grid>
                     <Grid item xs={12} mt={3}>

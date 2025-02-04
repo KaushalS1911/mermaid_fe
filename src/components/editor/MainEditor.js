@@ -11,15 +11,14 @@ import { useStore } from "@/store";
 function MainEditor({ sidebarKey }) {
     const setCode = useStore((state) => state.setCode);
     const code = useStore((state) => state.code);
-    const token = typeof window !== "undefined" && localStorage.getItem("code");
+    const codeData = typeof window !== "undefined" && sessionStorage.getItem("code");
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
     useEffect(() => {
-        if (token !== null) {
-            setCode(token);
+        if (codeData !== null) {
+            setCode(codeData);
         }
-    }, [token]);
+    }, [codeData]);
 
     const chartRef = useRef(null);
 

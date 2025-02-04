@@ -19,6 +19,7 @@ const MermaidEditor = () => {
   const onChange = (value) => { // Removed TypeScript type annotations
     if (editorMode === "code") {
       setCode(value);
+      typeof window !== "undefined" && sessionStorage.setItem("code", value);
     } else {
       setConfig(value);
     }

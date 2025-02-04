@@ -1,21 +1,10 @@
 "use client";
-import {Geist, Geist_Mono} from "next/font/google";
 import "./globals.css";
 import {ThemeProvider} from "@mui/material";
 import theme from "@/components/theme/theme";
 import {Toaster} from "react-hot-toast";
 import {createContext, Suspense, useContext, useRef, useState} from "react";
 import light from "../asset/editor/design/image (1).png"
-
-const geistSans = Geist({
-    variable: "--font-geist-sans",
-    subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-    variable: "--font-geist-mono",
-    subsets: ["latin"],
-});
 
 // export const metadata = {
 //   title: "Create Next App",
@@ -28,7 +17,7 @@ export default function RootLayout({children}) {
     const chartRef = useRef(null);
     return (
         <html lang="en">
-        <body className={`${geistSans.variable} ${geistMono.variable}`} cz-shortcut-listen="true">
+        <body cz-shortcut-listen="true">
         {/*<Header />*/}
         <ChartContext.Provider value={{code, setCode, color, setColor, chartRef}}>
             <Toaster/>
