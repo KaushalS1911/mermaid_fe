@@ -52,24 +52,31 @@ function MainEditor({ sidebarKey }) {
         renderDiagram();
     }, [code]);
 
-    // Adjusting Widths
-    const [leftWidth, setLeftWidth] = useState(isMobile ? 100 : 50); // Default 50% on desktop, 100% on mobile
+
+    const [leftWidth, setLeftWidth] = useState(isMobile ? 100 : 50);
     const isResizing = useRef(false);
+    const startX = useRef(0);
+    const startWidth = useRef(leftWidth);
 
     const handleMouseDown = (e) => {
-        if (isMobile) return; // Disable resizing on mobile
+        if (isMobile) return;
         isResizing.current = true;
+        startX.current = e.clientX;
+        startWidth.current = leftWidth;
+
         document.addEventListener("mousemove", handleMouseMove);
         document.addEventListener("mouseup", handleMouseUp);
     };
 
     const handleMouseMove = (e) => {
         if (!isResizing.current || isMobile) return;
-        const sidebarWidth = sidebarKey.selected ? 250 : 0;
-        const newWidth = ((e.clientX - sidebarWidth) / (window.innerWidth - sidebarWidth)) * 100;
-        if (newWidth > 20 && newWidth < 80) {
+        requestAnimationFrame(() => {
+            const sidebarWidth = sidebarKey.selected ? 250 : 0;
+            const delta = e.clientX - startX.current;
+            let newWidth = startWidth.current + (delta / window.innerWidth) * 100;
+            newWidth = Math.min(Math.max(newWidth, 20), 80);
             setLeftWidth(newWidth);
-        }
+        });
     };
 
     const handleMouseUp = () => {
