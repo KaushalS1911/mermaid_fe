@@ -139,7 +139,7 @@ function Header() {
                                 Log Out
                             </Button>
                         ) : (
-                            <Button variant="text" sx={{ color: '#333' }} onClick={handleDialogOpen}>
+                            <Button variant="text" sx={{ color: '#333' }} onClick={() => router.push('/login')}>
                                 Log In
                             </Button>
                         )}
@@ -168,11 +168,11 @@ function Header() {
             </Box>
 
             {/* Log In Dialog */}
-            <Dialog open={dialogOpen} onClose={handleDialogClose}>
-                <DialogContent sx={{padding:0}}>
-                    <Page/>
-                </DialogContent>
-            </Dialog>
+            {/*<Dialog open={dialogOpen} onClose={handleDialogClose}>*/}
+            {/*    <DialogContent sx={{padding:0}}>*/}
+            {/*        <Page/>*/}
+            {/*    </DialogContent>*/}
+            {/*</Dialog>*/}
         </>
     );
 }

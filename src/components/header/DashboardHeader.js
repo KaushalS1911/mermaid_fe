@@ -62,7 +62,10 @@ export default function DashboardHeader({handleDrawerToggle}) {
                     {darkMode ? <Brightness7/> : <Brightness4/>}
                 </IconButton>
                 <Button
-                    onClick={()=>router.push("/")}
+                    onClick={()=> {
+                        router.push("/")
+                        sessionStorage.removeItem('token')
+                    }}
                     variant="contained"
                     sx={{ color: "#fff", display: {xs: "none", sm: "flex"}, gap: 1}}
                 >
