@@ -3,11 +3,12 @@
 import MonacoEditor from "@monaco-editor/react";
 import initEditor from "monaco-mermaid";
 import {useStore} from "@/store";
-import {useState, useEffect} from "react";
+import {useState, useEffect ,useContext} from "react";
 import {Box, Button} from "@mui/material";
 import axios from "axios";
 import {useParams} from "next/navigation";
-import axiosInstance from "@/utils/axiosInstance"; // Import Axios
+import axiosInstance from "@/utils/axiosInstance";
+import mermaid from "mermaid";
 
 const MermaidEditor = () => {
     const code = useStore((state) => state.code);
@@ -53,6 +54,28 @@ const MermaidEditor = () => {
         }
     };
     // }
+  const onMount = (editor, monaco) => {
+    try {
+      initEditor(monaco);
+    } catch (error) {
+      console.error("Error initializing Monaco editor:", error);
+    }
+  };
+
+  // Apply custom styles for node colors and connection lines
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      mermaid.initialize({
+        theme: "default",
+        themeVariables: {
+          primaryColor: "#AC5C1C", // Node color
+          edgeStroke: "#AC5C1C", // Line color
+          primaryTextColor: "#FFFFFF",
+          nodeBorder: "#333333",
+        },
+      });
+    }
+  }, [code]);
 
     return (
         <Box sx={{position: "relative", height: "100%"}}>
