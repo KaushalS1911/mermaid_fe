@@ -108,7 +108,7 @@ const Table = () => {
                 <span
                     style={{ color: "#000", cursor: "pointer", textDecoration: "none", fontWeight:600}}
                     onClick={() => {
-                        router.push('/editor')
+                        router.push(`/editor/${params.row._id}`)
                         setCode(params.row.mermaidString);
                     }}
                 >

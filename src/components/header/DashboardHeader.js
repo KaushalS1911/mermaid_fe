@@ -16,7 +16,6 @@ export default function DashboardHeader({handleDrawerToggle}) {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
     const router = useRouter();
-    const name = pathName?.split("/");
 
     return (
         <AppBar position="static"
@@ -27,7 +26,7 @@ export default function DashboardHeader({handleDrawerToggle}) {
 
                     <Breadcrumbs separator="›" sx={{flexGrow: 1}}>
                         <Link underline="hover" color="inherit" href="/dashboard">Dashboard</Link>s
-                        <Typography color="textPrimary" sx={{textTransform: "capitalize"}}>{name}</Typography>
+                        <Typography color="textPrimary" sx={{textTransform: "capitalize"}}>Editor</Typography>
                     </Breadcrumbs>
                 </Box>
 
