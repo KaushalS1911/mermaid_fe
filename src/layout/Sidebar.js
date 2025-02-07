@@ -105,11 +105,16 @@ const Sidebar = ({
     ];
 
     const themes = [
-        { text: "Default", color: "default", image: light, borderColor: "#AC5C1C" },
-        { text: "Forest", color: "forest", image: light, borderColor: "#228B22" },
-        { text: "Base", color: "base", image: light, borderColor: "#000" },
-        { text: "Dark", color: "dark", image: dark, borderColor: "#FFFFFF" },
-        { text: "Neutral", color: "neutral", image: light, borderColor: "#999999" },
+        { text: "Default", color: "default", image: light},
+        { text: "Forest", color: "forest", image: light},
+        { text: "Base", color: "base", image: light},
+        { text: "Dark", color: "dark", image: dark},
+        { text: "Neutral", color: "neutral", image: light},
+        { text: "Ocean", color: "ocean", image: light},
+        { text: "Solarized", color: "solarized", image: light},
+        { text: "Sunset", color: "sunset", image: light},
+        { text: "Neon", color: "neon", image: dark},
+        { text: "Monochrome", color: "monochrome", image: light},
     ];
 
     return (

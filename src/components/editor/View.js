@@ -1,21 +1,15 @@
 "use client";
-
 import { useContext, useEffect, useRef, useState } from "react";
 import { useDebounce } from "ahooks";
-import { Box } from "@mui/material";
+import { Box, Slider, Typography } from "@mui/material";
 import { parse, render } from "@/utils/mermaid";
 import svgPanZoom from "svg-pan-zoom";
 import { useStore } from "@/store";
 import { ChartContext } from "@/app/layout";
 
-const customMessage = `\n\nIf you are using AI, Gemini can be incorrect sometimes and may provide syntax errors. 
-In such cases please manually fix them.
+const customMessage = `\n\nIf you are using AI, Gemini can be incorrect sometimes and may provide syntax errors.`;
 
-Common gemini syntax Errors:
-- Comments (remove all comments)
-- Parenthesis or single or double quotes in node titles (remove them)`;
-
-const View = () => {
+const View = ({ viewFontSizeBar }) => {
     const { chartRef, color } = useContext(ChartContext);
     const code = useStore.use.code();
     const config = useStore.use.config();
@@ -31,6 +25,7 @@ const View = () => {
     const setValidateConfigState = useStore.use.setValidateConfig();
 
     const container = useRef(null);
+    const [fontSize, setFontSize] = useState(16);
 
     const debounceCode = useDebounce(code, { wait: 300 });
     const debounceConfig = useDebounce(config, { wait: 300 });
@@ -49,16 +44,38 @@ const View = () => {
             setValidateCodeState(code);
             setValidateConfigState(config);
         } catch (error) {
-            let errorMessage;
-            if (error instanceof Error) {
-                errorMessage = `Syntax error: ${error.message} ${customMessage}`;
-            } else {
-                errorMessage = "Syntax error: Unknown error";
-            }
+            let errorMessage = error instanceof Error
+                ? `Syntax error: ${error.message} ${customMessage}`
+                : "Syntax error: Unknown error";
             setValidateCode(errorMessage);
             setValidateConfig(config);
             setValidateCodeState(errorMessage);
             setValidateConfigState(config);
+        }
+    };
+
+    const getBorderColorAndWidthByTheme = (theme) => {
+        switch (theme) {
+            case "dark":
+                return { color: "#ff9800", width: "1.2" };
+            case "forest":
+                return { color: "#4caf50", width: "1" };
+            case "base":
+                return { color: "#607d8b", width: "1.2" };
+            case "neutral":
+                return { color: "#9e9e9e", width: "1" };
+            case "ocean":
+                return { color: "#0288d1", width: "1.3" };
+            case "solarized":
+                return { color: "#d4a900", width: "1.2" };
+            case "sunset":
+                return { color: "#ff7043", width: "1.1" };
+            case "neon":
+                return { color: "#FAFFC5", width: "1.3" };
+            case "monochrome":
+                return { color: "#212121", width: "1.2" };
+            default:
+                return { color: "#673ab7", width: "1.2" };
         }
     };
 
@@ -67,9 +84,10 @@ const View = () => {
             const { svg } = await render(
                 { ...JSON.parse(config) },
                 code,
-                "graph-div", {
+                "graph-div",
+                {
                     startOnLoad: false,
-                    securityLevel: 'loose',
+                    securityLevel: "loose",
                     theme: color.theme,
                 }
             );
@@ -83,28 +101,46 @@ const View = () => {
                 }
                 graphDiv.setAttribute("height", "100%");
                 graphDiv.style.maxWidth = "100%";
+                graphDiv.style.overflow = "visible"; // Allow overflow content to be visible
 
-                // Update only chart elements (rect, path, circle) borders based on theme
+                const { color: borderColor, width: borderWidth } = getBorderColorAndWidthByTheme(color.theme);
+
                 const nodes = graphDiv.querySelectorAll("rect, path, circle");
-                const borderColor = getBorderColorByTheme(color.theme);
                 nodes.forEach(node => {
-                    node.style.stroke = borderColor; // Apply border color to chart elements
-                    node.style.strokeWidth = "1"; // Optional: Apply a stroke width to make the border visible
+                    node.style.stroke = borderColor;
+                    node.style.strokeWidth = borderWidth;
                 });
-            }
-        }
-    };
 
-    const getBorderColorByTheme = (theme) => {
-        switch (theme) {
-            case "dark":
-                return "#ff5722"; // Orange for dark theme
-            case "light":
-                return "#1976d2"; // Blue for light theme
-            case "purple":
-                return "#9c27b0"; // Purple for purple theme
-            // default:
-            //     return "#000";
+                const textNodes = graphDiv.querySelectorAll("text, tspan, foreignObject *");
+                const fontSizeMapping = {
+                    SM: 12,
+                    MD: 13,
+                    LG: 14,
+                    XL: 15,
+                    XXL: 16.2,
+                };
+
+                textNodes.forEach(text => {
+                    text.style.fontSize = `${fontSizeMapping[viewFontSizeBar] || 12}px`;
+
+                });
+
+
+                const boxes = graphDiv.querySelectorAll("rect");
+                boxes.forEach(box => {
+                    box.style.overflow = "visible"; // Ensure no text gets clipped inside boxes
+                    const parentText = box.closest("g")?.querySelector("text");
+                    if (parentText) {
+                        const textLength = parentText.getComputedTextLength();
+                        const adjustedWidth = textLength + fontSize * 1.5; // Keep some padding
+                        const adjustedHeight = fontSize * 2;
+                        box.setAttribute("width", adjustedWidth);
+                        box.setAttribute("height", adjustedHeight);
+                    }
+                });
+
+                container.current.style.fontSize = `${fontSize}px`;
+            }
         }
     };
 
@@ -149,20 +185,21 @@ const View = () => {
     });
 
     return (
-        <Box
-            ref={chartRef}
-            component="div"
-            sx={{
-                height: "100vh !important",
-                cursor: "grab",
-            }}
-        >
+        <Box ref={chartRef} component="div" sx={{
+            height: "100vh !important",
+            cursor: "grab",
+            backgroundImage: `url("${color.image.src}")`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+        }}>
+
             {validateCode.startsWith("Syntax error") ? (
                 <Box component="div" sx={{ color: "red", paddingX: 2 }}>
                     {validateCode}
                 </Box>
             ) : (
-                <Box id="container" ref={container} component="div" sx={{ height: "100%" }}></Box>
+                <Box id="container" ref={container} component="div" sx={{ height: "100%", overflow: "visible" }} />
             )}
         </Box>
     );

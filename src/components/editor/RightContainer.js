@@ -1,34 +1,41 @@
-"use client";
-
 import dynamic from "next/dynamic";
 import {
-    AppBar,
     Box,
-    Button,
     IconButton,
     Menu,
     MenuItem,
-    ListItemIcon,
-    ListItemText,
+    Tooltip,
     useTheme,
 } from "@mui/material";
-import {FaCloudUploadAlt} from "react-icons/fa";
 import {IoMdMove} from "react-icons/io";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-import CodeRoundedIcon from "@mui/icons-material/CodeRounded";
-import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
-import {downloadImgAsPng, downloadImgAsSvg} from "@/utils/utils";
+import {MdTextFields} from "react-icons/md";  // Font size icon
+import FullScreen from "./FullScreen";
 import {useState} from "react";
 import {useStore} from "@/store";
 
 // Dynamically load components to avoid SSR
 const View = dynamic(() => import("./View"), {ssr: false});
-const FullScreen = dynamic(() => import("./FullScreen"), {ssr: false});
 
 const RightContainer = () => {
     const panZoom = useStore.use.panZoom();
     const setPanZoomEnable = useStore.use.setPanZoomEnable();
     const theme = useTheme();
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [fontSize, setFontSize] = useState("MD"); // Default font size
+    const open = Boolean(anchorEl);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleFontSizeChange = (size) => {
+        setFontSize(size);
+        setAnchorEl(null);
+    };
 
     const togglePanZoom = () => setPanZoomEnable(!panZoom);
 
@@ -78,15 +85,47 @@ const RightContainer = () => {
                             <IoMdMove/>
                         </IconButton>
                         <FullScreen/>
+                        <Tooltip title="Adjust Font Size">
+                            <Box sx={{display: "flex", alignItems: "center"}}>
+                                <IconButton
+                                    onClick={handleClick}
+                                    sx={{
+                                        backgroundColor: theme.palette.action.hover,
+                                    }}
+                                >
+                                    <MdTextFields />
+                                </IconButton>
+                            </Box>
+                        </Tooltip>
+                        <Menu
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleClose}
+                            anchorOrigin={{
+                                vertical: "bottom",
+                                horizontal: "right",
+                            }}
+                            transformOrigin={{
+                                vertical: "top",
+                                horizontal: "right",
+                            }}
+                        >
+                            {["MD", "LG", "XL", "XXL"].map((size) => (
+                                <MenuItem key={size} onClick={() => handleFontSizeChange(size)}>
+                                    {size}
+                                </MenuItem>
+                            ))}
+                        </Menu>
                     </Box>
                 </Box>
             </Box>
-            <Box sx={{height: "calc(100% - 48px)"}}>
-                <View/>
+
+            <Box
+            >
+                <View viewFontSizeBar={fontSize}/>
             </Box>
         </Box>
     );
 };
-
 
 export default RightContainer;
