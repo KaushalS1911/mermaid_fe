@@ -2,7 +2,7 @@
 import {useEffect } from 'react';
 import {usePathname, useRouter,useSearchParams} from "next/navigation";
 
-const AuthGuard = ({ children , searchParams}) => {
+const AuthGuard = ({ children }) => {
     const searchParams = useSearchParams()
     const token =
         searchParams.get("token") ||
