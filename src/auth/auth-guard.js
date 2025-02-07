@@ -1,9 +1,12 @@
 'use client'
 import {useEffect } from 'react';
-import {usePathname, useRouter} from "next/navigation";
+import {usePathname, useRouter,useSearchParams} from "next/navigation";
 
 const AuthGuard = ({ children }) => {
-    const token  = typeof window !== 'undefined' && sessionStorage.getItem('token');
+    const searchParams = useSearchParams()
+    const token =
+        searchParams.get("token") ||
+        (typeof window !== "undefined" && sessionStorage.getItem("token"));
     const path = usePathname()
     const router = useRouter();
 
@@ -13,7 +16,8 @@ const AuthGuard = ({ children }) => {
         if (!token && !allowedRoutes.includes(path)) {
             router.push('/login');
         }
-    }, [token, path]);
+        if (token) sessionStorage.setItem("token", token)
+    }, [token]);
 
 
     return <>{children}</>;
