@@ -5,6 +5,7 @@ import theme from "@/components/theme/theme";
 import {Toaster} from "react-hot-toast";
 import {createContext, Suspense, useContext, useRef, useState} from "react";
 import light from "../asset/editor/design/image (1).png"
+import AuthGuard from "@/auth/auth-guard";
 
 // export const metadata = {
 //   title: "Create Next App",
@@ -23,7 +24,9 @@ export default function RootLayout({children}) {
             <Toaster/>
             <ThemeProvider theme={theme}>
                 <Suspense>
-                    {children}
+                    <AuthGuard>
+                        {children}
+                    </AuthGuard>
                 </Suspense>
             </ThemeProvider>
         </ChartContext.Provider>
