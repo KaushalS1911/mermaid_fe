@@ -104,7 +104,7 @@ function Header() {
                                 {token ? (
                                     <Button variant="text" sx={{ color: '#333' }} onClick={() => {
                                         router.push('/login');
-                                        Cookies.remove("token");
+                                        sessionStorage.removeItem("token");
                                     }}>
                                         Log Out
                                     </Button>
@@ -134,7 +134,7 @@ function Header() {
                         {token ? (
                             <Button variant="text" sx={{ color: '#333' }} onClick={() => {
                                 router.push('/login');
-                                Cookies.remove("token");
+                                sessionStorage.removeItem("token");
                             }}>
                                 Log Out
                             </Button>

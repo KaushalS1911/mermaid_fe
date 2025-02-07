@@ -60,8 +60,7 @@ const Dashboard = () => {
         } else {
             sessionStorage.setItem("token", token);
         }
-    }, []);
-
+    }, [token]);
     return (
         <Box sx={{bgcolor: "#fff", minHeight: "100vh",}}>
             <AppBar

@@ -25,6 +25,7 @@ import SystemUpdateAltIcon from "@mui/icons-material/SystemUpdateAlt";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+import {useStore} from "@/store";
 
 const Sidebar = ({
                      open,
@@ -39,10 +40,11 @@ const Sidebar = ({
     const [designAnchor, setDesignAnchor] = useState(null);
     const [themeAnchor, setThemeAnchor] = useState(null);
     const [exportAnchor, setExportAnchor] = useState(null);
-    const { code, chartRef, setColor } = useContext(ChartContext);
+    const { chartRef, setColor } = useContext(ChartContext);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
     const drawerWidth = collapsed ? 67 : 200;
+    const code = useStore((state) => state.code);
 
     const handleDownloadImage = () => {
         setIsLoading(true);
