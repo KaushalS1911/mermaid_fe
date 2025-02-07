@@ -1,8 +1,9 @@
 'use client'
 import {useEffect } from 'react';
-import {usePathname, useRouter} from "next/navigation";
+import {usePathname, useRouter,useSearchParams} from "next/navigation";
 
 const AuthGuard = ({ children , searchParams}) => {
+    const searchParams = useSearchParams()
     const token =
         searchParams.get("token") ||
         (typeof window !== "undefined" && sessionStorage.getItem("token"));
