@@ -125,8 +125,8 @@ function Page() {
                 });
 
                 setCode(response.data.mermaidChart);
-                typeof window !== "undefined" && sessionStorage.setItem("code", response.data.mermaidChart);
-                router.push(`/editor`);
+                typeof window !== "undefined" && sessionStorage.setItem("code", response.data.flowChart.mermaidString);
+                router.push(`/editor/${response.data.flowChart._id}`);
                 toast.success(response.data.message);
             } catch (error) {
                 toast.error("Something went wrong!");

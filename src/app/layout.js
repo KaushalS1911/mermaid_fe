@@ -14,7 +14,7 @@ import AuthGuard from "@/auth/auth-guard";
 export const ChartContext = createContext({});
 export default function RootLayout({children}) {
     const [code, setCode] = useState('');
-    const [color, setColor] = useState({theme: "default", image: light});
+    const [color, setColor] = useState({theme: "default", image: light , borderColor: "#AC5C1C"});
     const chartRef = useRef(null);
     return (
         <html lang="en">

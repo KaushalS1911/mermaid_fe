@@ -3,6 +3,7 @@ import { Box, Button, Modal, Typography } from "@mui/material";
 import { allTemplates } from "@/constants/allTemplates";
 import { useTheme } from "@mui/material/styles";
 import { useStore } from "@/store";
+import {useRouter} from "next/navigation";
 
 function Templates() {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -13,6 +14,7 @@ function Templates() {
     const setCode = useStore((state) => state.setCode);
     const code = useStore((state) => state.code); // Existing code in the editor
     const theme = useTheme();
+    const router = useRouter()
 
     const buttons = [
         "All", "Architecture", "Block", "C4 Diagram", "Class Diagram",
@@ -165,6 +167,7 @@ function Templates() {
                                     sx={{ backgroundColor: 'sidebarHover' }}
                                     onClick={() => {
                                         setCode(selectedTemplate.code);
+                                        router.push(`/editor`);
                                         handleClose();
                                     }}
                                 >
