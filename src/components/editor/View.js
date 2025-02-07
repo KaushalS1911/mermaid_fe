@@ -1,7 +1,7 @@
 "use client";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useDebounce } from "ahooks";
-import { Box, Slider, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { parse, render } from "@/utils/mermaid";
 import svgPanZoom from "svg-pan-zoom";
 import { useStore } from "@/store";
@@ -27,11 +27,10 @@ const View = ({ viewFontSizeBar }) => {
     const setValidateConfigState = useStore.use.setValidateConfig();
 
     const container = useRef(null);
-    const [fontSize, setFontSize] = useState(16);
+    const [fontSize] = useState(16);
 
     const debounceCode = useDebounce(code, { wait: 300 });
     const debounceConfig = useDebounce(config, { wait: 300 });
-
 
     const [validateCode, setValidateCode] = useState("");
     const [validateConfig, setValidateConfig] = useState("");
@@ -44,7 +43,8 @@ const View = ({ viewFontSizeBar }) => {
         if (savedCode) {
             setCode(savedCode);
         }
-    }, []);
+    }, [viewFontSizeBar]);
+
 
     const setValidateCodeAndConfig = async (code, config) => {
         try {
@@ -64,7 +64,6 @@ const View = ({ viewFontSizeBar }) => {
             setValidateConfigState(config);
         }
     };
-
     const getBorderColorAndWidthByTheme = (theme) => {
         switch (theme) {
             case "dark":
@@ -94,9 +93,14 @@ const View = ({ viewFontSizeBar }) => {
         if (!pzoom.current) return;
         const pan = pzoom.current.getPan();
         const zoom = pzoom.current.getZoom();
-        setPanZoom({pan, zoom});
+        setPanZoom({ pan, zoom });
     };
-
+    const fontSizeMapping = {
+        MD: 13,
+        LG: 14,
+        XL: 15,
+        XXL: 16.2,
+    };
     const renderDiagram = async (code, config) => {
         if (container.current && code) {
             const { svg } = await render(
@@ -124,12 +128,9 @@ const View = ({ viewFontSizeBar }) => {
                 }
                 graphDiv.setAttribute("height", "100%");
                 graphDiv.style.maxWidth = "100%";
-                graphDiv.style.overflow = "visible"; // Allow overflow content to be visible
-                handlePanZoom();
-                makeChartEditable();
+                graphDiv.style.overflow = "visible";
 
                 const { color: borderColor, width: borderWidth } = getBorderColorAndWidthByTheme(color.theme);
-
                 const nodes = graphDiv.querySelectorAll("rect, path, circle");
                 nodes.forEach(node => {
                     node.style.stroke = borderColor;
@@ -137,27 +138,21 @@ const View = ({ viewFontSizeBar }) => {
                 });
 
                 const textNodes = graphDiv.querySelectorAll("text, tspan, foreignObject *");
-                const fontSizeMapping = {
-                    SM: 12,
-                    MD: 13,
-                    LG: 14,
-                    XL: 15,
-                    XXL: 16.2,
-                };
 
                 textNodes.forEach(text => {
                     text.style.fontSize = `${fontSizeMapping[viewFontSizeBar] || 12}px`;
-
+                    text.setAttribute("alignment-baseline", "central");
                 });
-
+                handlePanZoom();
+                makeChartEditable();
 
                 const boxes = graphDiv.querySelectorAll("rect");
                 boxes.forEach(box => {
-                    box.style.overflow = "visible"; // Ensure no text gets clipped inside boxes
+                    box.style.overflow = "visible";
                     const parentText = box.closest("g")?.querySelector("text");
                     if (parentText) {
                         const textLength = parentText.getComputedTextLength();
-                        const adjustedWidth = textLength + fontSize * 1.5; // Keep some padding
+                        const adjustedWidth = textLength + fontSize * 1.5;
                         const adjustedHeight = fontSize * 2;
                         box.setAttribute("width", adjustedWidth);
                         box.setAttribute("height", adjustedHeight);
@@ -166,7 +161,6 @@ const View = ({ viewFontSizeBar }) => {
 
                 container.current.style.fontSize = `${fontSize}px`;
             }
-        }
         }
     };
 
@@ -230,7 +224,6 @@ const View = ({ viewFontSizeBar }) => {
         setTimeout(() => renderDiagram(newCode, debounceConfig), 20);
     };
 
-
     const handlePanZoom = () => {
         if (!panZoom) return;
         pzoom.current?.destroy();
@@ -251,12 +244,11 @@ const View = ({ viewFontSizeBar }) => {
         });
     };
 
-
     useEffect(() => {
         if (typeof window !== "undefined") {
             renderDiagram(validateCode, validateConfig);
         }
-    }, [validateCode, validateConfig]);
+    }, [validateCode, validateConfig,fontSizeMapping[viewFontSizeBar]]);
 
     useEffect(() => {
         if (typeof window !== "undefined" && (autoSync || updateDiagram)) {
@@ -280,11 +272,14 @@ const View = ({ viewFontSizeBar }) => {
                     {validateCode}
                 </Box>
             ) : (
-                <Box id="container" ref={container} component="div" sx={{ maxWidth: "100% ",
+                <Box id="container" ref={container} component="div" sx={{
+                    maxWidth: "100%",
                     height: "100%",
                     display: "flex",
                     justifyContent: "center",
-                    alignItems: "center",, overflow: "visible" }} />
+                    alignItems: "center",
+                    overflow: "visible"
+                }} />
             )}
         </Box>
     );
