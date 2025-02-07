@@ -120,7 +120,8 @@ function Page() {
 
                 const response = await axiosInstance.post(`${process.env.NEXT_PUBLIC_BASE_URL}/flowchart`, payload, {
                     headers: {
-                        "Content-Type": "multipart/form-data", "huggingToken": process.env.NEXT_PUBLIC_HUGGING_TOKEN,
+                        "Content-Type": "multipart/form-data", "huggingToken": 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
+                        ,
                     },
                 });
 

@@ -168,6 +168,7 @@ function Templates() {
                                     onClick={() => {
                                         setCode(selectedTemplate.code);
                                         router.push(`/editor`);
+                                        typeof window !== "undefined" && sessionStorage.setItem('code',selectedTemplate.code);
                                         handleClose();
                                     }}
                                 >

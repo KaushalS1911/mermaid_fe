@@ -9,6 +9,7 @@ import axios from "axios";
 import {useParams} from "next/navigation";
 import axiosInstance from "@/utils/axiosInstance";
 import mermaid from "mermaid";
+import toast from "react-hot-toast";
 
 const MermaidEditor = () => {
     const code = useStore((state) => state.code);
@@ -37,45 +38,21 @@ const MermaidEditor = () => {
     };
 
 
-    // if (id) {
     const handleSave = async () => {
         try {
 
             const response = await axiosInstance.put(`${process.env.NEXT_PUBLIC_BASE_URL}/flowchart/${id}`, {mermaidString: code});
             if (response.status === 200) {
                 setIsModified(false);
-                alert("Saved successfully!");
+                toast.success(response.data.message);
             } else {
-                alert("Failed to save");
+                toast.error("Something went wrong!");
             }
         } catch (error) {
             console.error("Error saving:", error);
             alert("Error occurred while saving");
         }
     };
-    // }
-  const onMount = (editor, monaco) => {
-    try {
-      initEditor(monaco);
-    } catch (error) {
-      console.error("Error initializing Monaco editor:", error);
-    }
-  };
-
-  // Apply custom styles for node colors and connection lines
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      mermaid.initialize({
-        theme: "default",
-        themeVariables: {
-          primaryColor: "#AC5C1C", // Node color
-          edgeStroke: "#AC5C1C", // Line color
-          primaryTextColor: "#FFFFFF",
-          nodeBorder: "#333333",
-        },
-      });
-    }
-  }, [code]);
 
     return (
         <Box sx={{position: "relative", height: "100%"}}>
