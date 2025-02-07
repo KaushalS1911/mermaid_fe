@@ -39,9 +39,7 @@ const Dashboard = () => {
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
     const router = useRouter();
-    const token =
-        searchParams.get("token") ||
-        (typeof window !== "undefined" && sessionStorage.getItem("token"));
+    
 
     const [menuOpen, setMenuOpen] = useState(false);
     const [value, setValue] = React.useState("1");
@@ -54,13 +52,7 @@ const Dashboard = () => {
     };
 
 
-    useEffect(() => {
-        if (!token) {
-            router.push("/");
-        } else {
-            sessionStorage.setItem("token", token);
-        }
-    }, [token]);
+  
     return (
         <Box sx={{bgcolor: "#fff", minHeight: "100vh",}}>
             <AppBar
