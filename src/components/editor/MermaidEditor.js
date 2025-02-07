@@ -60,14 +60,14 @@ const MermaidEditor = () => {
                 sx={{
                     zIndex: 999,
                     position: "absolute",
-                    top: "90%",
-                    right: "2%",
+                    top: "80%",
+                    right: "10%",
                     backgroundColor: "#FF3480",
                     color: "#fff",
                 }}
                 onClick={handleSave}
             >
-                Save
+                Save Chart
             </Button>}
             <MonacoEditor
                 height="calc(100% - 50px)"
