@@ -2,8 +2,8 @@
 import {useEffect } from 'react';
 import {usePathname, useRouter} from "next/navigation";
 
+const token  = typeof window !== 'undefined' && sessionStorage.getItem('token');
 const AuthGuard = ({ children }) => {
-    const token  = typeof window !== 'undefined' && sessionStorage.getItem('token');
     const path = usePathname()
     const router = useRouter();
 
@@ -13,7 +13,7 @@ const AuthGuard = ({ children }) => {
         if (!token && !allowedRoutes.includes(path)) {
             router.push('/login');
         }
-    }, [token, path]);
+    }, [token]);
 
 
     return <>{children}</>;
