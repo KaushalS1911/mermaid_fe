@@ -4,20 +4,22 @@ import {
     IconButton,
     Tooltip,
     Collapse,
-    useTheme,
-    Popover,
-    Typography, Tabs
+    useTheme, Popover, List, ListItemButton, ListItemText,Typography, Tabs
 } from "@mui/material";
-import {IoMdMove} from "react-icons/io";
-import {MdTextFields} from "react-icons/md";
-import {ExpandMore, ExpandLess} from "@mui/icons-material";
+import { IoMdMove } from "react-icons/io";
+import { MdTextFields } from "react-icons/md"; // Font size icon
+import { ExpandMore, ExpandLess } from "@mui/icons-material"; // Collapse Icons
 import FullScreen from "./FullScreen";
-import {useState} from "react";
-import {useStore} from "@/store";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import {useContext, useEffect, useState} from "react";
+import { useStore } from "@/store";
+import AddIcon from '@mui/icons-material/Add';
 import AddToPhotosIcon from "@mui/icons-material/AddToPhotos";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import ImageIcon from "@mui/icons-material/Image";
 import BrushIcon from "@mui/icons-material/Brush";
+import { themes } from "@/layout/Sidebar";
+
 import InfoIcon from "@mui/icons-material/Info";
 import Tab from "@mui/material/Tab";
 import RectangleOutlinedIcon from '@mui/icons-material/RectangleOutlined';
@@ -80,8 +82,10 @@ import Triangle from '@/asset/editor/shapes/Triangle.svg';
 import Anchor from '@/asset/editor/shapes/Anchor.svg';
 import Paper_Tape from '@/asset/editor/shapes/Paper Tape.svg';
 import Communication_Link from '@/asset/editor/shapes/Communication Link.svg';
+import {ChartContext} from "@/app/layout";
 
-const View = dynamic(() => import("./View"), {ssr: false});
+
+const View = dynamic(() => import("./View"), { ssr: false });
 
 const RightContainer = () => {
     const panZoom = useStore.use.panZoom();
@@ -96,14 +100,28 @@ const RightContainer = () => {
     const setCode = useStore((state) => state.setCode);
     const code = useStore((state) => state.code);
     const [count, setCount] = useState(0);
+    const [countShape, setCountShape] = useState(0);
+    const [themeAnchor, setThemeAnchor] = useState(null);
 
-    const handleAddPhotosClick = (event) => {
-        setAnchorEl(event.currentTarget);
+    const [designAnchor, setDesignAnchor] = useState(null);
+    const handleThemeClose = () => {
+        setThemeAnchor(null);
+        setDesignAnchor(null);
     };
+    const { color, setColor } = useContext(ChartContext);
+
+
+
 
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const handleFontSizeChange = (size) => {
+        setFontSize(size);
+        setAnchorEl(null);
+    };
+
 
     const togglePanZoom = () => setPanZoomEnable(!panZoom);
 
@@ -112,8 +130,84 @@ const RightContainer = () => {
         setActiveButton("collapse");
     };
 
-    const handleButtonClick = (key) => {
+        const getBorderColorAndWidthByTheme = (theme) => {
+            switch (theme) {
+                case "dark":
+                    return { color: "#ff9800", width: "1.2" };
+                case "forest":
+                    return { color: "#4caf50", width: "1" };
+                case "base":
+                    return { color: "#607d8b", width: "1.2" };
+                case "neutral":
+                    return { color: "#9e9e9e", width: "1" };
+                case "ocean":
+                    return { color: "#0288d1", width: "1.3" };
+                case "solarized":
+                    return { color: "#d4a900", width: "1.2" };
+                case "sunset":
+                    return { color: "#ff7043", width: "1.1" };
+                case "neon":
+                    return { color: "#FAFFC5", width: "1.3" };
+                case "monochrome":
+                    return { color: "#212121", width: "1.2" };
+                default:
+                    return { color: "#673ab7", width: "1.2" };
+            }
+        };
+
+
+        useEffect(() => {
+            const graphDiv = document.querySelector("#graph-div");
+            if (graphDiv) {
+                const { color: borderColor, width: borderWidth } = getBorderColorAndWidthByTheme(color.theme);
+                const nodes = graphDiv.querySelectorAll("rect, path, circle");
+                nodes.forEach((node) => {
+                    node.style.stroke = borderColor;
+                    node.style.strokeWidth = `${borderWidth}px`;
+                });
+            }
+        }, [color.theme]);
+
+    function countOccurrencesByPrefix(text, word, prefixLength = 8) {
+        const prefix = word.slice(0, prefixLength);
+        const regex = new RegExp(`\\b${prefix}\\w*\\b`, 'gi');
+        const matches = text.match(regex);
+        setCount(matches ? matches.length + 1 : 1)
+    }
+    function countOccurrencesByPrefixForShape(text, word, prefixLength = 6) {
+        const prefix = word.slice(0, prefixLength);
+        const regex = new RegExp(`\\b${prefix}\\w*\\b`, 'gi');
+        const matches = text.match(regex);
+        setCountShape(matches ? matches.length : 1)
+    }
+
+    useEffect(() => {
+        if(code){
+            countOccurrencesByPrefix(code,'subchart')
+            countOccurrencesByPrefixForShape(code,'shapes')
+        }
+    },[code])
+
+    const handleButtonClick = (event, key) => {
         setActiveButton(key);
+
+        if (key === 'addSubChart') {
+            const newCode = `${code + `subgraph s${count}["Untitled subgraph"]\n` +
+            `        subchart${count}["Untitled Node"]\n` +
+            '  end'} `;
+
+            setCode(newCode);
+
+            if (typeof window !== "undefined") {
+                sessionStorage.setItem("code", newCode);
+            }
+        }
+
+        if (key === 'brushTool') {
+            setDesignAnchor(event.currentTarget);
+        }    if (key === 'shapes') {
+            setAnchorEl(event.currentTarget);
+        }
     };
 
     const handleTabChange = (event, newIndex) => {
@@ -127,65 +221,65 @@ const RightContainer = () => {
     const BasicShapes = [
         {
             img: Rectangle,
-            code: `\n shape${count}["Rectangle"]\n shape${count}@{ shape: rect}\n`
+            code: `\n shape${countShape}["Rectangle"]\n shape${countShape}@{ shape: rect}\n`
         },
         {
             img: Rounded,
-            code: `\n shape${count}["Rounded"] \n shape${count}@{ shape: rounded}`
+            code: `\n shape${countShape}["Rounded"] \n shape${countShape}@{ shape: rounded}`
         }, {
             img: Stadium,
-            code: `\n   shape${count}(["Stadium"])`
+            code: `\n   shape${countShape}(["Stadium"])`
         }, {
             img: Triangle,
-            code: `\n shape${count}["Diamond"] \n shape${count}@{ shape: diam}`
+            code: `\n shape${countShape}["Diamond"] \n shape${countShape}@{ shape: diam}`
         }, {
             img: Diamond,
-            code: `\n shape${count}["Triangle"] \n shape${count}@{ shape: tri}`
+            code: `\n shape${countShape}["Triangle"] \n shape${countShape}@{ shape: tri}`
         }, {
             img: Hexazone,
-            code: `\n   shape${count}["Hexagon"] \n shape${count}@{ shape: hex}`
+            code: `\n   shape${countShape}["Hexagon"] \n shape${countShape}@{ shape: hex}`
         }, {
             img: Cylinder,
-            code: `\n shape${count}["Cylinder"]\n shape${count}@{ shape: cyl}`
+            code: `\n shape${countShape}["Cylinder"]\n shape${countShape}@{ shape: cyl}`
         }, {
             img: Horizontal_Cylinder,
-            code: `\n shape${count}["Horizontal Cylinder"] \nshape${count}@{ shape: h-cyl}`
+            code: `\n shape${countShape}["Horizontal Cylinder"] \nshape${countShape}@{ shape: h-cyl}`
         }, {
             img: Circle,
-            code: `\n     shape${count}(("Circle"))`
+            code: `\n     shape${countShape}(("Circle"))`
         }, {
             img: Dubble_Circle,
-            code: `\n shape${count}["Double Circle"]\n shape${count}@{ shape: dbl-circ}`
+            code: `\n shape${countShape}["Double Circle"]\n shape${countShape}@{ shape: dbl-circ}`
         }, {
             img: Small_Circle,
-            code: `\n  shape${count}["Small Circle"] \n shape${count}@{ shape: sm-circ}`
+            code: `\n  shape${countShape}["Small Circle"] \n shape${countShape}@{ shape: sm-circ}`
         }, {
             img: Framed_Circle,
-            code: `\n shape${count}["Frames Circle"]\n shape${count}@{ shape: fr-circ}`
+            code: `\n shape${countShape}["Frames Circle"]\n shape${countShape}@{ shape: fr-circ}`
         }, {
             img: Filled_Circles,
-            code: `\n   shape${count}["Filled Circle"] \n shape${count}@{ shape: f-circ}`
+            code: `\n   shape${countShape}["Filled Circle"] \n shape${countShape}@{ shape: f-circ}`
         }, {
             img: Parallelogram,
-            code: `\n    shape${count}["Parallelogram"] \n shape${count}@{ shape: lean-l}`
+            code: `\n    shape${countShape}["Parallelogram"] \n shape${countShape}@{ shape: lean-l}`
         }, {
             img: Parallelogram_Reversed,
-            code: `\n  shape${count}["Parallelogram Reversed"] \n shape${count}@{ shape: lean-r}`
+            code: `\n  shape${countShape}["Parallelogram Reversed"] \n shape${countShape}@{ shape: lean-r}`
         }, {
             img: Trapezoid,
-            code: `\n   shape${count}["Trapezoid"] \n shape${count}@{ shape: trap-b}`
+            code: `\n   shape${countShape}["Trapezoid"] \n shape${countShape}@{ shape: trap-b}`
         }, {
             img: Trapezoid_Reversed,
-            code: `\nshape${count}["Trapezoid Reversed"] \n shape${count}@{ shape: trap-t}`
+            code: `\nshape${countShape}["Trapezoid Reversed"] \n shape${countShape}@{ shape: trap-t}`
         }, {
             img: Card,
-            code: `\n  shape${count}["Card"]  \n  shape${count}@{ shape: card}`
+            code: `\n  shape${countShape}["Card"]  \n  shape${countShape}@{ shape: card}`
         }, {
             img: Odd,
-            code: `\n shape${count}>"Odd"]`
+            code: `\n shape${countShape}>"Odd"]`
         }, {
             img: Anchor,
-            code: `\n shape${count}["Anchor"] \n shape${count}@{ shape: anchor}`
+            code: `\n shape${countShape}["Anchor"] \n shape${countShape}@{ shape: anchor}`
         },
     ]
     const ProcessShapes = [
@@ -255,6 +349,7 @@ const RightContainer = () => {
             code: `\n shape${count}["Paper Tape"]\n shape${count}@{ shape: paper-tape}`
         }
     ]
+
 
     return (
         <Box
@@ -332,36 +427,33 @@ const RightContainer = () => {
                                 },
                             }}
                         >
-                            {expanded ? <ExpandLess/> : <ExpandMore/>}
+                            {expanded ? <ExpandLess /> : <ExpandMore />}
                         </IconButton>
                     </Tooltip>
                 </Box>
 
                 <Collapse in={expanded}>
-                    <Box sx={{display: "flex", flexDirection: "column", gap: 1}}>
-                        {[
-                            ...(code?.startsWith('flowchart')
-                                ? [{
-                                    key: "shapes",
-                                    icon: <AddToPhotosIcon/>,
-                                    tooltip: "Shapes",
-                                    onClick: handleAddPhotosClick,
-                                }]
-                                : []),
-                            {key: "launchRocket", icon: <RocketLaunchIcon/>, tooltip: "Launch Rocket"},
-                            {key: "addImage", icon: <ImageIcon/>, tooltip: "Add Image"},
-                            {key: "brushTool", icon: <BrushIcon/>, tooltip: "Brush Tool"},
-                            {key: "info", icon: <InfoIcon/>, tooltip: "Information"},
-                        ].map(({key, icon, tooltip, onClick}) => (
+                    <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                            {[
+                                ...(code.startsWith('flowchart')
+                                    ? [{
+                                        key: "shapes",
+                                        icon: <AddIcon/>,
+                                        tooltip: "Shapes",
+                                    }]
+                                    : []),
+                            { key: "addSubChart", icon: <AddToPhotosIcon />, tooltip: "Add Sub Chart" },
+                            // { key: "launchRocket", icon: <RocketLaunchIcon />, tooltip: "Launch Rocket" },
+                            // { key: "addImage", icon: <ImageIcon />, tooltip: "Add Image" },
+                            { key: "brushTool", icon: <BrushIcon />, tooltip: "Brush Tool" },
+                        ].map(({ key, icon, tooltip,onClick }) => (
                             <Tooltip key={key} title={tooltip}>
                                 <IconButton
-                                    onClick={onClick || (() => handleButtonClick(key))}
+                                    onClick={(event) => handleButtonClick(event, key)}  // Pass event explicitly
                                     sx={{
                                         backgroundColor: activeButton === key ? "sidebarHover" : "white",
                                         color: activeButton === key ? "white" : "black",
-                                        "&:hover": {
-                                            backgroundColor: "#FF348033",
-                                        },
+                                        "&:hover": { backgroundColor: "#FF348033" },
                                     }}
                                 >
                                     {icon}
@@ -370,6 +462,58 @@ const RightContainer = () => {
                         ))}
                     </Box>
                 </Collapse>
+                <Popover
+                    open={Boolean(designAnchor)}
+                    anchorEl={designAnchor}
+                    onClose={handleThemeClose}
+                    anchorOrigin={{vertical: "bottom", horizontal: "left"}}
+                    // transformOrigin={{ vertical: "top", horizontal: "left" }}
+                >
+                    <List sx={{ backgroundColor: "#F2F2F3", py: 0.5, px: 0.5, width: "180px" }}>
+                        <ListItemButton
+                            onClick={(event) => setThemeAnchor(event.currentTarget)}
+                            sx={{
+                                borderRadius: "10px",
+                                py: 0.5,
+                                "&:hover": { backgroundColor: "sidebarHover", color: "white" },
+                            }}
+                        >
+                            <ListItemText primary="Themes" /> <KeyboardArrowRightIcon />
+                        </ListItemButton>
+                    </List>
+                </Popover>
+
+                <Popover
+                    open={Boolean(themeAnchor)}
+                    anchorEl={themeAnchor}
+                    onClose={handleThemeClose}
+                    anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                    // transformOrigin={{ vertical: "top", horizontal: "right" }}
+                >
+                    <List sx={{ backgroundColor: "#F2F2F3", py: 0.5, px: 0.5, width: "180px" }}>
+                        {themes.map((themeItem, index) => (
+                            <ListItemButton
+                                key={index}
+                                onClick={() => {
+                                    setColor({
+                                        theme: themeItem.color,
+                                        image: themeItem.image,
+                                        borderColor: themeItem.borderColor,
+                                    });
+                                    setThemeAnchor(null);
+                                    setDesignAnchor(null);
+                                }}
+                                sx={{
+                                    borderRadius: "10px",
+                                    py: 0.5,
+                                    "&:hover": { backgroundColor: "sidebarHover", color: "white" },
+                                }}
+                            >
+                                <ListItemText primary={themeItem.text} />
+                            </ListItemButton>
+                        ))}
+                    </List>
+                </Popover>
             </Box>
 
             <Box>
@@ -412,7 +556,6 @@ const RightContainer = () => {
                                                 <Box
                                                     onClick={() => {
                                                         setCode(`${code + item.code}`)
-                                                        setCount(count + 1)
                                                     }}
                                                     sx={{
                                                         height: 48,
@@ -443,7 +586,6 @@ const RightContainer = () => {
                                             <Box
                                                 onClick={() => {
                                                     setCode(`${code + item.code}`)
-                                                    setCount(count + 1)
                                                 }}
                                                 sx={{
                                                     height: 48,
@@ -473,7 +615,6 @@ const RightContainer = () => {
                                             <Box
                                                 onClick={() => {
                                                     setCode(`${code + item.code}`)
-                                                    setCount(count + 1)
                                                 }}
                                                 sx={{
                                                     height: 48,
@@ -495,11 +636,10 @@ const RightContainer = () => {
                 </Popover>
             </Box>
             <Box>
-                <View viewFontSizeBar={fontSize}/>
+                <View viewFontSizeBar={fontSize} color={color}/>
             </Box>
         </Box>
-    )
-        ;
+    );
 };
 
 export default RightContainer;

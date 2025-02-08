@@ -28,7 +28,7 @@ const Table = () => {
     const router = useRouter();
     const [rows, setRows] = useState([]);
     const [loading, setLoading] = useState(true);
-    const setCode = useStore((state) => state.setCode);
+    const setCode = useStore.use.setCode();
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
