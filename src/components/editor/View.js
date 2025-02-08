@@ -38,7 +38,6 @@ const View = ({ viewFontSizeBar }) => {
     const pzoom = useRef();
 
     useEffect(() => {
-        const savedCode = sessionStorage.getItem(SESSION_STORAGE_KEY);
         if (savedCode) {
             setCode(savedCode);
         }
