@@ -12,7 +12,7 @@ function Templates() {
     const [open, setOpen] = useState(false);
     const [templateName, setTemplateName] = useState("All");
     const setCode = useStore((state) => state.setCode);
-    const code = useStore((state) => state.code); // Existing code in the editor
+    const code = useStore((state) => state.code);
     const theme = useTheme();
     const router = useRouter()
 
