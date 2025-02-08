@@ -8,7 +8,6 @@ import { useStore } from "@/store";
 import { ChartContext } from "@/app/layout";
 
 const customMessage = `\n\nIf you are using AI, Gemini can be incorrect sometimes and may provide syntax errors.`;
-const SESSION_STORAGE_KEY = "mermaid_chart_code";
 
 const View = ({ viewFontSizeBar }) => {
     const { chartRef, color } = useContext(ChartContext);
@@ -213,7 +212,7 @@ const View = ({ viewFontSizeBar }) => {
         if (!oldText || !newText) return;
         const newCode = code.replace(oldText, newText);
         setCode(newCode);
-        sessionStorage.setItem(SESSION_STORAGE_KEY, newCode);
+        sessionStorage.setItem('code', newCode);
         requestAnimationFrame(() => {
             document.querySelectorAll(".node, .box, .circle").forEach((element) => {
                 if (element.textContent.trim() === oldText) {
