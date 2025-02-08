@@ -100,6 +100,7 @@ const RightContainer = () => {
     const setCode = useStore((state) => state.setCode);
     const code = useStore((state) => state.code);
     const [count, setCount] = useState(0);
+    const [countShape, setCountShape] = useState(0);
     const [themeAnchor, setThemeAnchor] = useState(null);
 
     const [designAnchor, setDesignAnchor] = useState(null);
@@ -111,9 +112,6 @@ const RightContainer = () => {
 
 
 
-    const handleAddPhotosClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
 
     const handleClose = () => {
         setAnchorEl(null);
@@ -123,9 +121,7 @@ const RightContainer = () => {
         setFontSize(size);
         setAnchorEl(null);
     };
-    const handleBrushClick = (event) => {
-        setDesignAnchor(event.currentTarget);
-    };
+
 
     const togglePanZoom = () => setPanZoomEnable(!panZoom);
 
@@ -178,17 +174,40 @@ const RightContainer = () => {
         const matches = text.match(regex);
         setCount(matches ? matches.length + 1 : 1)
     }
+    function countOccurrencesByPrefixForShape(text, word, prefixLength = 6) {
+        const prefix = word.slice(0, prefixLength);
+        const regex = new RegExp(`\\b${prefix}\\w*\\b`, 'gi');
+        const matches = text.match(regex);
+        setCountShape(matches ? matches.length : 1)
+    }
 
     useEffect(() => {
         if(code){
             countOccurrencesByPrefix(code,'subchart')
+            countOccurrencesByPrefixForShape(code,'shapes')
         }
     },[code])
 
-
-
-    const handleButtonClick = (key) => {
+    const handleButtonClick = (event, key) => {
         setActiveButton(key);
+
+        if (key === 'addSubChart') {
+            const newCode = `${code + `subgraph s${count}["Untitled subgraph"]\n` +
+            `        subchart${count}["Untitled Node"]\n` +
+            '  end'} `;
+
+            setCode(newCode);
+
+            if (typeof window !== "undefined") {
+                sessionStorage.setItem("code", newCode);
+            }
+        }
+
+        if (key === 'brushTool') {
+            setDesignAnchor(event.currentTarget);
+        }    if (key === 'shapes') {
+            setAnchorEl(event.currentTarget);
+        }
     };
 
     const handleTabChange = (event, newIndex) => {
@@ -202,65 +221,65 @@ const RightContainer = () => {
     const BasicShapes = [
         {
             img: Rectangle,
-            code: `\n shape${count}["Rectangle"]\n shape${count}@{ shape: rect}\n`
+            code: `\n shapes${countShape}["Rectangle"]\n shapes${countShape}@{ shape: rect}\n`
         },
         {
             img: Rounded,
-            code: `\n shape${count}["Rounded"] \n shape${count}@{ shape: rounded}`
+            code: `\n shapes${countShape}["Rounded"] \n shapes${countShape}@{ shape: rounded}`
         }, {
             img: Stadium,
-            code: `\n   shape${count}(["Stadium"])`
+            code: `\n   shapes${countShape}(["Stadium"])`
         }, {
             img: Triangle,
-            code: `\n shape${count}["Diamond"] \n shape${count}@{ shape: diam}`
+            code: `\n shapes${countShape}["Diamond"] \n shapes${countShape}@{ shape: diam}`
         }, {
             img: Diamond,
-            code: `\n shape${count}["Triangle"] \n shape${count}@{ shape: tri}`
+            code: `\n shapes${countShape}["Triangle"] \n shapes${countShape}@{ shape: tri}`
         }, {
             img: Hexazone,
-            code: `\n   shape${count}["Hexagon"] \n shape${count}@{ shape: hex}`
+            code: `\n   shapes${countShape}["Hexagon"] \n shapes${countShape}@{ shape: hex}`
         }, {
             img: Cylinder,
-            code: `\n shape${count}["Cylinder"]\n shape${count}@{ shape: cyl}`
+            code: `\n shapes${countShape}["Cylinder"]\n shapes${countShape}@{ shape: cyl}`
         }, {
             img: Horizontal_Cylinder,
-            code: `\n shape${count}["Horizontal Cylinder"] \nshape${count}@{ shape: h-cyl}`
+            code: `\n shapes${countShape}["Horizontal Cylinder"] \nshapes${countShape}@{ shape: h-cyl}`
         }, {
             img: Circle,
-            code: `\n     shape${count}(("Circle"))`
+            code: `\n     shapes${countShape}(("Circle"))`
         }, {
             img: Dubble_Circle,
-            code: `\n shape${count}["Double Circle"]\n shape${count}@{ shape: dbl-circ}`
+            code: `\n shapes${countShape}["Double Circle"]\n shapes${countShape}@{ shape: dbl-circ}`
         }, {
             img: Small_Circle,
-            code: `\n  shape${count}["Small Circle"] \n shape${count}@{ shape: sm-circ}`
+            code: `\n  shapes${countShape}["Small Circle"] \n shapes${countShape}@{ shape: sm-circ}`
         }, {
             img: Framed_Circle,
-            code: `\n shape${count}["Frames Circle"]\n shape${count}@{ shape: fr-circ}`
+            code: `\n shapes${countShape}["Frames Circle"]\n shapes${countShape}@{ shape: fr-circ}`
         }, {
             img: Filled_Circles,
-            code: `\n   shape${count}["Filled Circle"] \n shape${count}@{ shape: f-circ}`
+            code: `\n   shapes${countShape}["Filled Circle"] \n shapes${countShape}@{ shape: f-circ}`
         }, {
             img: Parallelogram,
-            code: `\n    shape${count}["Parallelogram"] \n shape${count}@{ shape: lean-l}`
+            code: `\n    shapes${countShape}["Parallelogram"] \n shapes${countShape}@{ shape: lean-l}`
         }, {
             img: Parallelogram_Reversed,
-            code: `\n  shape${count}["Parallelogram Reversed"] \n shape${count}@{ shape: lean-r}`
+            code: `\n  shapes${countShape}["Parallelogram Reversed"] \n shapes${countShape}@{ shape: lean-r}`
         }, {
             img: Trapezoid,
-            code: `\n   shape${count}["Trapezoid"] \n shape${count}@{ shape: trap-b}`
+            code: `\n   shapes${countShape}["Trapezoid"] \n shapes${countShape}@{ shape: trap-b}`
         }, {
             img: Trapezoid_Reversed,
-            code: `\nshape${count}["Trapezoid Reversed"] \n shape${count}@{ shape: trap-t}`
+            code: `\nshapes${countShape}["Trapezoid Reversed"] \n shapes${countShape}@{ shape: trap-t}`
         }, {
             img: Card,
-            code: `\n  shape${count}["Card"]  \n  shape${count}@{ shape: card}`
+            code: `\n  shapes${countShape}["Card"]  \n  shapes${countShape}@{ shape: card}`
         }, {
             img: Odd,
-            code: `\n shape${count}>"Odd"]`
+            code: `\n shapes${countShape}>"Odd"]`
         }, {
             img: Anchor,
-            code: `\n shape${count}["Anchor"] \n shape${count}@{ shape: anchor}`
+            code: `\n shapes${countShape}["Anchor"] \n shapes${countShape}@{ shape: anchor}`
         },
     ]
     const ProcessShapes = [
@@ -294,53 +313,43 @@ const RightContainer = () => {
         {img: Comment_Right, code: `\nshape${count}["Comment Right"]\nshape${count}@{ shape: brace-r}`},
         {img: Braces, code: `\nshape${count}["Braces"]\nshape${count}@{ shape: braces}`},
         {img: Summary, code: `\nshape${count}["Summary"]\nshape${count}@{ shape: summary}`},
-
     ];
     const TechnicalShapes = [
         {
             img: Database,
-            code: `\n shape${count}["Database"]\n shape${count}@{ shape: db}`
+            code: `\n shapes${count}["Database"]\n shapes${count}@{ shape: db}`
         },
         {
             img: Disk_Storage,
-            code: `\n shape${count}["Disk Storage"]\n shape${count}@{ shape: disk}`
+            code: `\n shapes${count}["Disk Storage"]\n shapes${count}@{ shape: disk}`
         },
         {
             img: Direct_Access_Storage,
-            code: `\n shape${count}["Direct Access Storage"]\n shape${count}@{ shape: das}`
+            code: `\n shapes${count}["Direct Access Storage"]\n shapes${count}@{ shape: das}`
         },
         {
             img: Internal_Storage,
-            code: `\n shape${count}["Internal Storage"]\n shape${count}@{ shape: internal-storage}`
+            code: `\n shapes${count}["Internal Storage"]\n shapes${count}@{ shape: internal-storage}`
         },
         {
             img: Display,
-            code: `\n shape${count}["Display"]\n shape${count}@{ shape: display}`
+            code: `\n shapes${count}["Display"]\n shapes${count}@{ shape: display}`
         },
         {
             img: Stored_Data,
-            code: `\n shape${count}["Stored Data"]\n shape${count}@{ shape: stored-data}`
+            code: `\n shapes${count}["Stored Data"]\n shapes${count}@{ shape: stored-data}`
         },
         {
             img: Communication_Link,
-            code: `\n shape${count}["Communication Link"]\n shape${count}@{ shape: com-link}`
+            code: `\n shapes${count}["Communication Link"]\n shapes${count}@{ shape: com-link}`
         },
         {
             img: Paper_Tape,
-            code: `\n shape${count}["Paper Tape"]\n shape${count}@{ shape: paper-tape}`
+            code: `\n shapes${count}["Paper Tape"]\n shapes${count}@{ shape: paper-tape}`
         }
     ]
-        setActiveButton(key);
-        if(key === 'addSubChart'){
-            setCode(`${code +`  subgraph s${count}["Untitled subgraph"]\n` +
-            `        subchart${count}["Untitled Node"]\n` +
-            '  end'} `)
-            typeof window !== "undefined" && sessionStorage.setItem("code",`${code +`  subgraph s${count}["Untitled subgraph"]\n` +
-            `        subchart${count}["Untitled Node"]\n` +
-            '  end'} `);
 
-        }
-    };
+
     return (
         <Box
             sx={{
@@ -391,7 +400,6 @@ const RightContainer = () => {
                 </Box>
             </Box>
 
-            {/* Box with Collapse Toggle and Icon List */}
             <Box
                 sx={{
                     position: "absolute",
@@ -427,32 +435,27 @@ const RightContainer = () => {
                 </Box>
 
                 <Collapse in={expanded}>
-                    <Box sx={{display: "flex", flexDirection: "column", gap: 1}}>
-                        {[
-                            ...(code.startsWith('flowchart')
-                                ? [{
-                                    key: "shapes",
-                                    icon: <AddToPhotosIcon/>,
-                                    tooltip: "Shapes",
-                                    onClick: handleAddPhotosClick,
-                                }]
-                                : []),
-                            {key: "launchRocket", icon: <RocketLaunchIcon/>, tooltip: "Launch Rocket"},
-                            {key: "addImage", icon: <ImageIcon/>, tooltip: "Add Image"},
-                            {key: "brushTool", icon: <BrushIcon/>, tooltip: "Brush Tool"},
-                            {key: "info", icon: <InfoIcon/>, tooltip: "Information"},
-                        ].map(({key, icon, tooltip, onClick}) => (
+                    <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                            {[
+                                ...(code.startsWith('flowchart')
+                                    ? [{
+                                        key: "shapes",
+                                        icon: <AddIcon/>,
+                                        tooltip: "Shapes",
+                                    }]
+                                    : []),
+                            { key: "addSubChart", icon: <AddToPhotosIcon />, tooltip: "Add Sub Chart" },
+                            // { key: "launchRocket", icon: <RocketLaunchIcon />, tooltip: "Launch Rocket" },
+                            // { key: "addImage", icon: <ImageIcon />, tooltip: "Add Image" },
+                            { key: "brushTool", icon: <BrushIcon />, tooltip: "Brush Tool" },
+                        ].map(({ key, icon, tooltip,onClick }) => (
                             <Tooltip key={key} title={tooltip}>
                                 <IconButton
-                                    onClick={key === "brushTool" ? handleBrushClick :() => handleButtonClick(key)}
+                                    onClick={(event) => handleButtonClick(event, key)}  // Pass event explicitly
                                     sx={{
-                                        backgroundColor: activeButton === key
-                                            ? "sidebarHover"
-                                            : "white",
+                                        backgroundColor: activeButton === key ? "sidebarHover" : "white",
                                         color: activeButton === key ? "white" : "black",
-                                        "&:hover": {
-                                            backgroundColor: "#FF348033",
-                                        },
+                                        "&:hover": { backgroundColor: "#FF348033" },
                                     }}
                                 >
                                     {icon}
@@ -465,8 +468,8 @@ const RightContainer = () => {
                     open={Boolean(designAnchor)}
                     anchorEl={designAnchor}
                     onClose={handleThemeClose}
-                    anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                    transformOrigin={{ vertical: "top", horizontal: "left" }}
+                    anchorOrigin={{vertical: "bottom", horizontal: "left"}}
+                    // transformOrigin={{ vertical: "top", horizontal: "left" }}
                 >
                     <List sx={{ backgroundColor: "#F2F2F3", py: 0.5, px: 0.5, width: "180px" }}>
                         <ListItemButton
@@ -487,7 +490,7 @@ const RightContainer = () => {
                     anchorEl={themeAnchor}
                     onClose={handleThemeClose}
                     anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                    transformOrigin={{ vertical: "top", horizontal: "left" }}
+                    // transformOrigin={{ vertical: "top", horizontal: "right" }}
                 >
                     <List sx={{ backgroundColor: "#F2F2F3", py: 0.5, px: 0.5, width: "180px" }}>
                         {themes.map((themeItem, index) => (
@@ -555,7 +558,6 @@ const RightContainer = () => {
                                                 <Box
                                                     onClick={() => {
                                                         setCode(`${code + item.code}`)
-                                                        setCount(count + 1)
                                                     }}
                                                     sx={{
                                                         height: 48,
@@ -586,7 +588,6 @@ const RightContainer = () => {
                                             <Box
                                                 onClick={() => {
                                                     setCode(`${code + item.code}`)
-                                                    setCount(count + 1)
                                                 }}
                                                 sx={{
                                                     height: 48,
@@ -616,7 +617,6 @@ const RightContainer = () => {
                                             <Box
                                                 onClick={() => {
                                                     setCode(`${code + item.code}`)
-                                                    setCount(count + 1)
                                                 }}
                                                 sx={{
                                                     height: 48,
@@ -641,8 +641,7 @@ const RightContainer = () => {
                 <View viewFontSizeBar={fontSize} color={color}/>
             </Box>
         </Box>
-    )
-        ;
+    );
 };
 
 export default RightContainer;
