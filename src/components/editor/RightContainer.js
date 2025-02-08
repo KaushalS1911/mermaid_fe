@@ -130,43 +130,43 @@ const RightContainer = () => {
         setActiveButton("collapse");
     };
 
-        const getBorderColorAndWidthByTheme = (theme) => {
-            switch (theme) {
-                case "dark":
-                    return { color: "#ff9800", width: "1.2" };
-                case "forest":
-                    return { color: "#4caf50", width: "1" };
-                case "base":
-                    return { color: "#607d8b", width: "1.2" };
-                case "neutral":
-                    return { color: "#9e9e9e", width: "1" };
-                case "ocean":
-                    return { color: "#0288d1", width: "1.3" };
-                case "solarized":
-                    return { color: "#d4a900", width: "1.2" };
-                case "sunset":
-                    return { color: "#ff7043", width: "1.1" };
-                case "neon":
-                    return { color: "#FAFFC5", width: "1.3" };
-                case "monochrome":
-                    return { color: "#212121", width: "1.2" };
-                default:
-                    return { color: "#673ab7", width: "1.2" };
-            }
-        };
+    const getBorderColorAndWidthByTheme = (theme) => {
+        switch (theme) {
+            case "dark":
+                return { color: "#ff9800", width: "1.2" };
+            case "forest":
+                return { color: "#4caf50", width: "1" };
+            case "base":
+                return { color: "#607d8b", width: "1.2" };
+            case "neutral":
+                return { color: "#9e9e9e", width: "1" };
+            case "ocean":
+                return { color: "#0288d1", width: "1.3" };
+            case "solarized":
+                return { color: "#d4a900", width: "1.2" };
+            case "sunset":
+                return { color: "#ff7043", width: "1.1" };
+            case "neon":
+                return { color: "#FAFFC5", width: "1.3" };
+            case "monochrome":
+                return { color: "#212121", width: "1.2" };
+            default:
+                return { color: "#673ab7", width: "1.2" };
+        }
+    };
 
 
-        useEffect(() => {
-            const graphDiv = document.querySelector("#graph-div");
-            if (graphDiv) {
-                const { color: borderColor, width: borderWidth } = getBorderColorAndWidthByTheme(color.theme);
-                const nodes = graphDiv.querySelectorAll("rect, path, circle");
-                nodes.forEach((node) => {
-                    node.style.stroke = borderColor;
-                    node.style.strokeWidth = `${borderWidth}px`;
-                });
-            }
-        }, [color.theme]);
+    useEffect(() => {
+        const graphDiv = document.querySelector("#graph-div");
+        if (graphDiv) {
+            const { color: borderColor, width: borderWidth } = getBorderColorAndWidthByTheme(color.theme);
+            const nodes = graphDiv.querySelectorAll("rect, path, circle");
+            nodes.forEach((node) => {
+                node.style.stroke = borderColor;
+                node.style.strokeWidth = `${borderWidth}px`;
+            });
+        }
+    }, [color.theme]);
 
     function countOccurrencesByPrefix(text, word, prefixLength = 8) {
         const prefix = word.slice(0, prefixLength);
@@ -221,132 +221,132 @@ const RightContainer = () => {
     const BasicShapes = [
         {
             img: Rectangle,
-            code: `\n shape${countShape}["Rectangle"]\n shape${countShape}@{ shape: rect}\n`
+            code: `\n shapes${countShape}["Rectangle"]\n shapes${countShape}@{ shape: rect}\n`
         },
         {
             img: Rounded,
-            code: `\n shape${countShape}["Rounded"] \n shape${countShape}@{ shape: rounded}`
+            code: `\n shapes${countShape}["Rounded"] \n shapes${countShape}@{ shape: rounded}`
         }, {
             img: Stadium,
-            code: `\n   shape${countShape}(["Stadium"])`
+            code: `\n   shapes${countShape}(["Stadium"])`
         }, {
             img: Triangle,
-            code: `\n shape${countShape}["Diamond"] \n shape${countShape}@{ shape: diam}`
+            code: `\n shapes${countShape}["Diamond"] \n shapes${countShape}@{ shape: diam}`
         }, {
             img: Diamond,
-            code: `\n shape${countShape}["Triangle"] \n shape${countShape}@{ shape: tri}`
+            code: `\n shapes${countShape}["Triangle"] \n shapes${countShape}@{ shape: tri}`
         }, {
             img: Hexazone,
-            code: `\n   shape${countShape}["Hexagon"] \n shape${countShape}@{ shape: hex}`
+            code: `\n   shapes${countShape}["Hexagon"] \n shapes${countShape}@{ shape: hex}`
         }, {
             img: Cylinder,
-            code: `\n shape${countShape}["Cylinder"]\n shape${countShape}@{ shape: cyl}`
+            code: `\n shapes${countShape}["Cylinder"]\n shapes${countShape}@{ shape: cyl}`
         }, {
             img: Horizontal_Cylinder,
-            code: `\n shape${countShape}["Horizontal Cylinder"] \nshape${countShape}@{ shape: h-cyl}`
+            code: `\n shapes${countShape}["Horizontal Cylinder"] \nshapes${countShape}@{ shape: h-cyl}`
         }, {
             img: Circle,
-            code: `\n     shape${countShape}(("Circle"))`
+            code: `\n     shapes${countShape}(("Circle"))`
         }, {
             img: Dubble_Circle,
-            code: `\n shape${countShape}["Double Circle"]\n shape${countShape}@{ shape: dbl-circ}`
+            code: `\n shapes${countShape}["Double Circle"]\n shapes${countShape}@{ shape: dbl-circ}`
         }, {
             img: Small_Circle,
-            code: `\n  shape${countShape}["Small Circle"] \n shape${countShape}@{ shape: sm-circ}`
+            code: `\n  shapes${countShape}["Small Circle"] \n shapes${countShape}@{ shape: sm-circ}`
         }, {
             img: Framed_Circle,
-            code: `\n shape${countShape}["Frames Circle"]\n shape${countShape}@{ shape: fr-circ}`
+            code: `\n shapes${countShape}["Frames Circle"]\n shapes${countShape}@{ shape: fr-circ}`
         }, {
             img: Filled_Circles,
-            code: `\n   shape${countShape}["Filled Circle"] \n shape${countShape}@{ shape: f-circ}`
+            code: `\n   shapes${countShape}["Filled Circle"] \n shapes${countShape}@{ shape: f-circ}`
         }, {
             img: Parallelogram,
-            code: `\n    shape${countShape}["Parallelogram"] \n shape${countShape}@{ shape: lean-l}`
+            code: `\n    shapes${countShape}["Parallelogram"] \n shapes${countShape}@{ shape: lean-l}`
         }, {
             img: Parallelogram_Reversed,
-            code: `\n  shape${countShape}["Parallelogram Reversed"] \n shape${countShape}@{ shape: lean-r}`
+            code: `\n  shapes${countShape}["Parallelogram Reversed"] \n shapes${countShape}@{ shape: lean-r}`
         }, {
             img: Trapezoid,
-            code: `\n   shape${countShape}["Trapezoid"] \n shape${countShape}@{ shape: trap-b}`
+            code: `\n   shapes${countShape}["Trapezoid"] \n shapes${countShape}@{ shape: trap-b}`
         }, {
             img: Trapezoid_Reversed,
-            code: `\nshape${countShape}["Trapezoid Reversed"] \n shape${countShape}@{ shape: trap-t}`
+            code: `\nshapes${countShape}["Trapezoid Reversed"] \n shapes${countShape}@{ shape: trap-t}`
         }, {
             img: Card,
-            code: `\n  shape${countShape}["Card"]  \n  shape${countShape}@{ shape: card}`
+            code: `\n  shapes${countShape}["Card"]  \n  shapes${countShape}@{ shape: card}`
         }, {
             img: Odd,
-            code: `\n shape${countShape}>"Odd"]`
+            code: `\n shapes${countShape}>"Odd"]`
         }, {
             img: Anchor,
-            code: `\n shape${countShape}["Anchor"] \n shape${countShape}@{ shape: anchor}`
+            code: `\n shapes${countShape}["Anchor"] \n shapes${countShape}@{ shape: anchor}`
         },
     ]
     const ProcessShapes = [
-        {img: Standard_Process, code: `\nshape${count}["Standard Process"]\nshape${count}@{ shape: proc}`},
-        {img: Sub_Process, code: `\nshape${count}["Sub Process"]\nshape${count}@{ shape: subproc}`},
-        {img: Tagged_Process, code: `\nshape${count}["Tagged Process"]\nshape${count}@{ shape: tag-proc}`},
-        {img: Multi_Process, code: `\nshape${count}["Multi Process"]\nshape${count}@{ shape: procs}`},
-        {img: Divied_Process, code: `\nshape${count}["Divided Process"]\nshape${count}@{ shape: div-proc}`},
-        {img: Extractions_Process, code: `\nshape${count}["Extraction Process"]\nshape${count}@{ shape: extract}`},
-        {img: Lined_Process, code: `\nshape${count}["Lined Process"]\nshape${count}@{ shape: lin-proc}`},
-        {img: In_Out, code: `\nshape${count}["In Out"]\nshape${count}@{ shape: in-out}`},
-        {img: Out_In, code: `\nshape${count}["Out In"]\nshape${count}@{ shape: out-in}`},
-        {img: Manual_File_Action, code: `\nshape${count}["Manual File Action"]\nshape${count}@{ shape: manual-file}`},
-        {img: Priority_Action, code: `\nshape${count}["Priority Action"]\nshape${count}@{ shape: priority}`},
-        {img: Collate_Action, code: `\nshape${count}["Collate Action"]\nshape${count}@{ shape: collate}`},
-        {img: Loop_Limit, code: `\nshape${count}["Loop Limit"]\nshape${count}@{ shape: loop-limit}`},
-        {img: Manual_Input, code: `\nshape${count}["Manual Input"]\nshape${count}@{ shape: manual-input}`},
-        {img: Event, code: `\nshape${count}["Event"]\nshape${count}@{ shape: event}`},
-        {img: Start, code: `\nshape${count}["Start"]\nshape${count}@{ shape: start}`},
-        {img: Stop, code: `\nshape${count}["Stop"]\nshape${count}@{ shape: stop}`},
-        {img: Fork_Join, code: `\nshape${count}["Fork/Join"]\nshape${count}@{ shape: fork}`},
-        {img: Terminal, code: `\nshape${count}["Terminal"]\nshape${count}@{ shape: terminal}`},
-        {img: Delay, code: `\nshape${count}["Delay"]\nshape${count}@{ shape: delay}`},
-        {img: Junction, code: `\nshape${count}["Junction"]\nshape${count}@{ shape: junction}`},
-        {img: Decision, code: `\nshape${count}["Decision"]\nshape${count}@{ shape: decision}`},
-        {img: Document, code: `\nshape${count}["Document"]\nshape${count}@{ shape: doc}`},
-        {img: Tagged_Document, code: `\nshape${count}["Tagged Document"]\nshape${count}@{ shape: tag-doc}`},
-        {img: Multiple_Document, code: `\nshape${count}["Multiple Documents"]\nshape${count}@{ shape: docs}`},
-        {img: Lined_Document, code: `\nshape${count}["Lined Document"]\nshape${count}@{ shape: lin-doc}`},
-        {img: Comment, code: `\nshape${count}["Comment"]\nshape${count}@{ shape: comment}`},
-        {img: Comment_Right, code: `\nshape${count}["Comment Right"]\nshape${count}@{ shape: brace-r}`},
-        {img: Braces, code: `\nshape${count}["Braces"]\nshape${count}@{ shape: braces}`},
-        {img: Summary, code: `\nshape${count}["Summary"]\nshape${count}@{ shape: summary}`},
+        {img: Standard_Process, code: `\nshapes${countShape}["Standard Process"]\nshapes${countShape}@{ shape: proc}`},
+        {img: Sub_Process, code: `\nshapes${countShape}["Sub Process"]\nshapes${countShape}@{ shape: subproc}`},
+        {img: Tagged_Process, code: `\nshapes${countShape}["Tagged Process"]\nshapes${countShape}@{ shape: tag-proc}`},
+        {img: Multi_Process, code: `\nshapes${countShape}["Multi Process"]\nshapes${countShape}@{ shape: procs}`},
+        {img: Divied_Process, code: `\nshapes${countShape}["Divided Process"]\nshapes${countShape}@{ shape: div-proc}`},
+        {img: Extractions_Process, code: `\nshapes${countShape}["Extraction Process"]\nshapes${countShape}@{ shape: extract}`},
+        {img: Lined_Process, code: `\nshapes${countShape}["Lined Process"]\nshapes${countShape}@{ shape: lin-proc}`},
+        {img: In_Out, code: `\nshapes${countShape}["In Out"]\nshapes${countShape}@{ shape: in-out}`},
+        {img: Out_In, code: `\nshapes${countShape}["Out In"]\nshapes${countShape}@{ shape: out-in}`},
+        {img: Manual_File_Action, code: `\nshapes${countShape}["Manual File Action"]\nshapes${countShape}@{ shape: manual-file}`},
+        {img: Priority_Action, code: `\nshapes${countShape}["Priority Action"]\nshapes${countShape}@{ shape: priority}`},
+        {img: Collate_Action, code: `\nshapes${countShape}["Collate Action"]\nshapes${countShape}@{ shape: collate}`},
+        {img: Loop_Limit, code: `\nshapes${countShape}["Loop Limit"]\nshapes${countShape}@{ shape: loop-limit}`},
+        {img: Manual_Input, code: `\nshapes${countShape}["Manual Input"]\nshapes${countShape}@{ shape: manual-input}`},
+        {img: Event, code: `\nshapes${countShape}["Event"]\nshapes${countShape}@{ shape: event}`},
+        {img: Start, code: `\nshapes${countShape}["Start"]\nshapes${countShape}@{ shape: start}`},
+        {img: Stop, code: `\nshapes${countShape}["Stop"]\nshapes${countShape}@{ shape: stop}`},
+        {img: Fork_Join, code: `\nshapes${countShape}["Fork/Join"]\nshapes${countShape}@{ shape: fork}`},
+        {img: Terminal, code: `\nshapes${countShape}["Terminal"]\nshapes${countShape}@{ shape: terminal}`},
+        {img: Delay, code: `\nshapes${countShape}["Delay"]\nshapes${countShape}@{ shape: delay}`},
+        {img: Junction, code: `\nshapes${countShape}["Junction"]\nshapes${countShape}@{ shape: junction}`},
+        {img: Decision, code: `\nshapes${countShape}["Decision"]\nshapes${countShape}@{ shape: decision}`},
+        {img: Document, code: `\nshapes${countShape}["Document"]\nshapes${countShape}@{ shape: doc}`},
+        {img: Tagged_Document, code: `\nshapes${countShape}["Tagged Document"]\nshapes${countShape}@{ shape: tag-doc}`},
+        {img: Multiple_Document, code: `\nshapes${countShape}["Multiple Documents"]\nshapes${countShape}@{ shape: docs}`},
+        {img: Lined_Document, code: `\nshapes${countShape}["Lined Document"]\nshapes${countShape}@{ shape: lin-doc}`},
+        {img: Comment, code: `\nshapes${countShape}["Comment"]\nshapes${countShape}@{ shape: comment}`},
+        {img: Comment_Right, code: `\nshapes${countShape}["Comment Right"]\nshapes${countShape}@{ shape: brace-r}`},
+        {img: Braces, code: `\nshapes${countShape}["Braces"]\nshapes${countShape}@{ shape: braces}`},
+        {img: Summary, code: `\nshapes${countShape}["Summary"]\nshapes${countShape}@{ shape: summary}`},
 
     ];
     const TechnicalShapes = [
         {
             img: Database,
-            code: `\n shape${count}["Database"]\n shape${count}@{ shape: db}`
+            code: `\n shapes${countShape}["Database"]\n shapes${countShape}@{ shape: db}`
         },
         {
             img: Disk_Storage,
-            code: `\n shape${count}["Disk Storage"]\n shape${count}@{ shape: disk}`
+            code: `\n shapes${countShape}["Disk Storage"]\n shapes${countShape}@{ shape: disk}`
         },
         {
             img: Direct_Access_Storage,
-            code: `\n shape${count}["Direct Access Storage"]\n shape${count}@{ shape: das}`
+            code: `\n shapes${countShape}["Direct Access Storage"]\n shapes${countShape}@{ shape: das}`
         },
         {
             img: Internal_Storage,
-            code: `\n shape${count}["Internal Storage"]\n shape${count}@{ shape: internal-storage}`
+            code: `\n shapes${countShape}["Internal Storage"]\n shapes${countShape}@{ shape: internal-storage}`
         },
         {
             img: Display,
-            code: `\n shape${count}["Display"]\n shape${count}@{ shape: display}`
+            code: `\n shapes${countShape}["Display"]\n shapes${countShape}@{ shape: display}`
         },
         {
             img: Stored_Data,
-            code: `\n shape${count}["Stored Data"]\n shape${count}@{ shape: stored-data}`
+            code: `\n shapes${countShape}["Stored Data"]\n shapes${countShape}@{ shape: stored-data}`
         },
         {
             img: Communication_Link,
-            code: `\n shape${count}["Communication Link"]\n shape${count}@{ shape: com-link}`
+            code: `\n shapes${countShape}["Communication Link"]\n shapes${countShape}@{ shape: com-link}`
         },
         {
             img: Paper_Tape,
-            code: `\n shape${count}["Paper Tape"]\n shape${count}@{ shape: paper-tape}`
+            code: `\n shapes${countShape}["Paper Tape"]\n shapes${countShape}@{ shape: paper-tape}`
         }
     ]
 
@@ -434,14 +434,14 @@ const RightContainer = () => {
 
                 <Collapse in={expanded}>
                     <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-                            {[
-                                ...(code.startsWith('flowchart')
-                                    ? [{
-                                        key: "shapes",
-                                        icon: <AddIcon/>,
-                                        tooltip: "Shapes",
-                                    }]
-                                    : []),
+                        {[
+                            ...(code.startsWith('flowchart')
+                                ? [{
+                                    key: "shapes",
+                                    icon: <AddIcon/>,
+                                    tooltip: "Shapes",
+                                }]
+                                : []),
                             { key: "addSubChart", icon: <AddToPhotosIcon />, tooltip: "Add Sub Chart" },
                             // { key: "launchRocket", icon: <RocketLaunchIcon />, tooltip: "Launch Rocket" },
                             // { key: "addImage", icon: <ImageIcon />, tooltip: "Add Image" },
