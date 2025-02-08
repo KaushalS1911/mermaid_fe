@@ -221,65 +221,65 @@ const RightContainer = () => {
     const BasicShapes = [
         {
             img: Rectangle,
-            code: `\n shapes${countShape}["Rectangle"]\n shapes${countShape}@{ shape: rect}\n`
+            code: `\n shape${countShape}["Rectangle"]\n shape${countShape}@{ shape: rect}\n`
         },
         {
             img: Rounded,
-            code: `\n shapes${countShape}["Rounded"] \n shapes${countShape}@{ shape: rounded}`
+            code: `\n shape${countShape}["Rounded"] \n shape${countShape}@{ shape: rounded}`
         }, {
             img: Stadium,
-            code: `\n   shapes${countShape}(["Stadium"])`
+            code: `\n   shape${countShape}(["Stadium"])`
         }, {
             img: Triangle,
-            code: `\n shapes${countShape}["Diamond"] \n shapes${countShape}@{ shape: diam}`
+            code: `\n shape${countShape}["Diamond"] \n shape${countShape}@{ shape: diam}`
         }, {
             img: Diamond,
-            code: `\n shapes${countShape}["Triangle"] \n shapes${countShape}@{ shape: tri}`
+            code: `\n shape${countShape}["Triangle"] \n shape${countShape}@{ shape: tri}`
         }, {
             img: Hexazone,
-            code: `\n   shapes${countShape}["Hexagon"] \n shapes${countShape}@{ shape: hex}`
+            code: `\n   shape${countShape}["Hexagon"] \n shape${countShape}@{ shape: hex}`
         }, {
             img: Cylinder,
-            code: `\n shapes${countShape}["Cylinder"]\n shapes${countShape}@{ shape: cyl}`
+            code: `\n shape${countShape}["Cylinder"]\n shape${countShape}@{ shape: cyl}`
         }, {
             img: Horizontal_Cylinder,
-            code: `\n shapes${countShape}["Horizontal Cylinder"] \nshapes${countShape}@{ shape: h-cyl}`
+            code: `\n shape${countShape}["Horizontal Cylinder"] \nshape${countShape}@{ shape: h-cyl}`
         }, {
             img: Circle,
-            code: `\n     shapes${countShape}(("Circle"))`
+            code: `\n     shape${countShape}(("Circle"))`
         }, {
             img: Dubble_Circle,
-            code: `\n shapes${countShape}["Double Circle"]\n shapes${countShape}@{ shape: dbl-circ}`
+            code: `\n shape${countShape}["Double Circle"]\n shape${countShape}@{ shape: dbl-circ}`
         }, {
             img: Small_Circle,
-            code: `\n  shapes${countShape}["Small Circle"] \n shapes${countShape}@{ shape: sm-circ}`
+            code: `\n  shape${countShape}["Small Circle"] \n shape${countShape}@{ shape: sm-circ}`
         }, {
             img: Framed_Circle,
-            code: `\n shapes${countShape}["Frames Circle"]\n shapes${countShape}@{ shape: fr-circ}`
+            code: `\n shape${countShape}["Frames Circle"]\n shape${countShape}@{ shape: fr-circ}`
         }, {
             img: Filled_Circles,
-            code: `\n   shapes${countShape}["Filled Circle"] \n shapes${countShape}@{ shape: f-circ}`
+            code: `\n   shape${countShape}["Filled Circle"] \n shape${countShape}@{ shape: f-circ}`
         }, {
             img: Parallelogram,
-            code: `\n    shapes${countShape}["Parallelogram"] \n shapes${countShape}@{ shape: lean-l}`
+            code: `\n    shape${countShape}["Parallelogram"] \n shape${countShape}@{ shape: lean-l}`
         }, {
             img: Parallelogram_Reversed,
-            code: `\n  shapes${countShape}["Parallelogram Reversed"] \n shapes${countShape}@{ shape: lean-r}`
+            code: `\n  shape${countShape}["Parallelogram Reversed"] \n shape${countShape}@{ shape: lean-r}`
         }, {
             img: Trapezoid,
-            code: `\n   shapes${countShape}["Trapezoid"] \n shapes${countShape}@{ shape: trap-b}`
+            code: `\n   shape${countShape}["Trapezoid"] \n shape${countShape}@{ shape: trap-b}`
         }, {
             img: Trapezoid_Reversed,
-            code: `\nshapes${countShape}["Trapezoid Reversed"] \n shapes${countShape}@{ shape: trap-t}`
+            code: `\nshape${countShape}["Trapezoid Reversed"] \n shape${countShape}@{ shape: trap-t}`
         }, {
             img: Card,
-            code: `\n  shapes${countShape}["Card"]  \n  shapes${countShape}@{ shape: card}`
+            code: `\n  shape${countShape}["Card"]  \n  shape${countShape}@{ shape: card}`
         }, {
             img: Odd,
-            code: `\n shapes${countShape}>"Odd"]`
+            code: `\n shape${countShape}>"Odd"]`
         }, {
             img: Anchor,
-            code: `\n shapes${countShape}["Anchor"] \n shapes${countShape}@{ shape: anchor}`
+            code: `\n shape${countShape}["Anchor"] \n shape${countShape}@{ shape: anchor}`
         },
     ]
     const ProcessShapes = [
@@ -318,35 +318,35 @@ const RightContainer = () => {
     const TechnicalShapes = [
         {
             img: Database,
-            code: `\n shapes${count}["Database"]\n shapes${count}@{ shape: db}`
+            code: `\n shape${count}["Database"]\n shape${count}@{ shape: db}`
         },
         {
             img: Disk_Storage,
-            code: `\n shapes${count}["Disk Storage"]\n shapes${count}@{ shape: disk}`
+            code: `\n shape${count}["Disk Storage"]\n shape${count}@{ shape: disk}`
         },
         {
             img: Direct_Access_Storage,
-            code: `\n shapes${count}["Direct Access Storage"]\n shapes${count}@{ shape: das}`
+            code: `\n shape${count}["Direct Access Storage"]\n shape${count}@{ shape: das}`
         },
         {
             img: Internal_Storage,
-            code: `\n shapes${count}["Internal Storage"]\n shapes${count}@{ shape: internal-storage}`
+            code: `\n shape${count}["Internal Storage"]\n shape${count}@{ shape: internal-storage}`
         },
         {
             img: Display,
-            code: `\n shapes${count}["Display"]\n shapes${count}@{ shape: display}`
+            code: `\n shape${count}["Display"]\n shape${count}@{ shape: display}`
         },
         {
             img: Stored_Data,
-            code: `\n shapes${count}["Stored Data"]\n shapes${count}@{ shape: stored-data}`
+            code: `\n shape${count}["Stored Data"]\n shape${count}@{ shape: stored-data}`
         },
         {
             img: Communication_Link,
-            code: `\n shapes${count}["Communication Link"]\n shapes${count}@{ shape: com-link}`
+            code: `\n shape${count}["Communication Link"]\n shape${count}@{ shape: com-link}`
         },
         {
             img: Paper_Tape,
-            code: `\n shapes${count}["Paper Tape"]\n shapes${count}@{ shape: paper-tape}`
+            code: `\n shape${count}["Paper Tape"]\n shape${count}@{ shape: paper-tape}`
         }
     ]
 
