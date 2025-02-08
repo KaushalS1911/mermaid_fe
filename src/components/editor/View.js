@@ -37,11 +37,6 @@ const View = ({ viewFontSizeBar }) => {
 
     const pzoom = useRef();
 
-    useEffect(() => {
-        if (savedCode) {
-            setCode(savedCode);
-        }
-    }, [viewFontSizeBar]);
 
 
     const setValidateCodeAndConfig = async (code, config) => {
