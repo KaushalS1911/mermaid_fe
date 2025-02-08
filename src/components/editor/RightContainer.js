@@ -313,6 +313,7 @@ const RightContainer = () => {
         {img: Comment_Right, code: `\nshape${count}["Comment Right"]\nshape${count}@{ shape: brace-r}`},
         {img: Braces, code: `\nshape${count}["Braces"]\nshape${count}@{ shape: braces}`},
         {img: Summary, code: `\nshape${count}["Summary"]\nshape${count}@{ shape: summary}`},
+
     ];
     const TechnicalShapes = [
         {
@@ -409,23 +410,20 @@ const RightContainer = () => {
                     bgcolor: "#f9f9f9",
                     boxShadow: 3,
                     transition: "all 0.3s ease-in-out",
-                    width: "60px", // Adjusted for vertical layout
-                    top: 80, // Adjust position below top bar
+                    width: "60px",
+                    top: 80,
                     left: 10,
                 }}
             >
-                {/* Collapse Toggle Icon at the Top */}
-                <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
+                <Box sx={{display: "flex", justifyContent: "center", mb: 1}}>
                     <Tooltip title={expanded ? "Collapse" : "Expand"}>
                         <IconButton
                             onClick={toggleCollapse}
                             sx={{
-                                backgroundColor: activeButton === "collapse"
-                                    ? "sidebarHover" // Active state (clicked)
-                                    : "white", // Default state
+                                backgroundColor: activeButton === "collapse" ? "sidebarHover" : "white",
                                 color: activeButton === "collapse" ? "white" : "black",
                                 "&:hover": {
-                                    backgroundColor: "#FF348033", // Hover state
+                                    backgroundColor: "#FF348033",
                                 },
                             }}
                         >
