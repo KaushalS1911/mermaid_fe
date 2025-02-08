@@ -27,6 +27,19 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 import {useStore} from "@/store";
 
+export const themes = [
+    { text: "Default", color: "default", image: light },
+    { text: "Forest", color: "forest", image: light },
+    { text: "Base", color: "base", image: light },
+    { text: "Dark", color: "dark", image: dark },
+    { text: "Neutral", color: "neutral", image: light },
+    { text: "Ocean", color: "ocean", image: light },
+    { text: "Solarized", color: "solarized", image: light },
+    { text: "Sunset", color: "sunset", image: light },
+    { text: "Neon", color: "neon", image: dark },
+    { text: "Monochrome", color: "monochrome", image: light },
+];
+
 const Sidebar = ({
                      open,
                      mobileOpen,
@@ -106,18 +119,6 @@ const Sidebar = ({
         },
     ];
 
-    const themes = [
-        { text: "Default", color: "default", image: light},
-        { text: "Forest", color: "forest", image: light},
-        { text: "Base", color: "base", image: light},
-        { text: "Dark", color: "dark", image: dark},
-        { text: "Neutral", color: "neutral", image: light},
-        { text: "Ocean", color: "ocean", image: light},
-        { text: "Solarized", color: "solarized", image: light},
-        { text: "Sunset", color: "sunset", image: light},
-        { text: "Neon", color: "neon", image: dark},
-        { text: "Monochrome", color: "monochrome", image: light},
-    ];
 
     return (
         <Box>

@@ -10,8 +10,8 @@ import { ChartContext } from "@/app/layout";
 const customMessage = `\n\nIf you are using AI, Gemini can be incorrect sometimes and may provide syntax errors.`;
 const SESSION_STORAGE_KEY = "mermaid_chart_code";
 
-const View = ({ viewFontSizeBar }) => {
-    const { chartRef, color } = useContext(ChartContext);
+const View = ({ viewFontSizeBar, color }) => {
+    const { chartRef } = useContext(ChartContext);
     const code = useStore.use.code();
     const config = useStore.use.config();
     const autoSync = useStore.use.autoSync();
@@ -45,7 +45,6 @@ const View = ({ viewFontSizeBar }) => {
         }
     }, [viewFontSizeBar]);
 
-
     const setValidateCodeAndConfig = async (code, config) => {
         try {
             await parse(code);
@@ -64,6 +63,7 @@ const View = ({ viewFontSizeBar }) => {
             setValidateConfigState(config);
         }
     };
+
     const getBorderColorAndWidthByTheme = (theme) => {
         switch (theme) {
             case "dark":
@@ -95,16 +95,18 @@ const View = ({ viewFontSizeBar }) => {
         const zoom = pzoom.current.getZoom();
         setPanZoom({ pan, zoom });
     };
+
     const fontSizeMapping = {
         MD: 13,
         LG: 14,
         XL: 15,
         XXL: 16.2,
     };
+
     const renderDiagram = async (code, config) => {
         if (container.current && code) {
             const { svg } = await render(
-                { ...JSON.parse(config) },
+                { ...JSON.parse(config), theme: color.theme }, // Ensure theme is passed here
                 code,
                 "graph-div",
                 {
@@ -138,7 +140,6 @@ const View = ({ viewFontSizeBar }) => {
                 });
 
                 const textNodes = graphDiv.querySelectorAll("text, tspan, foreignObject *");
-
                 textNodes.forEach(text => {
                     text.style.fontSize = `${fontSizeMapping[viewFontSizeBar] || 12}px`;
                     text.setAttribute("alignment-baseline", "central");
@@ -248,7 +249,7 @@ const View = ({ viewFontSizeBar }) => {
         if (typeof window !== "undefined") {
             renderDiagram(validateCode, validateConfig);
         }
-    }, [validateCode, validateConfig,fontSizeMapping[viewFontSizeBar]]);
+    }, [validateCode, validateConfig, fontSizeMapping[viewFontSizeBar], color.theme]); // Add color.theme as a dependency
 
     useEffect(() => {
         if (typeof window !== "undefined" && (autoSync || updateDiagram)) {
@@ -266,7 +267,6 @@ const View = ({ viewFontSizeBar }) => {
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
         }}>
-
             {validateCode.startsWith("Syntax error") ? (
                 <Box component="div" sx={{ color: "red", paddingX: 2 }}>
                     {validateCode}
