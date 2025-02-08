@@ -108,8 +108,8 @@ const Table = () => {
                 <span
                     style={{ color: "#000", cursor: "pointer", textDecoration: "none", fontWeight:600}}
                     onClick={() => {
-                        router.push(`/editor/${params.row._id}`)
                         setCode(params.row.mermaidString);
+                        router.push(`/editor/${params.row._id}`)
                     }}
                 >
                 {params.value}
@@ -170,7 +170,6 @@ const Table = () => {
             try {
                 const response = await axiosInstance.get("/flowcharts");
                 setRows(response.data.data);
-                console.log(response.data.data, 'mmmmmmmmmmmmmmmm');
             } catch (error) {
                 setError("Failed to fetch data");
                 console.error(error);
