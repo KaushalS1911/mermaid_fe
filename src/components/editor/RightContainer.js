@@ -410,20 +410,23 @@ const RightContainer = () => {
                     bgcolor: "#f9f9f9",
                     boxShadow: 3,
                     transition: "all 0.3s ease-in-out",
-                    width: "60px",
+                    width: "50px",
                     top: 80,
                     left: 10,
                 }}
             >
-                <Box sx={{display: "flex", justifyContent: "center", mb: 1}}>
+                <Box sx={{display: "flex", justifyContent: "center"}}>
                     <Tooltip title={expanded ? "Collapse" : "Expand"}>
                         <IconButton
                             onClick={toggleCollapse}
                             sx={{
                                 backgroundColor: activeButton === "collapse" ? "sidebarHover" : "white",
                                 color: activeButton === "collapse" ? "white" : "black",
+                                borderRadius:1,
+                                p:0.5,
                                 "&:hover": {
                                     backgroundColor: "#FF348033",
+
                                 },
                             }}
                         >
@@ -433,7 +436,7 @@ const RightContainer = () => {
                 </Box>
 
                 <Collapse in={expanded}>
-                    <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                    <Box sx={{ display: "flex", flexDirection: "column", gap: 1 ,mt:1}}>
                         {[
                             ...(code.startsWith('flowchart')
                                 ? [{
@@ -449,11 +452,14 @@ const RightContainer = () => {
                         ].map(({ key, icon, tooltip,onClick }) => (
                             <Tooltip key={key} title={tooltip}>
                                 <IconButton
-                                    onClick={(event) => handleButtonClick(event, key)}  // Pass event explicitly
+                                    onClick={(event) => handleButtonClick(event, key)}
                                     sx={{
+                                        px:2,
+                                        py:0.5,
                                         backgroundColor: activeButton === key ? "sidebarHover" : "white",
                                         color: activeButton === key ? "white" : "black",
-                                        "&:hover": { backgroundColor: "#FF348033" },
+                                         "&:hover": { backgroundColor: "#FF348033" },
+                                        borderRadius: 1,
                                     }}
                                 >
                                     {icon}
