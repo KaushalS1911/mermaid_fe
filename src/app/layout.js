@@ -24,9 +24,9 @@ export default function RootLayout({children}) {
             <Toaster/>
             <ThemeProvider theme={theme}>
                 <Suspense>
-                    <AuthGuard>
+                    {/*<AuthGuard>*/}
                         {children}
-                    </AuthGuard>
+                    {/*</AuthGuard>*/}
                 </Suspense>
             </ThemeProvider>
         </ChartContext.Provider>
