@@ -28,22 +28,23 @@ import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrow
 import {useStore} from "@/store";
 
 export const themes = [
-    { text: "Default", color: "default", image: light },
-    { text: "Forest", color: "forest", image: light },
-    { text: "Base", color: "base", image: light },
-    { text: "Dark", color: "dark", image: dark },
-    { text: "Neutral", color: "neutral", image: light },
-    { text: "Ocean", color: "ocean", image: light },
-    { text: "Solarized", color: "solarized", image: light },
-    { text: "Sunset", color: "sunset", image: light },
-    { text: "Neon", color: "neon", image: dark },
-    { text: "Monochrome", color: "monochrome", image: light },
+    { text: "Default", color: "default", image: light ,borderColor:"#ff5733"},
+    { text: "Forest", color: "forest", image: light ,borderColor:"#000000"},
+    { text: "Base", color: "base", image: light ,borderColor:"#ff5733"},
+    { text: "Dark", color: "dark", image: dark ,borderColor:"#ff5733"},
+    { text: "Neutral", color: "neutral", image: light ,borderColor:"#ff5733"},
+    { text: "Ocean", color: "base/ocean", image: light ,borderColor:"#000"},
+    { text: "Solarized", color: "base/solarized", image: light ,borderColor:"#000"},
+    { text: "Sunset", color: "base/sunset", image: light ,borderColor:"#000"},
+    { text: "Neon", color: "base/neon", image: light ,borderColor:"#000"},
+    { text: "Monochrome", color: "base/monochrome", image: light ,borderColor:"#000"},
 ];
+
+
 
 const Sidebar = ({
                      open,
-                     mobileOpen,
-                     handleDrawerToggle,
+                     mobileOpen,        handleDrawerToggle,
                      setSidebarKey,
                      sidebarKey,
                      setCollapsed,

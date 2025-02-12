@@ -26,7 +26,7 @@ function MainEditor({ sidebarKey }) {
         mermaid.initialize({
             startOnLoad: false,
             securityLevel: "loose",
-            theme: "default",
+            theme: "base",
         });
     }, []);
 
@@ -118,7 +118,7 @@ function MainEditor({ sidebarKey }) {
                     overflowY: "auto",
                 }}
             >
-                <RightContainer />
+                <RightContainer themess={theme}/>
             </Box>
         </Box>
     );

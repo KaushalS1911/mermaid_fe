@@ -1,16 +1,17 @@
 "use client";
-import { useContext, useEffect, useRef, useState } from "react";
-import { useDebounce } from "ahooks";
-import { Box } from "@mui/material";
-import { parse, render } from "@/utils/mermaid";
+import {useContext, useEffect, useRef, useState} from "react";
+import {useDebounce} from "ahooks";
+import {Box} from "@mui/material";
+import {parse, render} from "@/utils/mermaid";
 import svgPanZoom from "svg-pan-zoom";
-import { useStore } from "@/store";
-import { ChartContext } from "@/app/layout";
+import {useStore} from "@/store";
+import {ChartContext} from "@/app/layout";
+import theme from "@/components/theme/theme";
 
 const customMessage = `\n\nIf you are using AI, Gemini can be incorrect sometimes and may provide syntax errors.`;
 
-const View = ({ viewFontSizeBar, color }) => {
-    const { chartRef } = useContext(ChartContext);
+const View = ({viewFontSizeBar, color,fontSizes}) => {
+    const {chartRef} = useContext(ChartContext);
     const code = useStore.use.code();
     const config = useStore.use.config();
     const autoSync = useStore.use.autoSync();
@@ -28,15 +29,14 @@ const View = ({ viewFontSizeBar, color }) => {
     const container = useRef(null);
     const [fontSize] = useState(16);
 
-    const debounceCode = useDebounce(code, { wait: 300 });
-    const debounceConfig = useDebounce(config, { wait: 300 });
+    const debounceCode = useDebounce(code, {wait: 300});
+    const debounceConfig = useDebounce(config, {wait: 300});
 
     const [validateCode, setValidateCode] = useState("");
     const [validateConfig, setValidateConfig] = useState("");
     const setCode = useStore.use.setCode();
 
     const pzoom = useRef();
-
 
     const setValidateCodeAndConfig = async (code, config) => {
         try {
@@ -56,58 +56,85 @@ const View = ({ viewFontSizeBar, color }) => {
             setValidateConfigState(config);
         }
     };
-
-    const getBorderColorAndWidthByTheme = (theme) => {
-        switch (theme) {
-            case "dark":
-                return { color: "#ff9800", width: "1.2" };
-            case "forest":
-                return { color: "#4caf50", width: "1" };
-            case "base":
-                return { color: "#607d8b", width: "1.2" };
-            case "neutral":
-                return { color: "#9e9e9e", width: "1" };
-            case "ocean":
-                return { color: "#0288d1", width: "1.3" };
-            case "solarized":
-                return { color: "#d4a900", width: "1.2" };
-            case "sunset":
-                return { color: "#ff7043", width: "1.1" };
-            case "neon":
-                return { color: "#FAFFC5", width: "1.3" };
-            case "monochrome":
-                return { color: "#212121", width: "1.2" };
-            default:
-                return { color: "#673ab7", width: "1.2" };
-        }
-    };
-
+    console.log(pzoom)
     const handlePanZoomChange = () => {
         if (!pzoom.current) return;
         const pan = pzoom.current.getPan();
         const zoom = pzoom.current.getZoom();
-        setPanZoom({ pan, zoom });
+        setPanZoom({pan, zoom});
     };
 
-    const fontSizeMapping = {
-        MD: 13,
-        LG: 14,
-        XL: 15,
-        XXL: 16.2,
-    };
+    // const fontSizeMapping = {
+    //     MD: 13,
+    //     LG: 14,
+    //     XL: 15,
+    //     XXL: 16.2,
+    // };
+
+    const addTheme = [
+        {
+            name: "ocean",
+            style: {
+                primaryColor: '#71BBB2',
+                primaryBorderColor: '#497D74',
+            }
+        },
+        {
+            name: "solarized",
+            style: {
+                primaryColor: '#A27B5C',
+                primaryBorderColor: '#3F4F44'
+            }
+        },
+        {
+            name: "sunset",
+            style: {
+                primaryColor: '#FFCDB2',
+                primaryBorderColor: '#E5989B'
+            }
+        },
+        {
+            name: "neon",
+            style: {
+                primaryColor: '#B6FFA1',
+                primaryBorderColor: '#00FF9C'
+            }
+        },
+        {
+            name: "monochrome",
+            style: {
+                primaryColor: '#A7B49E',
+                primaryBorderColor: '#818C78'
+            }
+        }
+    ]
 
     const renderDiagram = async (code, config) => {
         if (container.current && code) {
-            const { svg } = await render(
-                { ...JSON.parse(config), theme: color.theme }, // Ensure theme is passed here
+            let styles = {};
+            if (color.theme.includes("base/")) {
+                const themeName = color.theme.split("/")[1];
+                styles = addTheme.find((item) => item.name === themeName)?.style;
+            }
+            console.log(styles, color.theme.includes("base/") ? color.theme.split('/')[0] : color.theme,"dswds")
+            const {svg} = await render(
+                {...JSON.parse(config), theme: color.theme.includes("base/") ? color.theme.split('/')[0] : color.theme},
                 code,
                 "graph-div",
                 {
                     startOnLoad: false,
                     securityLevel: "loose",
-                    theme: color.theme,
+                    theme: color.theme.includes("base/") ? color.theme.split('/')[0] : color.theme,
+                    themeVariables: {...styles,
+                        fontSize: fontSizes && fontSizes === "MD" ? "12px" :
+                            fontSizes && fontSizes === "LG" ? "16px" :
+                                fontSizes && fontSizes === "XL" ? "20px" : "24px"
+                    }
                 }
             );
+            document.querySelectorAll('#graph-div .node rect').forEach((rect) => {
+                rect.style.strokeWidth = '2px';
+            });
             if (svg.length > 0) {
                 container.current.innerHTML = svg;
                 const svgElement = container.current.querySelector("svg");
@@ -125,16 +152,9 @@ const View = ({ viewFontSizeBar, color }) => {
                 graphDiv.style.maxWidth = "100%";
                 graphDiv.style.overflow = "visible";
 
-                const { color: borderColor, width: borderWidth } = getBorderColorAndWidthByTheme(color.theme);
-                const nodes = graphDiv.querySelectorAll("rect, path, circle");
-                nodes.forEach(node => {
-                    node.style.stroke = borderColor;
-                    node.style.strokeWidth = borderWidth;
-                });
-
                 const textNodes = graphDiv.querySelectorAll("text, tspan, foreignObject *");
                 textNodes.forEach(text => {
-                    text.style.fontSize = `${fontSizeMapping[viewFontSizeBar] || 12}px`;
+                    // text.style.fontSize = `${fontSizeMapping[viewFontSizeBar] || 12}px`;
                     text.setAttribute("alignment-baseline", "central");
                 });
                 handlePanZoom();
@@ -220,6 +240,7 @@ const View = ({ viewFontSizeBar, color }) => {
 
     const handlePanZoom = () => {
         if (!panZoom) return;
+        console.log(panZoom , "bhjfhgfgdfgd");
         pzoom.current?.destroy();
         pzoom.current = undefined;
         Promise.resolve().then(() => {
@@ -242,14 +263,14 @@ const View = ({ viewFontSizeBar, color }) => {
         if (typeof window !== "undefined") {
             renderDiagram(validateCode, validateConfig);
         }
-    }, [validateCode, validateConfig, fontSizeMapping[viewFontSizeBar], color.theme]); // Add color.theme as a dependency
+    }, [validateCode, validateConfig, color.theme,panZoom,fontSizes]); // Add color.theme as a dependency
 
     useEffect(() => {
         if (typeof window !== "undefined" && (autoSync || updateDiagram)) {
             setValidateCodeAndConfig(debounceCode, debounceConfig);
             if (updateDiagram) setUpdateDiagram(false);
         }
-    }, [debounceCode, debounceConfig, autoSync, updateDiagram]);
+    }, [debounceCode, debounceConfig, autoSync, updateDiagram,color.theme]);
 
     return (
         <Box ref={chartRef} component="div" sx={{
@@ -261,7 +282,7 @@ const View = ({ viewFontSizeBar, color }) => {
             backgroundRepeat: "no-repeat",
         }}>
             {validateCode.startsWith("Syntax error") ? (
-                <Box component="div" sx={{ color: "red", paddingX: 2 }}>
+                <Box component="div" sx={{color: "red", paddingX: 2}}>
                     {validateCode}
                 </Box>
             ) : (
@@ -272,7 +293,7 @@ const View = ({ viewFontSizeBar, color }) => {
                     justifyContent: "center",
                     alignItems: "center",
                     overflow: "visible"
-                }} />
+                }}/>
             )}
         </Box>
     );

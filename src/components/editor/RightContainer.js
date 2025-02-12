@@ -4,7 +4,7 @@ import {
     IconButton,
     Tooltip,
     Collapse,
-    useTheme, Popover, List, ListItemButton, ListItemText,Typography, Tabs
+    useTheme, Popover, List, ListItemButton, ListItemText, Typography, Tabs, Menu, MenuItem
 } from "@mui/material";
 import { IoMdMove } from "react-icons/io";
 import { MdTextFields } from "react-icons/md"; // Font size icon
@@ -110,18 +110,9 @@ const RightContainer = () => {
     };
     const { color, setColor } = useContext(ChartContext);
 
-
-
-
     const handleClose = () => {
         setAnchorEl(null);
     };
-
-    const handleFontSizeChange = (size) => {
-        setFontSize(size);
-        setAnchorEl(null);
-    };
-
 
     const togglePanZoom = () => setPanZoomEnable(!panZoom);
 
@@ -129,44 +120,20 @@ const RightContainer = () => {
         setExpanded(!expanded);
         setActiveButton("collapse");
     };
+    const [anchorElFontSize, setAnchorElFontSize] = useState(null);
 
-    const getBorderColorAndWidthByTheme = (theme) => {
-        switch (theme) {
-            case "dark":
-                return { color: "#ff9800", width: "1.2" };
-            case "forest":
-                return { color: "#4caf50", width: "1" };
-            case "base":
-                return { color: "#607d8b", width: "1.2" };
-            case "neutral":
-                return { color: "#9e9e9e", width: "1" };
-            case "ocean":
-                return { color: "#0288d1", width: "1.3" };
-            case "solarized":
-                return { color: "#d4a900", width: "1.2" };
-            case "sunset":
-                return { color: "#ff7043", width: "1.1" };
-            case "neon":
-                return { color: "#FAFFC5", width: "1.3" };
-            case "monochrome":
-                return { color: "#212121", width: "1.2" };
-            default:
-                return { color: "#673ab7", width: "1.2" };
-        }
+    const handleFontSizeMenuOpen = (event) => {
+        setAnchorElFontSize(event.currentTarget);
     };
 
+    const handleFontSizeMenuClose = () => {
+        setAnchorElFontSize(null);
+    };
 
-    useEffect(() => {
-        const graphDiv = document.querySelector("#graph-div");
-        if (graphDiv) {
-            const { color: borderColor, width: borderWidth } = getBorderColorAndWidthByTheme(color.theme);
-            const nodes = graphDiv.querySelectorAll("rect, path, circle");
-            nodes.forEach((node) => {
-                node.style.stroke = borderColor;
-                node.style.strokeWidth = `${borderWidth}px`;
-            });
-        }
-    }, [color.theme]);
+    const handleFontSizeChange = (size) => {
+        setFontSize(size);
+        handleFontSizeMenuClose();
+    };
 
     function countOccurrencesByPrefix(text, word, prefixLength = 8) {
         const prefix = word.slice(0, prefixLength);
@@ -397,6 +364,28 @@ const RightContainer = () => {
                             <IoMdMove/>
                         </IconButton>
                         <FullScreen/>
+                        <IconButton onClick={handleFontSizeMenuOpen}>
+                            <MdTextFields />
+                        </IconButton>
+                        <Menu
+                            anchorEl={anchorElFontSize}
+                            open={Boolean(anchorElFontSize)}
+                            onClose={handleFontSizeMenuClose}
+                            anchorOrigin={{
+                                vertical: "bottom",
+                                horizontal: "right",
+                            }}
+                            transformOrigin={{
+                                vertical: "top",
+                                horizontal: "right",
+                            }}
+                        >
+                            {["MD", "LG", "XL", "XXL"].map((size) => (
+                                <MenuItem key={size} onClick={() => handleFontSizeChange(size)}>
+                                    {size}
+                                </MenuItem>
+                            ))}
+                        </Menu>
                     </Box>
                 </Box>
             </Box>
@@ -636,7 +625,7 @@ const RightContainer = () => {
                 </Popover>
             </Box>
             <Box>
-                <View viewFontSizeBar={fontSize} color={color}/>
+                <View fontSizes={fontSize}  color={color}/>
             </Box>
         </Box>
     );
