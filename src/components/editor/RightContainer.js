@@ -159,7 +159,7 @@ const RightContainer = () => {
         setActiveButton(key);
 
         if (key === 'addSubChart') {
-            const newCode = `${code + `subgraph s${count}["Untitled subgraph"]\n` +
+            const newCode = `${code + `\nsubgraph s${count}["Untitled subgraph"]\n` +
             `        subchart${count}["Untitled Node"]\n` +
             '  end'} `;
 
@@ -363,7 +363,7 @@ const RightContainer = () => {
                         >
                             <IoMdMove/>
                         </IconButton>
-                        <FullScreen/>
+                        <IconButton><FullScreen/></IconButton>
                         <IconButton onClick={handleFontSizeMenuOpen}>
                             <MdTextFields />
                         </IconButton>
