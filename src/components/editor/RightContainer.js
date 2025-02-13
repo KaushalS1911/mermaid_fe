@@ -6,19 +6,19 @@ import {
     Collapse,
     useTheme, Popover, List, ListItemButton, ListItemText, Typography, Tabs, Menu, MenuItem
 } from "@mui/material";
-import { IoMdMove } from "react-icons/io";
-import { MdTextFields } from "react-icons/md"; // Font size icon
-import { ExpandMore, ExpandLess } from "@mui/icons-material"; // Collapse Icons
+import {IoMdMove} from "react-icons/io";
+import {MdTextFields} from "react-icons/md"; // Font size icon
+import {ExpandMore, ExpandLess} from "@mui/icons-material"; // Collapse Icons
 import FullScreen from "./FullScreen";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import {useContext, useEffect, useState} from "react";
-import { useStore } from "@/store";
+import {useStore} from "@/store";
 import AddIcon from '@mui/icons-material/Add';
 import AddToPhotosIcon from "@mui/icons-material/AddToPhotos";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import ImageIcon from "@mui/icons-material/Image";
 import BrushIcon from "@mui/icons-material/Brush";
-import { themes } from "@/layout/Sidebar";
+import {themes} from "@/layout/Sidebar";
 
 import InfoIcon from "@mui/icons-material/Info";
 import Tab from "@mui/material/Tab";
@@ -85,7 +85,7 @@ import Communication_Link from '@/asset/editor/shapes/Communication Link.svg';
 import {ChartContext} from "@/app/layout";
 
 
-const View = dynamic(() => import("./View"), { ssr: false });
+const View = dynamic(() => import("./View"), {ssr: false});
 
 const RightContainer = () => {
     const panZoom = useStore.use.panZoom();
@@ -102,13 +102,17 @@ const RightContainer = () => {
     const [count, setCount] = useState(0);
     const [countShape, setCountShape] = useState(0);
     const [themeAnchor, setThemeAnchor] = useState(null);
+    const [countRocket, setCountRocket] = useState(0);
+    const [countImage, setCountImage] = useState(0);
+    const [imageUrl, setImageUrl] = useState("https://static.mermaidchart.dev/whiteboard/default-image-shape.svg");
+    const [showImage, setShowImage] = useState(false);
 
     const [designAnchor, setDesignAnchor] = useState(null);
     const handleThemeClose = () => {
         setThemeAnchor(null);
         setDesignAnchor(null);
     };
-    const { color, setColor } = useContext(ChartContext);
+    const {color, setColor} = useContext(ChartContext);
 
     const handleClose = () => {
         setAnchorEl(null);
@@ -141,6 +145,7 @@ const RightContainer = () => {
         const matches = text.match(regex);
         setCount(matches ? matches.length + 1 : 1)
     }
+
     function countOccurrencesByPrefixForShape(text, word, prefixLength = 6) {
         const prefix = word.slice(0, prefixLength);
         const regex = new RegExp(`\\b${prefix}\\w*\\b`, 'gi');
@@ -148,12 +153,29 @@ const RightContainer = () => {
         setCountShape(matches ? matches.length : 1)
     }
 
+    function countOccurrencesByPrefixForRocket(text, word, prefixLength = 3) {
+        const prefix = word.slice(0, prefixLength);
+        const regex = new RegExp(`\\b${prefix}\\w*\\b`, 'gi');
+        const matches = text.match(regex);
+        setCountRocket(matches ? matches.length + 1 : 1)
+    }
+
+    function countOccurrencesByPrefixForImage(text, word, prefixLength = 8) {
+        const prefix = word.slice(0, prefixLength);
+        const regex = new RegExp(`\\b${prefix}\\w*\\b`, 'gi');
+        const matches = text.match(regex);
+        setCountImage(matches ? matches.length + 1 : 1)
+    }
+
+
     useEffect(() => {
-        if(code){
-            countOccurrencesByPrefix(code,'subchart')
-            countOccurrencesByPrefixForShape(code,'shapes')
+        if (code) {
+            countOccurrencesByPrefix(code, 'subchart')
+            countOccurrencesByPrefixForShape(code, 'shapes')
+            countOccurrencesByPrefixForRocket(code, 'xyz')
+            countOccurrencesByPrefixForImage(code, 'imgTitle')
         }
-    },[code])
+    }, [code])
 
     const handleButtonClick = (event, key) => {
         setActiveButton(key);
@@ -172,8 +194,33 @@ const RightContainer = () => {
 
         if (key === 'brushTool') {
             setDesignAnchor(event.currentTarget);
-        }    if (key === 'shapes') {
+        }
+        if (key === 'shapes') {
             setAnchorEl(event.currentTarget);
+        }
+
+        if (key === 'launchRocket') {
+            const newcode = `${code + `xyz${countRocket}["Sample Label"]\n` +
+            `xyz${countRocket}@{ icon: "mc:default", pos: "b"}\n`
+            }`;
+
+            setCode(newcode);
+
+            if (typeof window !== "undefined") {
+                sessionStorage.setItem("code", `${newcode}`);
+            }
+        }
+
+        if (key === 'addImage') {
+            const newcode = `${code + `imgTitle${countImage}["This is sample label"]\n` +
+            `imgTitle${countImage}@{img: ${imageUrl}, h: 200, w: 200, pos: "b"}\n`
+            }`;
+
+            setCode(newcode);
+
+            if (typeof window !== "undefined") {
+                sessionStorage.setItem("code", `${newcode}`);
+            }
         }
     };
 
@@ -255,12 +302,21 @@ const RightContainer = () => {
         {img: Tagged_Process, code: `\nshapes${countShape}["Tagged Process"]\nshapes${countShape}@{ shape: tag-proc}`},
         {img: Multi_Process, code: `\nshapes${countShape}["Multi Process"]\nshapes${countShape}@{ shape: procs}`},
         {img: Divied_Process, code: `\nshapes${countShape}["Divided Process"]\nshapes${countShape}@{ shape: div-proc}`},
-        {img: Extractions_Process, code: `\nshapes${countShape}["Extraction Process"]\nshapes${countShape}@{ shape: extract}`},
+        {
+            img: Extractions_Process,
+            code: `\nshapes${countShape}["Extraction Process"]\nshapes${countShape}@{ shape: extract}`
+        },
         {img: Lined_Process, code: `\nshapes${countShape}["Lined Process"]\nshapes${countShape}@{ shape: lin-proc}`},
         {img: In_Out, code: `\nshapes${countShape}["In Out"]\nshapes${countShape}@{ shape: in-out}`},
         {img: Out_In, code: `\nshapes${countShape}["Out In"]\nshapes${countShape}@{ shape: out-in}`},
-        {img: Manual_File_Action, code: `\nshapes${countShape}["Manual File Action"]\nshapes${countShape}@{ shape: manual-file}`},
-        {img: Priority_Action, code: `\nshapes${countShape}["Priority Action"]\nshapes${countShape}@{ shape: priority}`},
+        {
+            img: Manual_File_Action,
+            code: `\nshapes${countShape}["Manual File Action"]\nshapes${countShape}@{ shape: manual-file}`
+        },
+        {
+            img: Priority_Action,
+            code: `\nshapes${countShape}["Priority Action"]\nshapes${countShape}@{ shape: priority}`
+        },
         {img: Collate_Action, code: `\nshapes${countShape}["Collate Action"]\nshapes${countShape}@{ shape: collate}`},
         {img: Loop_Limit, code: `\nshapes${countShape}["Loop Limit"]\nshapes${countShape}@{ shape: loop-limit}`},
         {img: Manual_Input, code: `\nshapes${countShape}["Manual Input"]\nshapes${countShape}@{ shape: manual-input}`},
@@ -274,7 +330,10 @@ const RightContainer = () => {
         {img: Decision, code: `\nshapes${countShape}["Decision"]\nshapes${countShape}@{ shape: decision}`},
         {img: Document, code: `\nshapes${countShape}["Document"]\nshapes${countShape}@{ shape: doc}`},
         {img: Tagged_Document, code: `\nshapes${countShape}["Tagged Document"]\nshapes${countShape}@{ shape: tag-doc}`},
-        {img: Multiple_Document, code: `\nshapes${countShape}["Multiple Documents"]\nshapes${countShape}@{ shape: docs}`},
+        {
+            img: Multiple_Document,
+            code: `\nshapes${countShape}["Multiple Documents"]\nshapes${countShape}@{ shape: docs}`
+        },
         {img: Lined_Document, code: `\nshapes${countShape}["Lined Document"]\nshapes${countShape}@{ shape: lin-doc}`},
         {img: Comment, code: `\nshapes${countShape}["Comment"]\nshapes${countShape}@{ shape: comment}`},
         {img: Comment_Right, code: `\nshapes${countShape}["Comment Right"]\nshapes${countShape}@{ shape: brace-r}`},
@@ -365,7 +424,7 @@ const RightContainer = () => {
                         </IconButton>
                         <IconButton><FullScreen/></IconButton>
                         <IconButton onClick={handleFontSizeMenuOpen}>
-                            <MdTextFields />
+                            <MdTextFields/>
                         </IconButton>
                         <Menu
                             anchorEl={anchorElFontSize}
@@ -411,21 +470,21 @@ const RightContainer = () => {
                             sx={{
                                 backgroundColor: activeButton === "collapse" ? "sidebarHover" : "white",
                                 color: activeButton === "collapse" ? "white" : "black",
-                                borderRadius:1,
-                                p:0.5,
+                                borderRadius: 1,
+                                p: 0.5,
                                 "&:hover": {
                                     backgroundColor: "#FF348033",
 
                                 },
                             }}
                         >
-                            {expanded ? <ExpandLess /> : <ExpandMore />}
+                            {expanded ? <ExpandLess/> : <ExpandMore/>}
                         </IconButton>
                     </Tooltip>
                 </Box>
 
                 <Collapse in={expanded}>
-                    <Box sx={{ display: "flex", flexDirection: "column", gap: 1 ,mt:1}}>
+                    <Box sx={{display: "flex", flexDirection: "column", gap: 1, mt: 1}}>
                         {[
                             ...(code.startsWith('flowchart')
                                 ? [{
@@ -434,20 +493,20 @@ const RightContainer = () => {
                                     tooltip: "Shapes",
                                 }]
                                 : []),
-                            { key: "addSubChart", icon: <AddToPhotosIcon />, tooltip: "Add Sub Chart" },
-                            // { key: "launchRocket", icon: <RocketLaunchIcon />, tooltip: "Launch Rocket" },
-                            // { key: "addImage", icon: <ImageIcon />, tooltip: "Add Image" },
-                            { key: "brushTool", icon: <BrushIcon />, tooltip: "Brush Tool" },
-                        ].map(({ key, icon, tooltip,onClick }) => (
+                            {key: "addSubChart", icon: <AddToPhotosIcon/>, tooltip: "Add Sub Chart"},
+                            // {key: "launchRocket", icon: <RocketLaunchIcon/>, tooltip: "Launch Rocket"},
+                            // {key: "addImage", icon: <ImageIcon/>, tooltip: "Add Image"},
+                            {key: "brushTool", icon: <BrushIcon/>, tooltip: "Brush Tool"},
+                        ].map(({key, icon, tooltip, onClick}) => (
                             <Tooltip key={key} title={tooltip}>
                                 <IconButton
                                     onClick={(event) => handleButtonClick(event, key)}
                                     sx={{
-                                        px:2,
-                                        py:0.5,
+                                        px: 2,
+                                        py: 0.5,
                                         backgroundColor: activeButton === key ? "sidebarHover" : "white",
                                         color: activeButton === key ? "white" : "black",
-                                         "&:hover": { backgroundColor: "#FF348033" },
+                                        "&:hover": {backgroundColor: "#FF348033"},
                                         borderRadius: 1,
                                     }}
                                 >
@@ -464,16 +523,16 @@ const RightContainer = () => {
                     anchorOrigin={{vertical: "bottom", horizontal: "left"}}
                     // transformOrigin={{ vertical: "top", horizontal: "left" }}
                 >
-                    <List sx={{ backgroundColor: "#F2F2F3", py: 0.5, px: 0.5, width: "180px" }}>
+                    <List sx={{backgroundColor: "#F2F2F3", py: 0.5, px: 0.5, width: "180px"}}>
                         <ListItemButton
                             onClick={(event) => setThemeAnchor(event.currentTarget)}
                             sx={{
                                 borderRadius: "10px",
                                 py: 0.5,
-                                "&:hover": { backgroundColor: "sidebarHover", color: "white" },
+                                "&:hover": {backgroundColor: "sidebarHover", color: "white"},
                             }}
                         >
-                            <ListItemText primary="Themes" /> <KeyboardArrowRightIcon />
+                            <ListItemText primary="Themes"/> <KeyboardArrowRightIcon/>
                         </ListItemButton>
                     </List>
                 </Popover>
@@ -482,10 +541,10 @@ const RightContainer = () => {
                     open={Boolean(themeAnchor)}
                     anchorEl={themeAnchor}
                     onClose={handleThemeClose}
-                    anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                    anchorOrigin={{vertical: "top", horizontal: "right"}}
                     // transformOrigin={{ vertical: "top", horizontal: "right" }}
                 >
-                    <List sx={{ backgroundColor: "#F2F2F3", py: 0.5, px: 0.5, width: "180px" }}>
+                    <List sx={{backgroundColor: "#F2F2F3", py: 0.5, px: 0.5, width: "180px"}}>
                         {themes.map((themeItem, index) => (
                             <ListItemButton
                                 key={index}
@@ -501,10 +560,10 @@ const RightContainer = () => {
                                 sx={{
                                     borderRadius: "10px",
                                     py: 0.5,
-                                    "&:hover": { backgroundColor: "sidebarHover", color: "white" },
+                                    "&:hover": {backgroundColor: "sidebarHover", color: "white"},
                                 }}
                             >
-                                <ListItemText primary={themeItem.text} />
+                                <ListItemText primary={themeItem.text}/>
                             </ListItemButton>
                         ))}
                     </List>
@@ -631,7 +690,35 @@ const RightContainer = () => {
                 </Popover>
             </Box>
             <Box>
-                <View fontSizes={fontSize}  color={color}/>
+                {showImage && (
+                    <Box
+                        sx={{
+                            position: "absolute",
+                            top: imagePosition.y,
+                            left: imagePosition.x,
+                            zIndex: 1000,
+                            textAlign: "center",
+                            cursor: "grab",
+                            userSelect: "none",
+                        }}
+                        onMouseDown={handleMouseDown}
+                    >
+                        <Box sx={{position: "relative"}}>
+                            <img
+                                src={imageUrl}
+                                alt="Draggable"
+                                width={imageSize.width}
+                                height={imageSize.height}
+                                style={{cursor: "grab"}}
+                                onClick={handleImageClick}
+                            />
+                            <Box sx={{fontSize: "14px", border: "1px solid #000", background: "#E1DFDF"}}>{label}</Box>
+                        </Box>
+                    </Box>
+                )}
+            </Box>
+            <Box>
+                <View fontSizes={fontSize} color={color}/>
             </Box>
         </Box>
     );
