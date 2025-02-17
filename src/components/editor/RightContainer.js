@@ -107,6 +107,7 @@ const RightContainer = () => {
     const [imageUrl, setImageUrl] = useState("https://static.mermaidchart.dev/whiteboard/default-image-shape.svg");
     const [showImage, setShowImage] = useState(false);
 
+
     const [designAnchor, setDesignAnchor] = useState(null);
     const handleThemeClose = () => {
         setThemeAnchor(null);
@@ -610,6 +611,9 @@ const RightContainer = () => {
                                                 <Box
                                                     onClick={() => {
                                                         setCode(`${code + item.code}`)
+                                                        if (typeof window !== "undefined") {
+                                                            sessionStorage.setItem("code", `${code + item.code}`);
+                                                        }
                                                     }}
                                                     sx={{
                                                         height: 48,
@@ -640,6 +644,9 @@ const RightContainer = () => {
                                             <Box
                                                 onClick={() => {
                                                     setCode(`${code + item.code}`)
+                                                    if (typeof window !== "undefined") {
+                                                        sessionStorage.setItem("code", `${code + item.code}`);
+                                                    }
                                                 }}
                                                 sx={{
                                                     height: 48,
@@ -669,6 +676,9 @@ const RightContainer = () => {
                                             <Box
                                                 onClick={() => {
                                                     setCode(`${code + item.code}`)
+                                                    if (typeof window !== "undefined") {
+                                                        sessionStorage.setItem("code", `${code + item.code}`);
+                                                    }
                                                 }}
                                                 sx={{
                                                     height: 48,
