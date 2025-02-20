@@ -4,7 +4,7 @@ import {
     IconButton,
     Tooltip,
     Collapse,
-    useTheme, Popover, List, ListItemButton, ListItemText, Typography, Tabs, Menu, MenuItem
+    useTheme, Popover, List, ListItemButton, ListItemText, Typography, Tabs, Menu, MenuItem, TextField, Button, Stack
 } from "@mui/material";
 import {IoMdMove} from "react-icons/io";
 import {MdTextFields} from "react-icons/md"; // Font size icon
@@ -86,16 +86,24 @@ import {ChartContext} from "@/app/layout";
 
 
 const View = dynamic(() => import("./View"), {ssr: false});
-
+const initialValue = {
+    heading: 'This is sample label',
+    image: 'https://static.mermaidchart.dev/whiteboard/default-image-shape.svg',
+    width: 200,
+    height: 200,
+}
 const RightContainer = () => {
+    const [form, setForm] = useState(initialValue)
     const panZoom = useStore.use.panZoom();
     const setPanZoomEnable = useStore.use.setPanZoomEnable();
     const theme = useTheme();
     const [anchorEl, setAnchorEl] = useState(null);
+    const [anchorElImage, setAnchorElImage] = useState(null);
     const [fontSize, setFontSize] = useState("MD");
     const [expanded, setExpanded] = useState(true);
     const [activeButton, setActiveButton] = useState(null);
     const open = Boolean(anchorEl);
+    const [openImageModel, setOpenImageModel] = useState(false);
     const [tabIndex, setTabIndex] = useState(0);
     const setCode = useStore((state) => state.setCode);
     const code = useStore((state) => state.code);
@@ -104,8 +112,62 @@ const RightContainer = () => {
     const [themeAnchor, setThemeAnchor] = useState(null);
     const [countRocket, setCountRocket] = useState(0);
     const [countImage, setCountImage] = useState(0);
-    const [imageUrl, setImageUrl] = useState("https://static.mermaidchart.dev/whiteboard/default-image-shape.svg");
-    const [showImage, setShowImage] = useState(false);
+    const [oldCode, setOldCode] = useState(null);
+    const handleChange = (e) => {
+        const {name, value} = e.target;
+        setForm((prevForm) => ({
+            ...prevForm,
+            [name]: value,
+        }));
+    };
+
+    useEffect(() => {
+        const handleClick = (svgDoc) => {
+            const labelElement = svgDoc.querySelector(".nodeLabel p");
+            const labelText = labelElement ? labelElement.innerText : "";
+
+            const imageElement = svgDoc.querySelector("image");
+            const imgSrc = imageElement ? imageElement.getAttribute("href") : "";
+            const imgWidth = imageElement ? imageElement.getAttribute("width") : "";
+            const imgHeight = imageElement ? imageElement.getAttribute("height") : "";
+            const identifier = svgDoc ? svgDoc.getAttribute("id").split("-")[1] : ""
+
+            const result = `${identifier}[${labelText}]
+                ${identifier}@{img: ${imgSrc}, h: ${imgHeight}, w: ${imgWidth}, pos: "b"}`;
+            const b = {
+                image: imgSrc,
+                height: imgHeight,
+                width: imgWidth,
+                heading: labelText,
+            }
+            setForm(b)
+            setOldCode(result)
+            setOpenImageModel(true);
+        };
+
+        const observer = new MutationObserver(() => {
+            const elements = document.getElementsByClassName('image-shape');
+            if (elements.length) {
+                Array.from(elements).forEach((item) => {
+                    item.addEventListener('click', () => handleClick(item));
+                });
+            }
+        });
+
+        // ✅ Start observing for DOM changes
+        observer.observe(document.body, {childList: true, subtree: true});
+
+        // 🧹 Cleanup on unmoun
+        return () => {
+            observer.disconnect();
+            const elements = document.getElementsByClassName('image-shape');
+            if (elements.length) {
+                Array.from(elements).forEach((item) => {
+                    item.removeEventListener('click', handleClick);
+                });
+            }
+        };
+    }, []);
 
 
     const [designAnchor, setDesignAnchor] = useState(null);
@@ -116,7 +178,7 @@ const RightContainer = () => {
     const {color, setColor} = useContext(ChartContext);
 
     const handleClose = () => {
-        setAnchorEl(null);
+        setOpenImageModel(false)
     };
 
     const togglePanZoom = () => setPanZoomEnable(!panZoom);
@@ -139,6 +201,20 @@ const RightContainer = () => {
         setFontSize(size);
         handleFontSizeMenuClose();
     };
+
+
+    const handleMouseDown = (event) => {
+        event.preventDefault();
+    };
+
+    const handleImageClick = (event) => {
+        console.log("Clicked")
+        setOpenImageModel(true);
+        setAnchorElImage(event.currentTarget);
+    };
+
+    const id = open ? "image-popover" : undefined;
+
 
     function countOccurrencesByPrefix(text, word, prefixLength = 8) {
         const prefix = word.slice(0, prefixLength);
@@ -174,9 +250,11 @@ const RightContainer = () => {
             countOccurrencesByPrefix(code, 'subchart')
             countOccurrencesByPrefixForShape(code, 'shapes')
             countOccurrencesByPrefixForRocket(code, 'xyz')
+
             countOccurrencesByPrefixForImage(code, 'imgTitle')
         }
     }, [code])
+
 
     const handleButtonClick = (event, key) => {
         setActiveButton(key);
@@ -213,10 +291,10 @@ const RightContainer = () => {
         }
 
         if (key === 'addImage') {
-            const newcode = `${code + `imgTitle${countImage}["This is sample label"]\n` +
-            `imgTitle${countImage}@{img: ${imageUrl}, h: 200, w: 200, pos: "b"}\n`
+            setOldCode(null)
+            const newcode = `${code + `\nimgTitle${countImage}[${form.heading}]\n` +
+            `imgTitle${countImage}@{img: ${form.image}, h: ${form.height}, w: ${form.width}, pos: "b"}\n`
             }`;
-
             setCode(newcode);
 
             if (typeof window !== "undefined") {
@@ -496,7 +574,7 @@ const RightContainer = () => {
                                 : []),
                             {key: "addSubChart", icon: <AddToPhotosIcon/>, tooltip: "Add Sub Chart"},
                             // {key: "launchRocket", icon: <RocketLaunchIcon/>, tooltip: "Launch Rocket"},
-                            // {key: "addImage", icon: <ImageIcon/>, tooltip: "Add Image"},
+                            {key: "addImage", icon: <ImageIcon/>, tooltip: "Add Image"},
                             {key: "brushTool", icon: <BrushIcon/>, tooltip: "Brush Tool"},
                         ].map(({key, icon, tooltip, onClick}) => (
                             <Tooltip key={key} title={tooltip}>
@@ -700,32 +778,93 @@ const RightContainer = () => {
                 </Popover>
             </Box>
             <Box>
-                {showImage && (
-                    <Box
-                        sx={{
-                            position: "absolute",
-                            top: imagePosition.y,
-                            left: imagePosition.x,
-                            zIndex: 1000,
-                            textAlign: "center",
-                            cursor: "grab",
-                            userSelect: "none",
-                        }}
-                        onMouseDown={handleMouseDown}
-                    >
-                        <Box sx={{position: "relative"}}>
-                            <img
-                                src={imageUrl}
-                                alt="Draggable"
-                                width={imageSize.width}
-                                height={imageSize.height}
-                                style={{cursor: "grab"}}
-                                onClick={handleImageClick}
-                            />
-                            <Box sx={{fontSize: "14px", border: "1px solid #000", background: "#E1DFDF"}}>{label}</Box>
-                        </Box>
+                <Popover
+                    id={id}
+                    open={openImageModel}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                        vertical: "center",
+                        horizontal: "right",
+                    }}
+                    transformOrigin={{
+                        vertical: "top",
+                        horizontal: "center",
+                    }}
+                >
+                    <Box display="flex" flexDirection="column" alignItems="center" gap={3} p={4}>
+                        <TextField
+                            label="Heading"
+                            variant="outlined"
+                            name="heading"
+                            value={form.heading}
+                            onChange={handleChange}
+                            sx={{width: 230}}
+                        />
+                        <TextField
+                            label="Image URL"
+                            variant="outlined"
+                            name="image"
+                            value={form.image}
+                            onChange={handleChange}
+                            sx={{width: 230}}
+                        />
+
+                        <TextField
+                            label="Width (px)"
+                            type="number"
+                            variant="outlined"
+                            name="width"
+                            value={form.width}
+                            onChange={handleChange}
+                        />
+                        <TextField
+                            label="Height (px)"
+                            type="number"
+                            name="height"
+                            variant="outlined"
+                            value={form.height}
+                            onChange={handleChange}
+                        />
+
+
+                        <Stack direction="row" spacing={2}>
+                            <Button variant="contained" color="secondary"
+                                    onClick={() => setOpenImageModel(!openImageModel)}>
+                                Close
+                            </Button>
+                            <Button variant="outlined" color="error" onClick={() => {
+                                const a = code.replace(oldCode, '');
+                                if (typeof window !== "undefined") {
+                                    sessionStorage.setItem("code", `${a}`);
+                                }
+                                setCode(a);
+                                setForm(initialValue)
+                                setOpenImageModel(false);
+                                // setShowImage(false);
+                            }}>
+                                Delete
+                            </Button>
+
+                            <Button variant="contained" color="primary" onClick={() => {
+                                // const newcode = `${code + `\nimgTitle${countImage}[${form.heading}]\n` +
+                                // `imgTitle${countImage}@{img: ${form.image}, h: ${form.height}, w: ${form.width}, pos: "b"}\n`
+                                // }`;
+                                const a = code.replace(oldCode, `\nimgTitle${countImage - 2}[${form.heading}]\n` +
+                                    `imgTitle${countImage - 2}@{img: ${form.image}, h: ${form.height}, w: ${form.width}, pos: "b"}\n`)
+                                setCode(a);
+
+                                if (typeof window !== "undefined") {
+                                    sessionStorage.setItem("code", `${a}`);
+                                }
+                                setOpenImageModel(!openImageModel);
+                                setForm(initialValue)
+                                setOldCode(null)
+                            }}>
+                                Save
+                            </Button>
+                        </Stack>
                     </Box>
-                )}
+                </Popover>
             </Box>
             <Box>
                 <View fontSizes={fontSize} color={color}/>
