@@ -223,11 +223,13 @@ const RightContainer = () => {
         setCount(matches ? matches.length + 1 : 1)
     }
 
-    function countOccurrencesByPrefixForShape(text, word, prefixLength = 6) {
-        const prefix = word.slice(0, prefixLength);
-        const regex = new RegExp(`\\b${prefix}\\w*\\b`, 'gi');
-        const matches = text.match(regex);
-        setCountShape(matches ? matches.length : 1)
+    function countOccurrencesByPrefixForShape() {
+        const matches = [...code.matchAll(/shapes(\d+)/g)];
+        let lastShapeNumber = 0;
+        if (matches.length > 0) {
+            lastShapeNumber = matches.length ? matches[matches.length - 2][1] : null;
+        }
+        setCountShape(matches && lastShapeNumber ? Number(lastShapeNumber) + 1 : 1)
     }
 
     function countOccurrencesByPrefixForRocket(text, word, prefixLength = 3) {
@@ -250,11 +252,9 @@ const RightContainer = () => {
             countOccurrencesByPrefix(code, 'subchart')
             countOccurrencesByPrefixForShape(code, 'shapes')
             countOccurrencesByPrefixForRocket(code, 'xyz')
-
             countOccurrencesByPrefixForImage(code, 'imgTitle')
         }
     }, [code])
-
 
     const handleButtonClick = (event, key) => {
         setActiveButton(key);
@@ -264,10 +264,14 @@ const RightContainer = () => {
             `        subchart${count}["Untitled Node"]\n` +
             '  end'} `;
 
-            setCode(newCode);
+            const connection = count > 1 ? `s${count} --> s${count - 1}\n` : '';
+
+            const finalCode = newCode + connection;
+
+            setCode(finalCode);
 
             if (typeof window !== "undefined") {
-                sessionStorage.setItem("code", newCode);
+                sessionStorage.setItem("code", finalCode);
             }
         }
 
@@ -333,10 +337,10 @@ const RightContainer = () => {
             code: `\n   shapes${countShape}["Hexagon"] \n shapes${countShape}@{ shape: hex}`
         }, {
             img: Cylinder,
-            code: `\n shapes${countShape}["Cylinder"]\n shapes${countShape}@{ shape: cyl}`
+            code: `\n shapes${countShape}["Cylinder"] \n shapes${countShape}@{ shape: cyl}`
         }, {
             img: Horizontal_Cylinder,
-            code: `\n shapes${countShape}["Horizontal Cylinder"] \nshapes${countShape}@{ shape: h-cyl}`
+            code: `\n shapes${countShape}["Horizontal Cylinder"] \n shapes${countShape}@{ shape: h-cyl}`
         }, {
             img: Circle,
             code: `\n     shapes${countShape}(("Circle"))`
@@ -688,9 +692,14 @@ const RightContainer = () => {
                                             <Box key={index + 1}>
                                                 <Box
                                                     onClick={() => {
-                                                        setCode(`${code + item.code}`)
+                                                        let connection = '';
+                                                        if (countShape > 1) {
+                                                            console.log(countShape)
+                                                            connection = `\nshapes${countShape} --> shapes${countShape - 1}\n`
+                                                        }
+                                                        setCode(`${code + item.code + connection}`)
                                                         if (typeof window !== "undefined") {
-                                                            sessionStorage.setItem("code", `${code + item.code}`);
+                                                            sessionStorage.setItem("code", `${code + item.code + connection }`);
                                                         }
                                                     }}
                                                     sx={{
@@ -721,9 +730,14 @@ const RightContainer = () => {
                                         <Box key={index + 1}>
                                             <Box
                                                 onClick={() => {
-                                                    setCode(`${code + item.code}`)
+                                                    let connection = '';
+                                                    if (countShape > 1) {
+                                                        console.log(countShape)
+                                                        connection = `\nshapes${countShape} --> shapes${countShape - 1}\n`
+                                                    }
+                                                    setCode(`${code + item.code + connection}`)
                                                     if (typeof window !== "undefined") {
-                                                        sessionStorage.setItem("code", `${code + item.code}`);
+                                                        sessionStorage.setItem("code", `${code + item.code + connection }`);
                                                     }
                                                 }}
                                                 sx={{
@@ -753,9 +767,14 @@ const RightContainer = () => {
                                         <Box key={index + 1}>
                                             <Box
                                                 onClick={() => {
-                                                    setCode(`${code + item.code}`)
+                                                    let connection = '';
+                                                    if (countShape > 1) {
+                                                        console.log(countShape)
+                                                        connection = `\nshapes${countShape} --> shapes${countShape - 1}\n`
+                                                    }
+                                                    setCode(`${code + item.code + connection}`)
                                                     if (typeof window !== "undefined") {
-                                                        sessionStorage.setItem("code", `${code + item.code}`);
+                                                        sessionStorage.setItem("code", `${code + item.code + connection }`);
                                                     }
                                                 }}
                                                 sx={{
