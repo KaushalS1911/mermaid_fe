@@ -6,6 +6,8 @@ import { useStore } from "@/store";
 import {useRouter} from "next/navigation";
 
 function Templates() {
+
+    // State hooks to manage component states
     const [activeIndex, setActiveIndex] = useState(0);
     const [templates, setTemplates] = useState([]);
     const [selectedTemplate, setSelectedTemplate] = useState(null);
@@ -16,6 +18,7 @@ function Templates() {
     const theme = useTheme();
     const router = useRouter()
 
+    // List of template category buttons
     const buttons = [
         "All", "Architecture", "Block", "C4 Diagram", "Class Diagram",
         "ER Diagram", "Flowchart", "Gantt Chart", "Git Graph", "Mindmap",
@@ -23,6 +26,7 @@ function Templates() {
         "Sequence Diagram", "State Diagram", "Timeline", "User Journey", "XY Chart",
     ];
 
+    // Effect to filter templates based on selected category
     useEffect(() => {
         if (templateName === "All") {
             setTemplates(allTemplates.flatMap((template) => template.content));
@@ -32,20 +36,24 @@ function Templates() {
         }
     }, [templateName]);
 
+    // Open modal with selected template
     const handleOpen = (template) => {
         setSelectedTemplate(template);
         setOpen(true);
     };
 
+    // Close modal
     const handleClose = () => {
         setOpen(false);
         setSelectedTemplate(null);
     };
 
+    // Handle drag start for templates
     const handleDragStart = (event, template) => {
         event.dataTransfer.setData("text/plain", template.code);
     };
 
+    // Handle drop event to replace code
     const handleDrop = (event) => {
         event.preventDefault();
         const droppedCode = event.dataTransfer.getData("text/plain");
@@ -55,6 +63,7 @@ function Templates() {
         }
     };
 
+    // Allow dropping by preventing default behavior
     const handleDragOver = (event) => {
         event.preventDefault();
     };

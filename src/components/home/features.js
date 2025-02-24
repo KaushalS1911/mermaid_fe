@@ -4,6 +4,8 @@ import {Box, Card, CardContent, Container, Grid, Typography} from "@mui/material
 import { Sensors, Build, Feedback, DirectionsRun } from '@mui/icons-material';
 
 function Features(props) {
+
+    // Feature Data array
     const features = [
         {
             icon: <Sensors fontSize="large" color="Dark" />,
@@ -35,6 +37,7 @@ function Features(props) {
     return (
         <>
             <Box sx={{padding:"70px 0 80px 0", backgroundColor:"#EFFBFA"}}>
+                {/* Section Header */}
                 <Container maxWidth={"lg"} sx={{ width:"100%" }}>
                     <Box sx={{
 
@@ -65,6 +68,7 @@ function Features(props) {
                             The Ultimate Electronic Acrobatic Gym
                         </Box>
                         <Box sx={{ flexGrow: 1,paddingTop: '50px' }}>
+                            {/* Features Grid */}
                             <Grid container spacing={4}>
                                 {features.map((feature, index) => (
                                     <Grid key={index} item xs={12} sm={6} md={4}>

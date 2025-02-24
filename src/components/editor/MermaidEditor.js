@@ -1,5 +1,8 @@
 "use client";
 
+
+// Import necessary libraries and components
+
 import MonacoEditor from "@monaco-editor/react";
 import initEditor from "monaco-mermaid";
 import { useStore } from "@/store";
@@ -10,14 +13,21 @@ import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
 
 const MermaidEditor = () => {
+    // State management using custom store
+
     const code = useStore((state) => state.code);
     const setCode = useStore((state) => state.setCode);
     const config = useStore((state) => state.config);
     const setConfig = useStore((state) => state.setConfig);
     const editorMode = useStore((state) => state.editorMode);
+
+    // Local states
+
     const [isModified, setIsModified] = useState(false);
     const { id } = useParams();
     const [loading, setLoading] = useState(false);
+
+    // Function to fetch existing flowchart data
 
     const fetchData = async () => {
         setLoading(true);
@@ -31,12 +41,16 @@ const MermaidEditor = () => {
         }
     };
 
+    // Effect to fetch data on component mount or when ID changes
+
     useEffect(() => {
         setIsModified(false);
         if (id) {
             fetchData();
         }
-    }, [id]); // Fix dependency to prevent unnecessary re-fetching
+    }, [id]);
+
+    // Handles changes in the editor
 
     const onChange = (value) => {
         if (editorMode === "code") {
@@ -49,6 +63,8 @@ const MermaidEditor = () => {
         }
         setIsModified(true);
     };
+
+    // Function to save the current flowchart
 
     const handleSave = async () => {
         try {
@@ -68,12 +84,14 @@ const MermaidEditor = () => {
     return (
         <Box sx={{ position: "relative", height: "100%" }}>
             {(loading && code) ? (
+                // Show loader while fetching data
                 <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
                     <CircularProgress />
                 </Box>
             ) : (
                 <>
                     {id && (
+                        // Save button appears only if an ID is present
                         <Button
                             sx={{
                                 zIndex: 999,

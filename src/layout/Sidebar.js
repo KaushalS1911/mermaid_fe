@@ -27,6 +27,8 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 import {useStore} from "@/store";
 
+
+// Define available themes with their properties
 export const themes = [
     { text: "Default", color: "default", image: light ,borderColor:"#ff5733"},
     { text: "Forest", color: "forest", image: light ,borderColor:"#000000"},
@@ -60,6 +62,7 @@ const Sidebar = ({
     const drawerWidth = collapsed ? 67 : 200;
     const code = useStore((state) => state.code);
 
+    // Function to download chart as PNG
     const handleDownloadImage = () => {
         setIsLoading(true);
         html2canvas(chartRef.current).then((canvas) => {
@@ -72,6 +75,7 @@ const Sidebar = ({
         });
     };
 
+    // Function to download code as MMD file
     const handleDownloadMMD = () => {
         // Check if code exists
         if (!code || code.trim() === "") {
@@ -89,6 +93,7 @@ const Sidebar = ({
         setIsLoading(false);
     };
 
+    // Sidebar menu items
     const menuItems = [
         {
             text: "Collapse menu",
@@ -126,6 +131,8 @@ const Sidebar = ({
             <Backdrop open={isLoading} sx={{ color: "#FF3480", zIndex: 9999 }}>
                 <CircularProgress color="inherit" />
             </Backdrop>
+
+            {/* Sidebar Drawer */}
             <Drawer
                 variant={isMobile ? "temporary" : "persistent"}
                 anchor="left"
@@ -197,6 +204,7 @@ const Sidebar = ({
                 </List>
             </Drawer>
 
+            {/* Design Popover */}
             <Popover
                 open={Boolean(designAnchor)}
                 anchorEl={designAnchor}
@@ -219,6 +227,7 @@ const Sidebar = ({
                 </List>
             </Popover>
 
+            {/* Theme Popover */}
             <Popover
                 open={Boolean(themeAnchor)}
                 anchorEl={themeAnchor}
@@ -252,6 +261,7 @@ const Sidebar = ({
                 </List>
             </Popover>
 
+            {/* Export Popover */}
             <Popover
                 open={Boolean(exportAnchor)}
                 anchorEl={exportAnchor}

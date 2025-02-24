@@ -1,17 +1,20 @@
 "use client";
-import {useContext, useEffect, useRef, useState} from "react";
-import {useDebounce} from "ahooks";
-import {Box} from "@mui/material";
-import {parse, render} from "@/utils/mermaid";
+import { useContext, useEffect, useRef, useState } from "react";
+import { useDebounce } from "ahooks";
+import { Box } from "@mui/material";
+import { parse, render } from "@/utils/mermaid";
 import svgPanZoom from "svg-pan-zoom";
-import {useStore} from "@/store";
-import {ChartContext} from "@/app/layout";
+import { useStore } from "@/store";
+import { ChartContext } from "@/app/layout";
 import theme from "@/components/theme/theme";
 
+// Custom message to display if there are syntax errors
 const customMessage = `\n\nIf you are using AI, Gemini can be incorrect sometimes and may provide syntax errors.`;
 
-const View = ({viewFontSizeBar, color,fontSizes}) => {
-    const {chartRef} = useContext(ChartContext);
+// View component definition
+const View = ({ viewFontSizeBar, color, fontSizes }) => {
+    // Context and store hooks
+    const { chartRef } = useContext(ChartContext);
     const code = useStore.use.code();
     const config = useStore.use.config();
     const autoSync = useStore.use.autoSync();
@@ -26,27 +29,36 @@ const View = ({viewFontSizeBar, color,fontSizes}) => {
     const setValidateCodeState = useStore.use.setValidateCode();
     const setValidateConfigState = useStore.use.setValidateConfig();
 
+    // Ref for the container element
     const container = useRef(null);
+    // State for font size
     const [fontSize] = useState(16);
 
-    const debounceCode = useDebounce(code, {wait: 300});
-    const debounceConfig = useDebounce(config, {wait: 300});
+    // Debounced versions of code and config
+    const debounceCode = useDebounce(code, { wait: 300 });
+    const debounceConfig = useDebounce(config, { wait: 300 });
 
+    // State for validation messages
     const [validateCode, setValidateCode] = useState("");
     const [validateConfig, setValidateConfig] = useState("");
     const setCode = useStore.use.setCode();
 
+    // Ref for pan-zoom instance
     const pzoom = useRef();
 
+    // Function to validate code and config
     const setValidateCodeAndConfig = async (code, config) => {
         try {
+            // Attempt to parse the code and config
             await parse(code);
             JSON.parse(config);
+            // If successful, update validation states
             setValidateCode(code);
             setValidateConfig(config);
             setValidateCodeState(code);
             setValidateConfigState(config);
         } catch (error) {
+            // Handle errors and set error messages
             let errorMessage = error instanceof Error
                 ? `Syntax error: ${error.message} ${customMessage}`
                 : "Syntax error: Unknown error";
@@ -56,21 +68,17 @@ const View = ({viewFontSizeBar, color,fontSizes}) => {
             setValidateConfigState(config);
         }
     };
-    console.log(pzoom)
+
+    // Function to handle pan-zoom changes
     const handlePanZoomChange = () => {
         if (!pzoom.current) return;
+        // Get current pan and zoom values
         const pan = pzoom.current.getPan();
         const zoom = pzoom.current.getZoom();
-        setPanZoom({pan, zoom});
+        setPanZoom({ pan, zoom });
     };
 
-    // const fontSizeMapping = {
-    //     MD: 13,
-    //     LG: 14,
-    //     XL: 15,
-    //     XXL: 16.2,
-    // };
-
+    // Custom themes for Mermaid diagrams
     const addTheme = [
         {
             name: "ocean",
@@ -107,34 +115,35 @@ const View = ({viewFontSizeBar, color,fontSizes}) => {
                 primaryBorderColor: '#818C78'
             }
         }
-    ]
+    ];
 
+    // Function to render the diagram
     const renderDiagram = async (code, config) => {
         if (container.current && code) {
+            // Determine styles based on the theme
             let styles = {};
             if (color.theme.includes("base/")) {
                 const themeName = color.theme.split("/")[1];
                 styles = addTheme.find((item) => item.name === themeName)?.style;
             }
-            console.log(styles, color.theme.includes("base/") ? color.theme.split('/')[0] : color.theme,"dswds")
-            const {svg} = await render(
-                {...JSON.parse(config), theme: color.theme.includes("base/") ? color.theme.split('/')[0] : color.theme},
+            // Render the diagram with Mermaid
+            const { svg } = await render(
+                { ...JSON.parse(config), theme: color.theme.includes("base/") ? color.theme.split('/')[0] : color.theme },
                 code,
                 "graph-div",
                 {
                     startOnLoad: false,
                     securityLevel: "loose",
                     theme: color.theme.includes("base/") ? color.theme.split('/')[0] : color.theme,
-                    themeVariables: {...styles,
+                    themeVariables: {
+                        ...styles,
                         fontSize: fontSizes && fontSizes === "MD" ? "12px" :
                             fontSizes && fontSizes === "LG" ? "16px" :
                                 fontSizes && fontSizes === "XL" ? "20px" : "24px"
                     }
                 }
             );
-            document.querySelectorAll('#graph-div .node rect').forEach((rect) => {
-                rect.style.strokeWidth = '2px';
-            });
+            // Update the container with the rendered SVG
             if (svg.length > 0) {
                 container.current.innerHTML = svg;
                 const svgElement = container.current.querySelector("svg");
@@ -152,9 +161,9 @@ const View = ({viewFontSizeBar, color,fontSizes}) => {
                 graphDiv.style.maxWidth = "100%";
                 graphDiv.style.overflow = "visible";
 
+                // Adjust text alignment and box sizes
                 const textNodes = graphDiv.querySelectorAll("text, tspan, foreignObject *");
                 textNodes.forEach(text => {
-                    // text.style.fontSize = `${fontSizeMapping[viewFontSizeBar] || 12}px`;
                     text.setAttribute("alignment-baseline", "central");
                 });
                 handlePanZoom();
@@ -178,6 +187,7 @@ const View = ({viewFontSizeBar, color,fontSizes}) => {
         }
     };
 
+    // Function to make chart elements editable
     const makeChartEditable = () => {
         const editableElements = document.querySelectorAll(".node, .box, .circle");
         editableElements.forEach((element) => {
@@ -223,6 +233,7 @@ const View = ({viewFontSizeBar, color,fontSizes}) => {
         });
     };
 
+    // Function to update the code when an element is edited
     const updateCode = (oldText, newText) => {
         if (!oldText || !newText) return;
         const newCode = code.replace(oldText, newText);
@@ -238,9 +249,9 @@ const View = ({viewFontSizeBar, color,fontSizes}) => {
         setTimeout(() => renderDiagram(newCode, debounceConfig), 20);
     };
 
+    // Function to handle pan-zoom initialization
     const handlePanZoom = () => {
         if (!panZoom) return;
-        console.log(panZoom , "bhjfhgfgdfgd");
         pzoom.current?.destroy();
         pzoom.current = undefined;
         Promise.resolve().then(() => {
@@ -259,19 +270,22 @@ const View = ({viewFontSizeBar, color,fontSizes}) => {
         });
     };
 
+    // Effect to render the diagram when dependencies change
     useEffect(() => {
         if (typeof window !== "undefined") {
             renderDiagram(validateCode, validateConfig);
         }
-    }, [validateCode, validateConfig, color.theme,panZoom,fontSizes]); // Add color.theme as a dependency
+    }, [validateCode, validateConfig, color.theme, panZoom, fontSizes]);
 
+    // Effect to validate code and config when they change
     useEffect(() => {
         if (typeof window !== "undefined" && (autoSync || updateDiagram)) {
             setValidateCodeAndConfig(debounceCode, debounceConfig);
             if (updateDiagram) setUpdateDiagram(false);
         }
-    }, [debounceCode, debounceConfig, autoSync, updateDiagram,color.theme]);
+    }, [debounceCode, debounceConfig, autoSync, updateDiagram, color.theme]);
 
+    // Render the component
     return (
         <Box ref={chartRef} component="div" sx={{
             height: "100vh !important",
@@ -282,7 +296,7 @@ const View = ({viewFontSizeBar, color,fontSizes}) => {
             backgroundRepeat: "no-repeat",
         }}>
             {validateCode.startsWith("Syntax error") ? (
-                <Box component="div" sx={{color: "red", paddingX: 2}}>
+                <Box component="div" sx={{ color: "red", paddingX: 2 }}>
                     {validateCode}
                 </Box>
             ) : (
@@ -293,7 +307,7 @@ const View = ({viewFontSizeBar, color,fontSizes}) => {
                     justifyContent: "center",
                     alignItems: "center",
                     overflow: "visible"
-                }}/>
+                }} />
             )}
         </Box>
     );

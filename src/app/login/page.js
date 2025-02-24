@@ -5,6 +5,8 @@ import {Box, Button, Card, Typography} from "@mui/material";
 import {Toaster} from "react-hot-toast";
 
 function Page() {
+
+    // Function to handle LinkedIn login redirect
     const handleLogin = () => {
         const params = new URLSearchParams({
             response_type: "code",
@@ -12,6 +14,8 @@ function Page() {
             redirect_uri: `${process.env.NEXT_PUBLIC_BASE_URL}/linkedin/callback`,
             scope: "openid email profile",
         });
+
+        // Redirect to LinkedIn authorization URL
         if (typeof window !== "undefined") {
             window.location.href = `https://www.linkedin.com/oauth/v2/authorization?${params}`;
         }

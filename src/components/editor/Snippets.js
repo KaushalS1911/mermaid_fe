@@ -1,7 +1,11 @@
 "use client";
+
+// Importing necessary dependencies and assets
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Box, Grid } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+
+// Importing shape and icon images
 import Rectangle from '../../asset/editor/snippets/Rectangle.png'
 import Rounded from '../../asset/editor/snippets/Rounded.png'
 import Stadium from '../../asset/editor/snippets/Stadium.png'
@@ -26,11 +30,14 @@ import toast from "react-hot-toast";
 import { useStore } from "@/store";
 
 function Snippets(props) {
+    // State to manage copy-to-clipboard functionality
     const [isCopied, setIsCopied] = useState(false);
     const [textToCopy, setTextToCopy] = useState('');
+    // Accessing global store functions and state
     const setCode = useStore((state) => state.setCode);
     const code = useStore((state) => state.code);
 
+    // Function to copy text to clipboard with toast notification
     const copyToClipboard = useCallback(async (text) => {
         try {
             await navigator.clipboard.writeText(text);
@@ -44,12 +51,14 @@ function Snippets(props) {
         }
     }, []);
 
+    // Effect to copy text when textToCopy state updates
     useEffect(() => {
         if (textToCopy) {
             copyToClipboard(textToCopy);
         }
     }, [textToCopy, copyToClipboard]);
 
+    // Handle drag start to allow dragging code snippets
     const handleDragStart = (e, code) => {
         e.dataTransfer.setData("text/plain", code);
     };
@@ -62,10 +71,12 @@ function Snippets(props) {
         }
     };
 
+    // Allow dropping by preventing default behavior
     const handleDragOver = (e) => {
         e.preventDefault();
     };
 
+    // Data for flowchart shapes and edges with corresponding images and codes
     const data = [{
         mainTitle: "Flowchart Shapes", subData: [{
             title: "Rectangle", img: Rectangle, code: '\nrectId["label"]'
@@ -108,6 +119,7 @@ function Snippets(props) {
         },]
     }]
 
+    // Access MUI theme for styling
     const theme = useTheme();
 
     return (
@@ -115,16 +127,22 @@ function Snippets(props) {
             <Grid container>
                 {data.map((item, index) => (
                     <Box key={index}>
+
+                        {/* Section title (Flowchart Shapes / Edges) */}
                         <Grid item xs={12} key={index}>
                             <Box>{item.mainTitle}</Box>
                         </Grid>
                         <Grid item xs={12} display={"flex"} justifyContent={"space-between"} alignItems={"center"} flexWrap={"wrap"}>
+
+                            {/* Render snippets for each shape/edge */}
                             {item.subData.map((subItem, index) => (
                                 <>
                                     <Box key={index} width={90} draggable sx={{cursor:'grab'}} onDragStart={(e) => handleDragStart(e, subItem.code)}>
                                         <Box fontSize={12} textAlign={"center"} mt={2} height={45}>
                                             {subItem.title}
                                         </Box>
+
+                                        {/* Snippet box with image and controls */}
                                         <Box sx={{
                                             display: 'flex',
                                             flexDirection: 'column',
@@ -132,6 +150,8 @@ function Snippets(props) {
                                             alignItems: 'center',
                                             border: `1px solid ${theme.palette.liteGray}`
                                         }}>
+
+                                            {/* Snippet image */}
                                             <Box sx={{
                                                 display: 'flex',
                                                 justifyContent: 'center',
@@ -143,6 +163,8 @@ function Snippets(props) {
                                             }}>
                                                 <img src={subItem.img.src} />
                                             </Box>
+
+                                            {/* Copy and Add buttons */}
                                             <Box sx={{
                                                 display: 'flex',
                                                 justifyContent: 'space-between',
@@ -150,6 +172,7 @@ function Snippets(props) {
                                                 width: '100%',
                                                 p: 1,
                                             }}>
+                                                {/* Copy to clipboard */}
                                                 <Box mt={0.2} sx={{ cursor: 'pointer' }} onClick={() => {
                                                     if (subItem.code) {
                                                         setTextToCopy(subItem.code)
@@ -158,6 +181,7 @@ function Snippets(props) {
                                                     <img src={file.src} />
                                                 </Box>
                                                 <Box color={'liteGray'}>|</Box>
+                                                {/* Add to editor */}
                                                 <Box mt={0.3} sx={{ cursor: 'pointer' }}>
                                                     <img src={plus.src} onClick={() => setCode(code + subItem.code)} />
                                                 </Box>

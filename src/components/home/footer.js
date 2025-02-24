@@ -131,6 +131,7 @@ const Footer = () => {
                     </Grid>
                 </Box>
 
+                {/* Bottom Section */}
                 <Box sx={{
                     borderTop: "1px solid #333",
                     py: 6,

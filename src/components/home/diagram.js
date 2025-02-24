@@ -15,6 +15,7 @@ import icon4 from '../../asset/home/diagram/icon 4.png';
 import {Box, Container, Typography} from '@mui/material';
 
 function Diagram() {
+    // Data array holding all diagram sections and their respective properties
     const data = [
         {
             name: 'Speed',
@@ -68,15 +69,19 @@ function Diagram() {
 
     return (
         <Box>
+            {/* Loop through each data item to render individual diagram sections */}
             {data.map((item, index) => (
                 <Box key={index} sx={{ backgroundColor: item.rectangleColor , py:15}}>
                     <Container maxWidth="lg">
                         <Box sx={{display: 'flex' , alignItems: {xs:"center" , md:'start'}}}>
+                            {/* Group image displayed on the left */}
                             <Box>
                                 <img src={item.group.src}
                                      style={{width: '100%', height: "100%", objectFit: 'contain'}}/>
                             </Box>
+                            {/* Content area */}
                             <Box>
+                                {/* Tag section with icon, name, and background color */}
                                 <Box sx={{
                                     display: "inline-block",
                                     p:"7px 25px",
@@ -87,11 +92,13 @@ function Diagram() {
                                     border:`1px solid ${item.borderColor}`,
                                     ml:2
                                 }}>
+                                    {/* Section title */}
                                     <Typography sx={{display: "flex", alignItems: 'center'}}>
                                         <img src={item.icon.src} width={25} style={{marginRight: 10 , marginBottom:2}}/>
                                         {item.name}
                                     </Typography>
                                 </Box>
+                                {/* Section description */}
                                 <Typography component="h2" variant="h5"
                                             sx={{fontWeight: 700, my: 2, fontSize: {xs: "18px", sm: "24px"},ml:3}}>
                                     {item.title}
@@ -99,6 +106,8 @@ function Diagram() {
                                 <Typography component="p" sx={{fontSize: {xs: "14px", sm: '16px'}, color: '#666',ml:3}}>
                                     {item.description}
                                 </Typography>
+
+                                {/* Main image related to the section */}
                                 <img src={item.img.src} alt={item.title} style={{width: '100%' , objectFit:"cover"}}/>
                             </Box>
                         </Box>

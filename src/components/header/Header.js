@@ -23,19 +23,26 @@ import Page from '../../app/login/page'
 
 
 function Header() {
+
+    // State for controlling mobile menu drawer
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+    // State for controlling login dialog visibility
     const [dialogOpen, setDialogOpen] = useState(false);
     const router = useRouter();
     const token = Cookies.get("token");
 
+    // Toggle mobile menu open/close
     const toggleMobileMenu = (open) => () => {
         setMobileMenuOpen(open);
     };
 
+    // Open login dialog
     const handleDialogOpen = () => {
         setDialogOpen(true);
     };
 
+    // Close login dialog
     const handleDialogClose = () => {
         setDialogOpen(false);
     };
@@ -43,14 +50,18 @@ function Header() {
     return (
         <>
             <Box>
+                {/* Main navigation toolbar */}
                 <Toolbar sx={{ justifyContent: 'space-around' }}>
+                        {/* Logo */}
                     <Box sx={{ maxWidth: '100%', height: '28px' }}>
                         <img src={logo.src} alt="logo" style={{ width: '100%', height: '100%' }} />
                     </Box>
 
+                    {/* Desktop navigation links */}
                     <Box sx={{ display: { xs: 'none', lg: 'flex' }, gap: 3 }}>
                         {['Use cases', 'Resources', 'About', 'SmartDOT', 'Diagram-as-Code'].map((text, index) => (
                             <Box key={index}>
+                                {/* Dropdown icon for certain links */}
                                 {['Use cases', 'Resources', 'About'].includes(text) ? (
                                     <Box
                                         sx={{
@@ -83,8 +94,10 @@ function Header() {
                         ))}
                     </Box>
 
+                    {/* Mobile menu drawer */}
                     <Drawer anchor="left" open={mobileMenuOpen} onClose={toggleMobileMenu(false)}>
                         <Box sx={{ p: 2, width: '300px' }}>
+                            {/* Drawer header with logo and close button */}
                             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 2 }}>
                                 <img src={logo.src} alt="logo" style={{ maxWidth: "100%", height: 'auto' }} />
                                 <IconButton onClick={toggleMobileMenu(false)}>
@@ -92,6 +105,7 @@ function Header() {
                                 </IconButton>
                             </Box>
 
+                            {/* Mobile navigation links */}
                             <List>
                                 {['Use cases', 'Resources', 'About', 'SmartDOT', 'Diagram-as-Code'].map((text, index) => (
                                     <ListItem button key={index}>
@@ -100,6 +114,7 @@ function Header() {
                                 ))}
                             </List>
 
+                            {/* Mobile login/logout and CTA buttons */}
                             <Box sx={{ padding: "0 10px", display: "inline-block", flexDirection: 'column' }}>
                                 {token ? (
                                     <Button variant="text" sx={{ color: '#333' }} onClick={() => {
@@ -114,6 +129,7 @@ function Header() {
                                     </Button>
                                 )}
                                 <Box>
+                                    {/* CTA Button */}
                                     <Button
                                         variant="contained"
                                         sx={{
@@ -130,6 +146,7 @@ function Header() {
                         </Box>
                     </Drawer>
 
+                    {/* Desktop login/logout and CTA buttons */}
                     <Box sx={{ display: { xs: 'none', sm: 'flex' }, gap: 2 }}>
                         {token ? (
                             <Button variant="text" sx={{ color: '#333' }} onClick={() => {
@@ -155,6 +172,7 @@ function Header() {
                         </Button>
                     </Box>
 
+                    {/* Mobile menu button */}
                     <IconButton
                         sx={{ display: { xs: 'flex', lg: 'none' } }}
                         edge="start"

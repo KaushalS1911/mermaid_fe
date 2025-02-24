@@ -10,13 +10,16 @@ import { Box, Container } from "@mui/material";
 
 function Faq() {
 
+    // State to manage which accordion is expanded
     const [expanded, setExpanded] = React.useState(false);
 
+    // Toggle accordion expansion
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
 
 
+    // FAQ data array
     const faqData = [
         {
             "title": "Flowchart Diagrams",
@@ -54,6 +57,7 @@ function Faq() {
         <Box sx={{backgroundColor:"#F6F6F6" , py:15}}>
             <Container maxWidth="lg">
                 <Box sx={{color:"#212121" , fontSize:{xs:"24px" , sm:"35px" , md:"56px"} , fontWeight:800 , textAlign:"center" , mb:10}}>Frequently Asked Questions</Box>
+                {/* FAQ Accordion */}
                 {faqData.map((faq, index) => (
                     <Accordion
                         expanded={expanded === `panel${index}`}
@@ -79,6 +83,7 @@ function Faq() {
                             },
                         }}
                     >
+                        {/* Accordion Summary */}
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls={`panel${index}-content`}
@@ -91,6 +96,8 @@ function Faq() {
                         >
                             <Typography component="span">{faq.title}</Typography>
                         </AccordionSummary>
+
+                        {/* Accordion Details */}
                         <AccordionDetails sx={{ padding: "16px 0 8px 0",  }}>
                             <Typography>{faq.content}</Typography>
                         </AccordionDetails>

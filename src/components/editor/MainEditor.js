@@ -9,19 +9,29 @@ import RightContainer from "@/components/editor/RightContainer";
 import { useStore } from "@/store";
 
 function MainEditor({ sidebarKey }) {
+
+    // State management using a global store
     const setCode = useStore((state) => state.setCode);
     const code = useStore((state) => state.code);
+
+    // Retrieve code data from session storage (if any)
     const codeData = typeof window !== "undefined" && sessionStorage.getItem("code");
+
+    // Theme and media query hooks
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+    // Load code from session storage on component mount
     useEffect(() => {
         if (codeData !== null) {
             setCode(codeData);
         }
     }, [codeData]);
 
+    // Reference for Mermaid chart container
     const chartRef = useRef(null);
 
+    // Initialize Mermaid once on component mount
     useEffect(() => {
         mermaid.initialize({
             startOnLoad: false,
@@ -30,6 +40,7 @@ function MainEditor({ sidebarKey }) {
         });
     }, []);
 
+    // Render Mermaid diagram whenever the code changes
     useEffect(() => {
         const renderDiagram = async () => {
             if (chartRef.current && code) {
@@ -51,12 +62,13 @@ function MainEditor({ sidebarKey }) {
         renderDiagram();
     }, [code]);
 
-
+// State and refs for resizing functionality
     const [leftWidth, setLeftWidth] = useState(isMobile ? 100 : 50);
     const isResizing = useRef(false);
     const startX = useRef(0);
     const startWidth = useRef(leftWidth);
 
+    // Handle mouse down event to start resizing
     const handleMouseDown = (e) => {
         if (isMobile) return;
         isResizing.current = true;
@@ -67,6 +79,7 @@ function MainEditor({ sidebarKey }) {
         document.addEventListener("mouseup", handleMouseUp);
     };
 
+    // Handle mouse movement for resizing
     const handleMouseMove = (e) => {
         if (!isResizing.current || isMobile) return;
         requestAnimationFrame(() => {
@@ -78,6 +91,7 @@ function MainEditor({ sidebarKey }) {
         });
     };
 
+    // Handle mouse up event to stop resizing
     const handleMouseUp = () => {
         if (isMobile) return;
         isResizing.current = false;
@@ -87,6 +101,7 @@ function MainEditor({ sidebarKey }) {
 
     return (
         <Box sx={{ height: "100vh", display: "flex", overflow: "hidden", flexDirection: isMobile ? "column" : "row" }}>
+            {/* Sidebar for Snippets or Templates */}
             {sidebarKey.selected && (
                 <Box sx={{ width: isMobile ? "100%" : "390px", height: isMobile ? "auto" : "100vh", overflowY: "auto", flexShrink: 0 }}>
                     {sidebarKey.text === "Snippets" && <Snippets />}
@@ -94,10 +109,12 @@ function MainEditor({ sidebarKey }) {
                 </Box>
             )}
 
+            {/* Left container (editable area) */}
             <Box sx={{ width: isMobile ? "100%" : `${leftWidth}%`, height: isMobile ? "50vh" : "100vh", overflowY: "auto", flexShrink: 0 }}>
                 <LeftContainer />
             </Box>
 
+            {/* Resizer bar (desktop only) */}
             {!isMobile && (
                 <Box
                     sx={{
@@ -111,6 +128,7 @@ function MainEditor({ sidebarKey }) {
                 />
             )}
 
+            {/* Right container (output area) */}
             <Box
                 sx={{
                     width: isMobile ? "100%" : `calc(100% - ${leftWidth}% - ${sidebarKey.selected ? "255px" : "5px"})`,

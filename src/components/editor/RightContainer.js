@@ -1,4 +1,7 @@
+// Importing dynamic component loading for client-side only rendering
 import dynamic from "next/dynamic";
+
+// Importing Material-UI components
 import {
     Box,
     IconButton,
@@ -6,23 +9,34 @@ import {
     Collapse,
     useTheme, Popover, List, ListItemButton, ListItemText, Typography, Tabs, Menu, MenuItem, TextField, Button, Stack
 } from "@mui/material";
+
+// Importing icons
 import {IoMdMove} from "react-icons/io";
 import {MdTextFields} from "react-icons/md"; // Font size icon
 import {ExpandMore, ExpandLess} from "@mui/icons-material"; // Collapse Icons
 import FullScreen from "./FullScreen";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+
+// React hooks and state management
 import {useContext, useEffect, useState} from "react";
 import {useStore} from "@/store";
+
+// Additional icons
 import AddIcon from '@mui/icons-material/Add';
 import AddToPhotosIcon from "@mui/icons-material/AddToPhotos";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import ImageIcon from "@mui/icons-material/Image";
 import BrushIcon from "@mui/icons-material/Brush";
+
+// Importing themes
 import {themes} from "@/layout/Sidebar";
 
+// More icons and shapes for the editor
 import InfoIcon from "@mui/icons-material/Info";
 import Tab from "@mui/material/Tab";
 import RectangleOutlinedIcon from '@mui/icons-material/RectangleOutlined';
+
+// Importing shape assets
 import Rectangle from '@/asset/editor/shapes/Rectangle.svg';
 import Braces from '@/asset/editor/shapes/Braces.svg';
 import Card from '@/asset/editor/shapes/Card.svg';
@@ -82,10 +96,14 @@ import Triangle from '@/asset/editor/shapes/Triangle.svg';
 import Anchor from '@/asset/editor/shapes/Anchor.svg';
 import Paper_Tape from '@/asset/editor/shapes/Paper Tape.svg';
 import Communication_Link from '@/asset/editor/shapes/Communication Link.svg';
+
+// Context for shared state
 import {ChartContext} from "@/app/layout";
 
-
+// Dynamically import View component (client-side only)
 const View = dynamic(() => import("./View"), {ssr: false});
+
+// Initial form values
 const initialValue = {
     heading: 'This is sample label',
     image: 'https://static.mermaidchart.dev/whiteboard/default-image-shape.svg',
@@ -93,6 +111,7 @@ const initialValue = {
     height: 200,
 }
 const RightContainer = () => {
+    // State hooks for managing UI and data
     const [form, setForm] = useState(initialValue)
     const panZoom = useStore.use.panZoom();
     const setPanZoomEnable = useStore.use.setPanZoomEnable();
@@ -113,6 +132,8 @@ const RightContainer = () => {
     const [countRocket, setCountRocket] = useState(0);
     const [countImage, setCountImage] = useState(0);
     const [oldCode, setOldCode] = useState(null);
+
+    // Handle form changes
     const handleChange = (e) => {
         const {name, value} = e.target;
         setForm((prevForm) => ({
@@ -121,11 +142,7 @@ const RightContainer = () => {
         }));
     };
 
-    // document.querySelector('.image-shape').addEventListener('click', function() {
-    //     // Open the modal
-    //     alert("ddddddddddddddddddd")
-    //     setOpenImageModel(!openImageModel);
-    // });
+    // Add click event to shapes dynamically
     useEffect(() => {
         const handleClick = (svgDoc) => {
             const labelElement = svgDoc.querySelector(".nodeLabel p");
@@ -161,10 +178,8 @@ ${identifier}@{img: ${imgSrc}, h: ${imgHeight}, w: ${imgWidth}, pos: "b"}
             }
         });
 
-        // ✅ Start observing for DOM changes
         observer.observe(document.body, {childList: true, subtree: true});
 
-        // 🧹 Cleanup on unmoun
         return () => {
             observer.disconnect();
             const elements = document.getElementsByClassName('image-shape');
@@ -182,18 +197,25 @@ ${identifier}@{img: ${imgSrc}, h: ${imgHeight}, w: ${imgWidth}, pos: "b"}
         setThemeAnchor(null);
         setDesignAnchor(null);
     };
+    const handleShapeClose = () => {
+        setAnchorEl(null);
+    };
     const {color, setColor} = useContext(ChartContext);
 
     const handleClose = () => {
         setOpenImageModel(false)
     };
 
+    // Handle pan/zoom toggle
     const togglePanZoom = () => setPanZoomEnable(!panZoom);
 
+    // Toggle collapse/expand
     const toggleCollapse = () => {
         setExpanded(!expanded);
         setActiveButton("collapse");
     };
+
+    // Handle font size menu
     const [anchorElFontSize, setAnchorElFontSize] = useState(null);
 
     const handleFontSizeMenuOpen = (event) => {
@@ -215,14 +237,14 @@ ${identifier}@{img: ${imgSrc}, h: ${imgHeight}, w: ${imgWidth}, pos: "b"}
     };
 
     const handleImageClick = (event) => {
-        console.log("Clicked")
+
         setOpenImageModel(true);
         setAnchorElImage(event.currentTarget);
     };
 
     const id = open ? "image-popover" : undefined;
 
-
+    {/*code counter*/}
     function countOccurrencesByPrefix(text, word, prefixLength = 8) {
         const prefix = word.slice(0, prefixLength);
         const regex = new RegExp(`\\b${prefix}\\w*\\b`, 'gi');
@@ -249,14 +271,14 @@ ${identifier}@{img: ${imgSrc}, h: ${imgHeight}, w: ${imgWidth}, pos: "b"}
     function countOccurrencesByPrefixForImage(text, word, prefixLength = 8) {
         const prefix = word.slice(0, prefixLength);
         const regex = new RegExp(`\\b${prefix}\\w*\\b`, 'gi');
-        if(oldCode == null) {
-            console.log(countImage,"y23yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
+        if (oldCode == null) {
+
             const matches = text.match(regex) || [];
-            console.log(matches?.length,"ppppppppppppppppppppppppppppppppppp")
+
             const a = matches?.length ? matches?.length == 2 ? matches?.length : matches?.length - 1 : 1
-            console.log(a,"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+
             setCountImage(a)
-            console.log(countImage, "0000000000000000000000000000000000000000000000000000000000000")
+
         }
     }
 
@@ -271,7 +293,7 @@ ${identifier}@{img: ${imgSrc}, h: ${imgHeight}, w: ${imgWidth}, pos: "b"}
         }
     }, [code])
 
-
+    {/*property click to show to code*/}
     const handleButtonClick = (event, key) => {
         setActiveButton(key);
 
@@ -327,6 +349,7 @@ ${identifier}@{img: ${imgSrc}, h: ${imgHeight}, w: ${imgWidth}, pos: "b"}
         setAnchorEl(event.currentTarget);
     };
 
+    {/*shape property*/}
     const BasicShapes = [
         {
             img: Rectangle,
@@ -521,6 +544,7 @@ ${identifier}@{img: ${imgSrc}, h: ${imgHeight}, w: ${imgWidth}, pos: "b"}
                         <IconButton onClick={handleFontSizeMenuOpen}>
                             <MdTextFields/>
                         </IconButton>
+                        {/*Font size*/}
                         <Menu
                             anchorEl={anchorElFontSize}
                             open={Boolean(anchorElFontSize)}
@@ -578,6 +602,7 @@ ${identifier}@{img: ${imgSrc}, h: ${imgHeight}, w: ${imgWidth}, pos: "b"}
                     </Tooltip>
                 </Box>
 
+                {/*other property*/}
                 <Collapse in={expanded}>
                     <Box sx={{display: "flex", flexDirection: "column", gap: 1, mt: 1}}>
                         {[
@@ -611,6 +636,7 @@ ${identifier}@{img: ${imgSrc}, h: ${imgHeight}, w: ${imgWidth}, pos: "b"}
                         ))}
                     </Box>
                 </Collapse>
+                {/*background color chart*/}
                 <Popover
                     open={Boolean(designAnchor)}
                     anchorEl={designAnchor}
@@ -665,12 +691,13 @@ ${identifier}@{img: ${imgSrc}, h: ${imgHeight}, w: ${imgWidth}, pos: "b"}
                 </Popover>
             </Box>
 
+            {/*shapes*/}
             <Box>
 
                 <Popover
                     open={open}
                     anchorEl={anchorEl}
-                    onClose={handleClose}
+                    onClose={handleShapeClose}
                     anchorOrigin={{vertical: "bottom", horizontal: "right"}}
                     sx={{maxWidth: '450px'}}
                 >
@@ -706,12 +733,12 @@ ${identifier}@{img: ${imgSrc}, h: ${imgHeight}, w: ${imgWidth}, pos: "b"}
                                                     onClick={() => {
                                                         let connection = '';
                                                         if (countShape > 1) {
-                                                            console.log(countShape)
+
                                                             connection = `\nshapes${countShape} --> shapes${countShape - 1}\n`
                                                         }
                                                         setCode(`${code + item.code + connection}`)
                                                         if (typeof window !== "undefined") {
-                                                            sessionStorage.setItem("code", `${code + item.code + connection }`);
+                                                            sessionStorage.setItem("code", `${code + item.code + connection}`);
                                                         }
                                                     }}
                                                     sx={{
@@ -744,12 +771,12 @@ ${identifier}@{img: ${imgSrc}, h: ${imgHeight}, w: ${imgWidth}, pos: "b"}
                                                 onClick={() => {
                                                     let connection = '';
                                                     if (countShape > 1) {
-                                                        console.log(countShape)
+
                                                         connection = `\nshapes${countShape} --> shapes${countShape - 1}\n`
                                                     }
                                                     setCode(`${code + item.code + connection}`)
                                                     if (typeof window !== "undefined") {
-                                                        sessionStorage.setItem("code", `${code + item.code + connection }`);
+                                                        sessionStorage.setItem("code", `${code + item.code + connection}`);
                                                     }
                                                 }}
                                                 sx={{
@@ -781,12 +808,12 @@ ${identifier}@{img: ${imgSrc}, h: ${imgHeight}, w: ${imgWidth}, pos: "b"}
                                                 onClick={() => {
                                                     let connection = '';
                                                     if (countShape > 1) {
-                                                        console.log(countShape)
+
                                                         connection = `\nshapes${countShape} --> shapes${countShape - 1}\n`
                                                     }
                                                     setCode(`${code + item.code + connection}`)
                                                     if (typeof window !== "undefined") {
-                                                        sessionStorage.setItem("code", `${code + item.code + connection }`);
+                                                        sessionStorage.setItem("code", `${code + item.code + connection}`);
                                                     }
                                                 }}
                                                 sx={{
@@ -808,6 +835,8 @@ ${identifier}@{img: ${imgSrc}, h: ${imgHeight}, w: ${imgWidth}, pos: "b"}
                     </Box>
                 </Popover>
             </Box>
+
+            {/*images*/}
             <Box>
                 <Popover
                     id={id}

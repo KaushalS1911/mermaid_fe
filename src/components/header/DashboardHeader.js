@@ -10,7 +10,10 @@ import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
 import {usePathname, useRouter} from "next/navigation";
 
 export default function DashboardHeader({handleDrawerToggle}) {
+
+    // State for dark mode toggle
     const [darkMode, setDarkMode] = React.useState(false);
+    // State for mobile menu toggle
     const [menuOpen, setMenuOpen] = React.useState(false);
     const pathName = usePathname();
     const theme = useTheme();
@@ -22,6 +25,7 @@ export default function DashboardHeader({handleDrawerToggle}) {
                     sx={{backgroundColor: "#F8F8FA", color: "#000", boxShadow: "none", py: 1, px: {xs: 2, sm: 4}}}>
         <Box sx={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
 
+            {/* Breadcrumbs for navigation (hidden on mobile) */}
             {!isMobile && (<Box>
 
                     <Breadcrumbs separator="›" sx={{flexGrow: 1}}>
@@ -31,7 +35,7 @@ export default function DashboardHeader({handleDrawerToggle}) {
                 </Box>
 
             )}
-
+            {/* Navigation Buttons */}
             <Box>
                 {isMobile ? (<Box>
                     <IconButton edge="start" color="inherit" onClick={handleDrawerToggle}>
@@ -44,6 +48,7 @@ export default function DashboardHeader({handleDrawerToggle}) {
                 </Box>)}
             </Box>
 
+            {/* User Actions: Share, Messages, Dark Mode Toggle, Logout, Avatar */}
             <Box sx={{display: "flex", alignItems: "center", gap: 1}}>
                 <Button
                     variant="contained"
@@ -57,9 +62,12 @@ export default function DashboardHeader({handleDrawerToggle}) {
                     <MessageOutlinedIcon/>
                 </IconButton>
 
+                {/* Dark mode toggle */}
                 <IconButton onClick={() => setDarkMode(!darkMode)}>
                     {darkMode ? <Brightness7/> : <Brightness4/>}
                 </IconButton>
+
+                {/* Logout Button */}
                 <Button
                     onClick={()=> {
                         router.push("/")
@@ -71,10 +79,12 @@ export default function DashboardHeader({handleDrawerToggle}) {
                     <LogoutIcon/>
                     Log Out
                 </Button>
+                {/* User Avatar */}
                 <Avatar src="https://mui.com/static/images/avatar/1.jpg"/>
             </Box>
         </Box>
 
+            {/* Mobile Dropdown Menu */}
         {isMobile && menuOpen && (<Box sx={{display: "flex", flexDirection: "column", px: 2, py: 1}}>
             <Button sx={{color: "#000"}}>Mermaid AI</Button>
             <Button variant="contained" sx={{backgroundColor: "#f72585", color: "#fff", my: 1}}>Editor</Button>

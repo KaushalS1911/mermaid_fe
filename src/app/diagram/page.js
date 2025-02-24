@@ -38,8 +38,10 @@ const ReactMic = dynamic(() => import("react-mic").then((mod) => mod.ReactMic), 
 import {useStore} from "@/store";
 
 function Page() {
+
+    // State management for file uploads, recording status, audio data, loading state, and dialog visibility
+
     const [file, setFile] = useState(null);
-    // const {setCode} = useContext(ChartContext);
     const [isRecording, setIsRecording] = useState(false);
     const [audioURL, setAudioURL] = useState(null);
     const [audioBlob, setAudioBlob] = useState(null);
@@ -48,11 +50,13 @@ function Page() {
     const [isOpen, setIsOpen] = useState(false);
     const [isRecordingComplete, setIsRecordingComplete] = useState(false);
 
+    // Closes the dialog modal
     const handleCloseDialog = () => {
         setIsOpen(false);
     };
     const setCode = useStore.use.setCode();
 
+    // Handles completion of audio recording
     const handleAudioStop = (recordedData) => {
         const audioBlob = recordedData.blob;
         const audioUrl = URL.createObjectURL(audioBlob);
@@ -62,10 +66,12 @@ function Page() {
         console.log(recordedData);
     };
 
+    // Toggles audio recording state
     const handleToggleRecording = () => {
         setIsRecording((prev) => !prev);
     };
 
+    // Yup validation schema for form fields
     const validation = Yup.object({
         aiModel: Yup.string().required("This field is required"),
         title: Yup.string().required("This field is required"),
@@ -83,11 +89,12 @@ function Page() {
         }),
     });
 
-
+// Toggles the visibility of a dialog box
     const handleToggleBox = () => {
         setIsOpen(!isOpen);
     };
 
+    // Formik form handling for managing form state and submission
     const formik = useFormik({
         initialValues: {
             method: "", aiModel: "Smart Graph", textOrSyntax: "", file: null, title: "",
@@ -118,6 +125,7 @@ function Page() {
                     payload["textOrMermaid"] = values.textOrSyntax;
                 }
 
+                // API call to create a new flowchart
                 const response = await axiosInstance.post(`${process.env.NEXT_PUBLIC_BASE_URL}/flowchart`, payload, {
                     headers: {
                         "Content-Type": "multipart/form-data", "huggingToken": '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'
@@ -125,6 +133,7 @@ function Page() {
                     },
                 });
 
+                // Update state and navigate to editor page
                 setCode(response.data.mermaidChart);
                 typeof window !== "undefined" && sessionStorage.setItem("code", response.data.flowChart.mermaidString);
                 router.push(`/editor/${response.data.flowChart._id}`);
@@ -151,14 +160,20 @@ function Page() {
             <Box>
                 <Grid container>
                     <Grid item xs={12} mt={3}>
+
+                        {/* Breadcrumbs for navigation */}
                         <Breadcrumbs separator="›" sx={{flexGrow: 1}}>
                             <Link underline="hover" color="inherit" href="/dashboard">Dashboard</Link>s
                             <Typography color="textPrimary" sx={{textTransform: "capitalize"}}>Diagram</Typography>
-                        </Breadcrumbs>                        <Typography sx={{fontSize: '32px', fontWeight: '600', color: '#171717', mt: 2}}> AI
+                        </Breadcrumbs>
+
+                        {/* Main title of the page */}
+                        <Typography sx={{fontSize: '32px', fontWeight: '600', color: '#171717', mt: 2}}> AI
                             Flowchart Generator</Typography>
                     </Grid>
                     <Grid item xs={12} mt={3}>
                         <Box>
+                            {/* FormControl form setup */}
                             <form onSubmit={formik.handleSubmit}>
                                 <FormControl
                                     component="fieldset"
@@ -181,6 +196,7 @@ function Page() {
                                     </RadioGroup>
                                 </FormControl>
 
+                                {/* Title input field */}
                                 <Typography variant="body2"
                                             sx={{fontSize: "14px", mt: 2, fontWeight: 600}}>
                                     Enter Title
