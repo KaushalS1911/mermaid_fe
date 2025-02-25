@@ -68,16 +68,6 @@ function MainEditor({ sidebarKey }) {
     const startX = useRef(0);
     const startWidth = useRef(leftWidth);
 
-    // Handle mouse down event to start resizing
-    const handleMouseDown = (e) => {
-        if (isMobile) return;
-        isResizing.current = true;
-        startX.current = e.clientX;
-        startWidth.current = leftWidth;
-
-        document.addEventListener("mousemove", handleMouseMove);
-        document.addEventListener("mouseup", handleMouseUp);
-    };
 
     // Handle mouse movement for resizing
     const handleMouseMove = (e) => {
@@ -89,6 +79,17 @@ function MainEditor({ sidebarKey }) {
             newWidth = Math.min(Math.max(newWidth, 20), 80);
             setLeftWidth(newWidth);
         });
+    };
+
+    // Handle mouse down event to start resizing
+    const handleMouseDown = (e) => {
+        if (isMobile) return;
+        isResizing.current = true;
+        startX.current = e.clientX;
+        startWidth.current = leftWidth;
+
+        document.addEventListener("mousemove", handleMouseMove);
+        document.addEventListener("mouseup", handleMouseUp);
     };
 
     // Handle mouse up event to stop resizing

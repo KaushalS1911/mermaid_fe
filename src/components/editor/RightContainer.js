@@ -606,7 +606,7 @@ ${identifier}@{img: ${imgSrc}, h: ${imgHeight}, w: ${imgWidth}, pos: "b"}
                 <Collapse in={expanded}>
                     <Box sx={{display: "flex", flexDirection: "column", gap: 1, mt: 1}}>
                         {[
-                            ...(code.startsWith('flowchart')
+                            ...(code?.startsWith('flowchart')
                                 ? [{
                                     key: "shapes",
                                     icon: <AddIcon/>,
